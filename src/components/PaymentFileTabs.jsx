@@ -8,6 +8,8 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { ThemeProvider, createTheme } from '@mui/material';
 import SearchBox from './SearchBox';
+import DataTable from './DataTable';
+import Grid from '@mui/material/Grid';
 
 const theme = createTheme({
   typography: {
@@ -22,7 +24,15 @@ const UPLOAD = 'Upload Payment File';
 const CREATE = 'Create Payment File';
 
 const TABS = [
-  { label: REJECTED, content: <SearchBox /> },
+  {
+    label: REJECTED,
+    content: (
+      <Grid container direction="column" spacing={2} p={3} mb={5}>
+        <SearchBox />
+        <DataTable />
+      </Grid>
+    )
+  },
   { label: UPLOAD, content: 'Upload Payment File' },
   { label: CREATE, content: 'Create Payment File' }
 ];

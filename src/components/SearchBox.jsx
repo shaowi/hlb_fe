@@ -48,7 +48,7 @@ export default function SearchBox() {
   };
 
   return (
-    <Box sx={{ p: 3, mb: 5 }}>
+    <Box sx={{ p: 3 }}>
       <Grid container direction="column" spacing={2}>
         <Grid item alignItems="center" md={6}>
           <Typography variant="h4">Search Criteria</Typography>
