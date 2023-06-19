@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { ThemeProvider, createTheme } from '@mui/material';
+import SearchBox from './SearchBox';
 
 const theme = createTheme({
   typography: {
@@ -21,9 +22,9 @@ const UPLOAD = 'Upload Payment File';
 const CREATE = 'Create Payment File';
 
 const TABS = [
-  { label: REJECTED, value: 0, content: 'Rejected Payment File' },
-  { label: UPLOAD, value: 1, content: 'Upload Payment File' },
-  { label: CREATE, value: 2, content: 'Create Payment File' }
+  { label: REJECTED, content: <SearchBox /> },
+  { label: UPLOAD, content: 'Upload Payment File' },
+  { label: CREATE, content: 'Create Payment File' }
 ];
 
 function TabPanel(props) {
@@ -37,11 +38,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && children}
     </div>
   );
 }
@@ -93,13 +90,17 @@ export default function PaymentFileTabs() {
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            {TABS.map((tab) => (
-              <Tab label={tab.label} {...a11yProps(0)} />
+            {TABS.map((tab, index) => (
+              <Tab
+                key={tab.label + index}
+                label={tab.label}
+                {...a11yProps(0)}
+              />
             ))}
           </Tabs>
         </Box>
-        {TABS.map((tab) => (
-          <TabPanel value={value} index={tab.value}>
+        {TABS.map((tab, index) => (
+          <TabPanel key={tab.label + index} value={value} index={index}>
             {tab.content}
           </TabPanel>
         ))}

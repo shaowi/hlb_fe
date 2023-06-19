@@ -9,6 +9,15 @@ import * as Yup from 'yup';
 import Copyright from '../components/Copyright';
 import TextField from '../components/forms_ui/TextField';
 import logInUser from './../services/LoginService';
+import { ThemeProvider, createTheme } from '@mui/material';
+
+const theme = createTheme({
+  typography: {
+    h4: {
+      color: '#BBB'
+    }
+  }
+});
 
 const INITIAL_FORM_STATE = {
   username: '',
@@ -28,84 +37,86 @@ export default function Login() {
   };
 
   return (
-    <Paper
-      elevation={16}
-      sx={{
-        p: 4,
-        flexGrow: 1,
-        marginTop: 12,
-        marginBottom: 12,
-        marginLeft: 20,
-        marginRight: 20,
-        padding: 10,
-        paddingBottom: '1rem'
-      }}
-    >
-      <Grid container spacing={6}>
-        <Grid item container direction="column" alignItems="center" md={6}>
-          <img src="/images/logo.png" alt="hlb" width="60%" height="auto" />
-          <Typography variant="h4" align="center" gutterBottom>
-            Payment Gateway Biz Ops Portal
-          </Typography>
-          <Typography variant="subtitle2">v0.1</Typography>
-        </Grid>
-        <Grid item container direction="column" md={6} spacing={2}>
-          <Grid item>
-            <Typography variant="h4">Login</Typography>
+    <ThemeProvider theme={theme}>
+      <Paper
+        elevation={16}
+        sx={{
+          p: 4,
+          flexGrow: 1,
+          marginTop: 12,
+          marginBottom: 12,
+          marginLeft: 20,
+          marginRight: 20,
+          padding: 10,
+          paddingBottom: '1rem'
+        }}
+      >
+        <Grid container spacing={6}>
+          <Grid item container direction="column" alignItems="center" md={6}>
+            <img src="/images/logo.png" alt="hlb" width="60%" height="auto" />
+            <Typography variant="h4" align="center" gutterBottom>
+              Payment Gateway Biz Ops Portal
+            </Typography>
+            <Typography variant="subtitle2">v0.1</Typography>
           </Grid>
-          <Grid item>
-            <Formik
-              initialValues={INITIAL_FORM_STATE}
-              validationSchema={FORM_VALIDATION}
-              onSubmit={handleSubmit}
-            >
-              <Form>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      autoFocus
-                      name="username"
-                      label="Username"
-                      data-testid="username"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Person />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
+          <Grid item container direction="column" md={6} spacing={2}>
+            <Grid item>
+              <Typography variant="h4">Login</Typography>
+            </Grid>
+            <Grid item>
+              <Formik
+                initialValues={INITIAL_FORM_STATE}
+                validationSchema={FORM_VALIDATION}
+                onSubmit={handleSubmit}
+              >
+                <Form>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <TextField
+                        autoFocus
+                        name="username"
+                        label="Username"
+                        data-testid="username"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Person />
+                            </InputAdornment>
+                          )
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        name="password"
+                        label="Password"
+                        type="password"
+                        data-testid="password"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Lock />
+                            </InputAdornment>
+                          )
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button fullWidth type="submit" variant="contained">
+                        Log in
+                      </Button>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      name="password"
-                      label="Password"
-                      type="password"
-                      data-testid="password"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Lock />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button fullWidth type="submit" variant="contained">
-                      Log in
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Form>
-            </Formik>
+                </Form>
+              </Formik>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <Copyright
-        sx={{ mt: 5 }}
-        content="Copyright © 2022 HL Bank. All Rights Reserved."
-      />
-    </Paper>
+        <Copyright
+          sx={{ mt: 5 }}
+          content="Copyright © 2022 HL Bank. All Rights Reserved."
+        />
+      </Paper>
+    </ThemeProvider>
   );
 }
