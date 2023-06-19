@@ -10,7 +10,9 @@ export default function UserNavBar() {
         flexGrow: 1,
         padding: 2,
         paddingLeft: 4,
-        paddingRight: 4
+        paddingRight: 4,
+        width: '98%',
+        margin: 'auto'
       }}
     >
       <Stack
