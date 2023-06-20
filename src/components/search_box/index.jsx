@@ -1,13 +1,14 @@
 import { Box } from '@mui/material';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { Form, Formik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
-import TextField from '../components/forms_ui/TextField';
-import DateTimePicker from './forms_ui/DateTimePicker';
-import SelectField from './forms_ui/Select';
+import DateTimePicker from '../forms_ui/DateTimePicker';
+import SelectField from '../forms_ui/Select';
+import TextField from '../forms_ui/TextField';
+import ResetButton from './ResetButton';
+import SearchButton from './SearchButton';
 
 const currentDate = new Date().toJSON().slice(0, 10);
 const previousMonthDate = new Date(
@@ -109,15 +110,19 @@ export default function SearchBox() {
                     />
                   </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    fullWidth
-                    type="submit"
-                    variant="contained"
-                    color="success"
-                  >
-                    Search
-                  </Button>
+                <Grid
+                  item
+                  container
+                  xs={12}
+                  spacing={2}
+                  justifyContent="center"
+                >
+                  <Grid item>
+                    <SearchButton />
+                  </Grid>
+                  <Grid item>
+                    <ResetButton />
+                  </Grid>
                 </Grid>
               </Grid>
             </Form>

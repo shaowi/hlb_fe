@@ -7,9 +7,9 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { ThemeProvider, createTheme } from '@mui/material';
-import SearchBox from './SearchBox';
 import DataTable from './DataTable';
 import Grid from '@mui/material/Grid';
+import SearchBox from './search_box/index';
 
 const theme = createTheme({
   typography: {
