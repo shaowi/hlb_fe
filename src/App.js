@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import Home from './pages/Home';
 import { ThemeProvider, createTheme } from '@mui/material';
+import PaymentFileTabs from './components/PaymentFileTabs';
 
 const theme = createTheme({
   palette: {
@@ -35,6 +36,14 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
+          <Route
+            path="/outward-iss-cbft-credit-transfer"
+            element={
+              <Home>
+                <PaymentFileTabs />
+              </Home>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
