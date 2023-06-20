@@ -11,7 +11,8 @@ import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
 import { visuallyHidden } from '@mui/utils';
 import Typography from '@mui/material/Typography';
-import { formatToCurrency } from './../services/helper';
+import { formatToCurrency } from './../../services/helper';
+import ActionButton from './ActionButton';
 
 const columns = [
   { id: 'action', label: 'Action', minWidth: 100 },
@@ -60,7 +61,7 @@ function createData(
 
 const rows = [
   createData(
-    '',
+    <ActionButton handleClick={() => console.log('row 0 clicked')} />,
     'OPFR202305150000021.csv',
     'Single Debit',
     2,
@@ -68,11 +69,19 @@ const rows = [
     '2023-05-15'
   ),
   createData(
-    '',
+    <ActionButton handleClick={() => console.log('row 1 clicked')} />,
     'OPFR202305150000022.csv',
     'Multiple Debit',
     2,
     957.5,
+    '2023-05-15'
+  ),
+  createData(
+    <ActionButton handleClick={() => console.log('row 2 clicked')} />,
+    'OPFR202305150000023.csv',
+    'Single Debit',
+    2,
+    1000,
     '2023-05-15'
   )
 ];

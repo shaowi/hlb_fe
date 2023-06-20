@@ -7,9 +7,10 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { ThemeProvider, createTheme } from '@mui/material';
-import DataTable from './DataTable';
 import Grid from '@mui/material/Grid';
 import SearchBox from './search_box/index';
+import DataTable from './datatable/index';
+import Upload from './upload/index';
 
 const theme = createTheme({
   typography: {
@@ -33,7 +34,7 @@ const TABS = [
       </Grid>
     )
   },
-  { label: UPLOAD, content: 'Upload Payment File' },
+  { label: UPLOAD, content: <Upload /> },
   { label: CREATE, content: 'Create Payment File' }
 ];
 
