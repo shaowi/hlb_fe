@@ -1,90 +1,16 @@
-import * as React from 'react';
+import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Box from '@mui/material/Box';
-import { visuallyHidden } from '@mui/utils';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import Typography from '@mui/material/Typography';
-import { formatToCurrency } from './../../services/helper';
-import ActionButton from './ActionButton';
-
-const columns = [
-  { id: 'action', label: 'Action', minWidth: 100 },
-  { id: 'filename', label: 'Filename', minWidth: 170 },
-  {
-    id: 'debitType',
-    label: 'Debit Type',
-    minWidth: 170
-  },
-  {
-    id: 'transactionCount',
-    label: 'Total Transaction Count',
-    minWidth: 120
-  },
-  {
-    id: 'totalPaymentAmount',
-    label: 'Total Payment Amount',
-    minWidth: 170,
-    format: (value) => formatToCurrency(value)
-  },
-  {
-    id: 'transactionDate',
-    label: 'Transaction Date',
-    minWidth: 170,
-    format: (value) => value.toLocaleString('en-US')
-  }
-];
-
-function createData(
-  action,
-  filename,
-  debitType,
-  transactionCount,
-  totalPaymentAmount,
-  transactionDate
-) {
-  return {
-    action,
-    filename,
-    debitType,
-    transactionCount,
-    totalPaymentAmount,
-    transactionDate
-  };
-}
-
-const rows = [
-  createData(
-    <ActionButton handleClick={() => console.log('row 0 clicked')} />,
-    'OPFR202305150000021.csv',
-    'Single Debit',
-    2,
-    19957.5,
-    '2023-05-15'
-  ),
-  createData(
-    <ActionButton handleClick={() => console.log('row 1 clicked')} />,
-    'OPFR202305150000022.csv',
-    'Multiple Debit',
-    2,
-    957.5,
-    '2023-05-15'
-  ),
-  createData(
-    <ActionButton handleClick={() => console.log('row 2 clicked')} />,
-    'OPFR202305150000023.csv',
-    'Single Debit',
-    2,
-    1000,
-    '2023-05-15'
-  )
-];
+import { visuallyHidden } from '@mui/utils';
+import * as React from 'react';
 
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -114,7 +40,7 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export default function DataTable() {
+export default function DataTable({ rows, columns }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [order, setOrder] = React.useState('asc');
@@ -130,7 +56,7 @@ export default function DataTable() {
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
-    [order, orderBy, page, rowsPerPage]
+    [order, orderBy, page, rows, rowsPerPage]
   );
 
   const handleChangePage = (event, newPage) => {

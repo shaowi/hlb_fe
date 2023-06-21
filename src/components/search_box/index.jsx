@@ -44,7 +44,7 @@ const FORM_VALIDATION = Yup.object().shape({
 });
 
 export default function SearchBox() {
-  const handleSubmit = (values) => {
+  const handleSearch = (values) => {
     console.log(values);
   };
 
@@ -58,7 +58,7 @@ export default function SearchBox() {
           <Formik
             initialValues={INITIAL_FORM_STATE}
             validationSchema={FORM_VALIDATION}
-            onSubmit={handleSubmit}
+            onSubmit={handleSearch}
           >
             <Form>
               <Grid container spacing={2}>

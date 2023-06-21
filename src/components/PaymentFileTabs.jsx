@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { ThemeProvider, createTheme } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import SearchBox from './search_box/index';
-import DataTable from './datatable/index';
-import Upload from './upload/index';
+import RejectedPaymentMain from '../pages/tabs/RejectedPaymentMain';
+import UploadPaymentMain from '../pages/tabs/UploadPaymentMain';
+import CreatePaymentMain from '../pages/tabs/CreatePaymentMain';
+import Footer from './Footer';
 
 const theme = createTheme({
   typography: {
@@ -27,15 +27,10 @@ const CREATE = 'Create Payment File';
 const TABS = [
   {
     label: REJECTED,
-    content: (
-      <Grid container direction="column" spacing={2} p={3} mb={5}>
-        <SearchBox />
-        <DataTable />
-      </Grid>
-    )
+    content: <RejectedPaymentMain />
   },
-  { label: UPLOAD, content: <Upload /> },
-  { label: CREATE, content: 'Create Payment File' }
+  { label: UPLOAD, content: <UploadPaymentMain /> },
+  { label: CREATE, content: <CreatePaymentMain /> }
 ];
 
 function TabPanel(props) {
@@ -69,9 +64,13 @@ function a11yProps(index) {
 
 export default function PaymentFileTabs() {
   const [value, setValue] = useState(0);
+  const [isFooterFixed, setIsFooterFixed] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    if (newValue === 1) {
+      setIsFooterFixed(true);
+    }
   };
 
   return (
@@ -116,6 +115,7 @@ export default function PaymentFileTabs() {
           </TabPanel>
         ))}
       </Paper>
+      <Footer isFixed={isFooterFixed} />
     </ThemeProvider>
   );
 }

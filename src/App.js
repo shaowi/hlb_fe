@@ -4,6 +4,7 @@ import NotFound from './pages/NotFound';
 import Home from './pages/Home';
 import { ThemeProvider, createTheme } from '@mui/material';
 import PaymentFileTabs from './components/PaymentFileTabs';
+import Footer from './components/Footer';
 
 const theme = createTheme({
   palette: {
@@ -35,7 +36,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/home" element={<Home />} />
+          <Route
+            path="/home"
+            element={
+              <Home>
+                <Footer isFixed={true} />
+              </Home>
+            }
+          />
           <Route
             path="/outward-iss-cbft-credit-transfer"
             element={
