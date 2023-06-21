@@ -3,7 +3,9 @@ import Grid from '@mui/material/Grid';
 import SearchBox from './../../components/search_box/index';
 import DataTable from './../../components/datatable/index';
 import { formatToCurrency } from './../../services/helper';
-import ActionButton from './../../components/datatable/ActionButton';
+import ActionButton from '../../components/datatable/ActionButton';
+import FileOpenIcon from '@mui/icons-material/FileOpen';
+import ToolTipWrapper from '../../components/forms_ui/ToolTipWrapper';
 
 const columns = [
   { id: 'action', label: 'Action', minWidth: 100 },
@@ -32,41 +34,61 @@ const columns = [
   }
 ];
 
+const viewFileToolTipText = 'View File';
+
 const rows = [
-  createData(
-    <ActionButton handleClick={() => console.log('row 0 clicked')} />,
-    'OPFR202305150000021.csv',
-    'Single Debit',
-    2,
-    19957.5,
-    '2023-05-15'
-  ),
-  createData(
-    <ActionButton handleClick={() => console.log('row 1 clicked')} />,
-    'OPFR202305150000022.csv',
-    'Multiple Debit',
-    2,
-    957.5,
-    '2023-05-15'
-  ),
-  createData(
-    <ActionButton handleClick={() => console.log('row 2 clicked')} />,
-    'OPFR202305150000023.csv',
-    'Single Debit',
-    2,
-    1000,
-    '2023-05-15'
-  )
+  createData({
+    action: (
+      <ToolTipWrapper title={viewFileToolTipText} placement="top">
+        <ActionButton handleClick={() => console.log('row 0 clicked')}>
+          <FileOpenIcon />
+        </ActionButton>
+      </ToolTipWrapper>
+    ),
+    filename: 'OPFR202305150000021.csv',
+    debitType: 'Single Debit',
+    transactionCount: 2,
+    totalPaymentAmount: 19957.5,
+    transactionDate: '2023-05-15'
+  }),
+  createData({
+    action: (
+      <ToolTipWrapper title={viewFileToolTipText} placement="top">
+        <ActionButton handleClick={() => console.log('row 1 clicked')}>
+          <FileOpenIcon />
+        </ActionButton>
+      </ToolTipWrapper>
+    ),
+    filename: 'OPFR202305150000022.csv',
+    debitType: 'Multiple Debit',
+    transactionCount: 2,
+    totalPaymentAmount: 900.5,
+    transactionDate: '2023-05-15'
+  }),
+  createData({
+    action: (
+      <ToolTipWrapper title={viewFileToolTipText} placement="top">
+        <ActionButton handleClick={() => console.log('row 2 clicked')}>
+          <FileOpenIcon />
+        </ActionButton>
+      </ToolTipWrapper>
+    ),
+    filename: 'OPFR202305150000023.csv',
+    debitType: 'Single Debit',
+    transactionCount: 2,
+    totalPaymentAmount: 800.5,
+    transactionDate: '2023-05-15'
+  })
 ];
 
-function createData(
+function createData({
   action,
   filename,
   debitType,
   transactionCount,
   totalPaymentAmount,
   transactionDate
-) {
+}) {
   return {
     action,
     filename,
@@ -81,7 +103,7 @@ export default function RejectedPaymentMain() {
   return (
     <Grid container direction="column" spacing={2} p={3} mb={5}>
       <SearchBox />
-      <DataTable columns={columns} rows={rows} />
+      <DataTable title="Pending Action" columns={columns} rows={rows} />
     </Grid>
   );
 }

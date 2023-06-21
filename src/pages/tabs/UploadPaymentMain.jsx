@@ -1,11 +1,9 @@
 import React from 'react';
 import { Button, Box, Tooltip, Grid } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+import { FILENAME_FORMAT } from '../../constants';
 
 export default function UploadPaymentMain() {
-  const toolTipText =
-    'Filename should be in the format of OPFR+yyyyMMdd+7 digits of running number per day. E.g.: OPFR202306210000001.csv';
-
   return (
     <Box sx={{ p: 3 }}>
       <Grid container spacing={1} alignItems="center">
@@ -16,7 +14,7 @@ export default function UploadPaymentMain() {
           </Button>
         </Grid>
         <Grid item xs={2}>
-          <Tooltip title={toolTipText}>
+          <Tooltip title={FILENAME_FORMAT}>
             <InfoIcon />
           </Tooltip>
         </Grid>

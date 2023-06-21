@@ -40,7 +40,7 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export default function DataTable({ rows, columns }) {
+export default function DataTable({ title, rows, columns }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [order, setOrder] = React.useState('asc');
@@ -77,10 +77,8 @@ export default function DataTable({ rows, columns }) {
   };
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <Typography sx={{ p: 3 }} variant="h4">
-        Pending Action
-      </Typography>
+    <Paper sx={{ width: '100%', overflow: 'hidden', p: 3 }}>
+      <Typography variant="h4">{title}</Typography>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

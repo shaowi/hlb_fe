@@ -1,13 +1,15 @@
 import { Button } from '@mui/material';
 import React from 'react';
-import PageviewIcon from '@mui/icons-material/Pageview';
 
-const ActionButton = ({ handleClick }) => {
+export default function ActionButton({
+  color = 'success',
+  handleClick,
+  children,
+  ...props
+}) {
   return (
-    <Button variant="contained" color="success" onClick={handleClick}>
-      <PageviewIcon />
+    <Button variant="contained" color={color} onClick={handleClick} {...props}>
+      {children}
     </Button>
   );
-};
-
-export default ActionButton;
+}
