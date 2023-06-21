@@ -1,15 +1,19 @@
 import { Lock, Person } from '@mui/icons-material';
-import { InputAdornment, Paper } from '@mui/material';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import {
+  Button,
+  Grid,
+  InputAdornment,
+  Paper,
+  ThemeProvider,
+  Typography,
+  createTheme
+} from '@mui/material';
 import { Form, Formik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 import Copyright from '../components/Copyright';
 import TextField from '../components/forms_ui/TextField';
 import logInUser from './../services/LoginService';
-import { ThemeProvider, createTheme } from '@mui/material';
 
 const theme = createTheme({
   typography: {

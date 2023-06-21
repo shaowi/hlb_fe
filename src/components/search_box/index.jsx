@@ -1,6 +1,4 @@
-import { Box } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import { Box, Grid, Typography } from '@mui/material';
 import { Form, Formik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';

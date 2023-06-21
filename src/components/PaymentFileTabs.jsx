@@ -1,15 +1,18 @@
+import {
+  Box,
+  Paper,
+  Tab,
+  Tabs,
+  Typography,
+  ThemeProvider,
+  createTheme
+} from '@mui/material';
+import PropTypes from 'prop-types';
 import * as React from 'react';
 import { useState } from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import { ThemeProvider, createTheme } from '@mui/material';
+import CreatePaymentMain from '../pages/tabs/CreatePaymentMain';
 import RejectedPaymentMain from '../pages/tabs/RejectedPaymentMain';
 import UploadPaymentMain from '../pages/tabs/UploadPaymentMain';
-import CreatePaymentMain from '../pages/tabs/CreatePaymentMain';
 import Footer from './Footer';
 
 const theme = createTheme({
