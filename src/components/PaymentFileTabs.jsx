@@ -10,10 +10,10 @@ import {
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import { useState } from 'react';
-import CreatePaymentMain from '../pages/tabs/CreatePaymentMain';
 import RejectedPaymentMain from '../pages/tabs/RejectedPaymentMain';
 import UploadPaymentMain from '../pages/tabs/UploadPaymentMain';
 import Footer from './Footer';
+import CreatePaymentMain from './../pages/tabs/create_payment_main/index';
 
 const theme = createTheme({
   typography: {

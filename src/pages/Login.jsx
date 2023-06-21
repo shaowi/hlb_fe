@@ -11,9 +11,9 @@ import {
 import { Form, Formik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
-import Copyright from '../components/Copyright';
-import TextField from '../components/forms_ui/TextField';
-import logInUser from './../services/LoginService';
+import Copyright from 'components/Copyright';
+import TextField from 'components/forms_ui/TextField';
+import logInUser from 'services/LoginService';
 
 const theme = createTheme({
   typography: {

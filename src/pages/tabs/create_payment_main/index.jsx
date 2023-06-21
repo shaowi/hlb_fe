@@ -1,15 +1,14 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Grid } from '@mui/material';
+import ActionButton from 'components/datatable/ActionButton';
+import DataTable from 'components/datatable/index';
+import ApplicantForm from 'components/forms/ApplicantForm';
+import FileForm from 'components/forms/FileForm';
+import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
 import { Form, Formik } from 'formik';
-import React from 'react';
+import { formatToCurrency } from 'services/helper';
 import * as Yup from 'yup';
-import ActionButton from '../../components/datatable/ActionButton';
-import ApplicantForm from '../../components/forms/ApplicantForm';
-import FileForm from '../../components/forms/FileForm';
-import DataTable from './../../components/datatable/index';
-import { formatToCurrency } from './../../services/helper';
-import ToolTipWrapper from '../../components/forms_ui/ToolTipWrapper';
 
 const currentDate = new Date().toJSON().slice(0, 10);
 
@@ -196,7 +195,7 @@ function createData({
 }
 
 export default function CreatePaymentMain() {
-  const handleSubmit = (values) => {
+  const addTransaction = (values) => {
     console.log(values);
   };
 
@@ -208,7 +207,7 @@ export default function CreatePaymentMain() {
             <Formik
               initialValues={INITIAL_FORM_STATE}
               validationSchema={FORM_VALIDATION}
-              onSubmit={handleSubmit}
+              onSubmit={addTransaction}
             >
               <Form>
                 <FileForm />

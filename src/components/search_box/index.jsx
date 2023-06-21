@@ -1,6 +1,5 @@
 import { Box, Grid, Typography } from '@mui/material';
 import { Form, Formik } from 'formik';
-import React from 'react';
 import * as Yup from 'yup';
 import DateTimePicker from '../forms_ui/DateTimePicker';
 import SelectField from '../forms_ui/Select';

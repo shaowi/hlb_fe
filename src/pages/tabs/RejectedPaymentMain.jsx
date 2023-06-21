@@ -1,11 +1,10 @@
-import React from 'react';
-import Grid from '@mui/material/Grid';
-import SearchBox from './../../components/search_box/index';
-import DataTable from './../../components/datatable/index';
-import { formatToCurrency } from './../../services/helper';
-import ActionButton from '../../components/datatable/ActionButton';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import ToolTipWrapper from '../../components/forms_ui/ToolTipWrapper';
+import Grid from '@mui/material/Grid';
+import ActionButton from 'components/datatable/ActionButton';
+import DataTable from 'components/datatable/index';
+import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
+import SearchBox from 'components/search_box/index';
+import { formatToCurrency } from 'services/helper';
 
 const columns = [
   { id: 'action', label: 'Action', minWidth: 100 },

@@ -1,7 +1,6 @@
-import React from 'react';
-import { Button, Box, Tooltip, Grid } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
-import { FILENAME_FORMAT } from '../../constants';
+import { Box, Button, Grid, Tooltip } from '@mui/material';
+import { FILENAME_FORMAT } from 'constants.js';
 
 export default function UploadPaymentMain() {
   return (
