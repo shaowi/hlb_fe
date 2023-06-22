@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export default function logInUser(username, password) {
   const encryptedPassword = encryptPassword(password);
 

@@ -1,28 +1,24 @@
 import { Lock, Person } from '@mui/icons-material';
 import {
+  Button,
+  Grid,
   InputAdornment,
   Paper,
   ThemeProvider,
+  Typography,
   createTheme
 } from '@mui/material';
-import React from 'react';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import { Form, Formik } from 'formik';
+import React from 'react';
 import * as Yup from 'yup';
-import Copyright from '../components/Copyright';
-import TextField from '../components/forms_ui/TextField';
-import logInUser from './../services/LoginService';
+import Copyright from 'components/Copyright';
+import TextField from 'components/forms_ui/TextField';
+import logInUser from 'services/LoginService';
 
 const theme = createTheme({
   typography: {
     h4: {
-      fontSize: '1.5rem',
       color: '#BBB'
-    },
-    subtitle2: {
-      color: 'red'
     }
   }
 });
@@ -32,7 +28,7 @@ const INITIAL_FORM_STATE = {
   password: ''
 };
 
-const FORM_VALIDATION = Yup.object().shape({
+const FORM_VALIDATION = Yup.object({
   username: Yup.string().required('Username is required'),
   password: Yup.string().required('Password is required')
 });
@@ -61,7 +57,7 @@ export default function Login() {
       >
         <Grid container spacing={6}>
           <Grid item container direction="column" alignItems="center" md={6}>
-            <img src="/images/logo.png" alt="Login" width="60%" height="auto" />
+            <img src="/images/logo.png" alt="hlb" width="60%" height="auto" />
             <Typography variant="h4" align="center" gutterBottom>
               Payment Gateway Biz Ops Portal
             </Typography>
