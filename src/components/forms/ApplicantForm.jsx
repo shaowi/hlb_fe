@@ -13,7 +13,7 @@ export default function ApplicantForm({
     <Paper sx={{ width: '100%', overflow: 'hidden', p: 3, mt: 3 }}>
       <Grid container direction="column" spacing={2}>
         <Grid item alignItems="center" md={6}>
-          <Typography variant="h4">Applicant Details</Typography>
+          <Typography variant="h5">Applicant Details</Typography>
         </Grid>
         <Grid item>
           <Divider />

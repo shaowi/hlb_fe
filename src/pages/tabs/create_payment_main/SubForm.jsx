@@ -8,6 +8,7 @@ import FormButton from 'components/forms/FormButton';
 import ResetButton from 'components/search_box/ResetButton';
 import { APPLICANT_DETAILS_VALIDATION } from 'constants.js';
 import BeneficiaryForm from 'components/forms/BeneficiaryForm';
+import PaymentDetailsForm from 'components/forms/PaymentDetailsForm';
 
 export default function SubForm({ handleSubmit, applicantDetails }) {
   // TODO: Move this to constants.js
@@ -36,10 +37,23 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
     beneficiaryCountryCode: { label: 'AU - Australia', value: 'AU' }
   };
 
+  const PAYMENT_DETAILS = {
+    remittanceCurrency: { label: 'AUD', value: 'AUD' },
+    remittanceAmount: '',
+    fxContractReferenceNo: '',
+    exchangeRate: '',
+    creditingFxRate: '',
+    debitingFxRate: '',
+    paymentCurrency: '',
+    paymentAmount: '',
+    localEquivalentAmount: ''
+  };
+
   const INITIAL_FORM_STATE = {
     ...FILE_DETAILS,
     ...applicantDetails,
-    ...BENEFICIARY_DETAILS
+    ...BENEFICIARY_DETAILS,
+    ...PAYMENT_DETAILS
   };
 
   const FILE_DETAILS_VALIDATION = {
@@ -65,10 +79,22 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
     beneficiaryAddress3: Yup.string()
   };
 
-  const FORM_VALIDATION = Yup.object().shape({
+  const PAYMENT_DETAILS_VALIDATION = {
+    remittanceAmount: Yup.number().required('Remittance Amount is required'),
+    fxContractReferenceNo: Yup.string(),
+    exchangeRate: Yup.number(),
+    creditingFxRate: Yup.number(),
+    debitingFxRate: Yup.number(),
+    paymentCurrency: Yup.string(),
+    paymentAmount: Yup.number(),
+    localEquivalentAmount: Yup.number()
+  };
+
+  const FORM_VALIDATION = Yup.object({
     ...FILE_DETAILS_VALIDATION,
     ...APPLICANT_DETAILS_VALIDATION,
-    ...BENEFICIARY_DETAILS_VALIDATION
+    ...BENEFICIARY_DETAILS_VALIDATION,
+    ...PAYMENT_DETAILS_VALIDATION
   });
 
   const theme = createTheme({
@@ -101,6 +127,10 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
                   <BeneficiaryForm
                     setFieldValue={setFieldValue}
                     formData={BENEFICIARY_DETAILS}
+                  />
+                  <PaymentDetailsForm
+                    setFieldValue={setFieldValue}
+                    formData={PAYMENT_DETAILS}
                   />
                   <Grid container spacing={2} justifyContent="center" mt={1}>
                     <Grid item>

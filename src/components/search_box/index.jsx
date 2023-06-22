@@ -31,7 +31,7 @@ const INITIAL_FORM_STATE = {
   transactionDateTo: ''
 };
 
-const FORM_VALIDATION = Yup.object().shape({
+const FORM_VALIDATION = Yup.object({
   filename: Yup.string(),
   status: Yup.string().required('Status is required'),
   businessDateFrom: Yup.date().required('Business Date From is required'),

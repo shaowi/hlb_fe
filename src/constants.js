@@ -18,6 +18,12 @@ export const COUNTRY_CODE = [
   { label: 'SG - Singapore', value: 'SG' }
 ];
 
+export const REMITTANCE_CURRENCY = [
+  { label: 'AUD', value: 'AUD' },
+  { label: 'USD', value: 'USD' },
+  { label: 'SGD', value: 'SGD' }
+];
+
 export const FILENAME_FORMAT =
   'Filename should be in the format of OPFR+yyyyMMdd+7 digits of running number per day. E.g.: OPFR202306210000001.csv';
 

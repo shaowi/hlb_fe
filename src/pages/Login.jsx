@@ -28,7 +28,7 @@ const INITIAL_FORM_STATE = {
   password: ''
 };
 
-const FORM_VALIDATION = Yup.object().shape({
+const FORM_VALIDATION = Yup.object({
   username: Yup.string().required('Username is required'),
   password: Yup.string().required('Password is required')
 });
