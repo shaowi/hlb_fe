@@ -1,7 +1,7 @@
 import { Autocomplete, Divider, Paper, Grid, Typography } from '@mui/material';
 import React from 'react';
 import TextField from '../forms_ui/TextField';
-import SelectField from '../forms_ui/SelectField';
+import SelectField from '../forms_ui/Select';
 import { COUNTRY_CODE, RESIDENT_CODE } from 'constants';
 
 export default function BeneficiaryForm({
@@ -148,10 +148,20 @@ export default function BeneficiaryForm({
           <Grid item container spacing={2}>
             <Grid item xs={4}>
               <Autocomplete
+                disabled={isDisabled}
                 required
                 disablePortal
                 id="beneficiaryCountryCode"
                 name="beneficiaryCountryCode"
+                defaultValue={
+                  formData.beneficiaryCountryCode.value === ''
+                    ? null
+                    : formData.beneficiaryCountryCode
+                }
+                isOptionEqualToValue={(option, value) =>
+                  option.value === value.value
+                }
+                getOptionLabel={(option) => option.label}
                 options={COUNTRY_CODE}
                 onChange={(e, value) => {
                   setFieldValue(

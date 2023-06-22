@@ -133,6 +133,8 @@ export default function CreatePaymentMain() {
     applicantAddress1: 'applicantAddress1',
     applicantAddress2: 'applicantAddress2',
     applicantAddress3: 'applicantAddress3',
+    // TODO: Move this to constants.js
+    // Data used for testing only
     // applicantCountryCode: { label: '', value: '' }
     applicantCountryCode: { label: 'AU - Australia', value: 'AU' }
   };
@@ -158,16 +160,18 @@ export default function CreatePaymentMain() {
           applicantDetails={applicantDetails}
         />
       ) : (
-        <MainForm
-          handleSubmit={showSubForm}
-          applicantDetails={applicantDetails}
-        />
+        <>
+          <MainForm
+            handleSubmit={showSubForm}
+            applicantDetails={applicantDetails}
+          />
+          <DataTable
+            title="Transaction Details"
+            rows={transactionRows}
+            columns={transactionColumns}
+          />
+        </>
       )}
-      <DataTable
-        title="Transaction Details"
-        rows={transactionRows}
-        columns={transactionColumns}
-      />
     </Box>
   );
 }

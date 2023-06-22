@@ -5,12 +5,17 @@ import ApplicantForm from 'components/forms/ApplicantForm';
 import * as Yup from 'yup';
 import FileSubForm from 'components/forms/FileSubForm';
 import FormButton from 'components/forms/FormButton';
+import ResetButton from 'components/search_box/ResetButton';
+import { APPLICANT_DETAILS_VALIDATION } from 'constants.js';
+import BeneficiaryForm from 'components/forms/BeneficiaryForm';
 
 export default function SubForm({ handleSubmit, applicantDetails }) {
+  // TODO: Move this to constants.js
+  // Data used for testing only
   const FILE_DETAILS = {
-    debitType: '',
-    transactionType: '',
-    processingMode: ''
+    debitType: 'single',
+    transactionType: 'transactionType',
+    processingMode: 'processingMode'
   };
 
   const BENEFICIARY_DETAILS = {
@@ -28,7 +33,7 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
     beneficiaryAddress1: '',
     beneficiaryAddress2: '',
     beneficiaryAddress3: '',
-    beneficiaryCountryCode: ''
+    beneficiaryCountryCode: { label: 'AU - Australia', value: 'AU' }
   };
 
   const INITIAL_FORM_STATE = {
@@ -41,28 +46,6 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
     debitType: Yup.string(),
     transactionType: Yup.string(),
     processingMode: Yup.string()
-  };
-
-  const APPLICANT_DETAILS_VALIDATION = {
-    applicantName: Yup.string().required('Name is required'),
-    applicantAccountNo: Yup.number().required('Account No is required'),
-    applicantAccountType: Yup.string().required('Account Type is required'),
-    applicantAccountCurrency: Yup.string().required(
-      'Account Currency is required'
-    ),
-    applicantIdType: Yup.string(),
-    applicantId: Yup.string(),
-    applicantAccountBranchCode: Yup.string().required(
-      'Account Branch Code is required'
-    ),
-    applicantBankBic: Yup.string(),
-    applicantResidentCode: Yup.string().required('Resident Code is required'),
-    applicantAccountCifId: Yup.string(),
-    applicantPhone: Yup.number().integer().typeError('Phone must be a number'),
-    applicantPostalCode: Yup.string(),
-    applicantAddress1: Yup.string().required('Address 1 is required'),
-    applicantAddress2: Yup.string(),
-    applicantAddress3: Yup.string()
   };
 
   const BENEFICIARY_DETAILS_VALIDATION = {
@@ -115,9 +98,19 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
                     setFieldValue={setFieldValue}
                     formData={applicantDetails}
                   />
+                  <BeneficiaryForm
+                    setFieldValue={setFieldValue}
+                    formData={BENEFICIARY_DETAILS}
+                  />
                   <Grid container spacing={2} justifyContent="center" mt={1}>
                     <Grid item>
                       <FormButton label="Back" color="neutral" />
+                    </Grid>
+                    <Grid item>
+                      <ResetButton />
+                    </Grid>
+                    <Grid item>
+                      <FormButton label="Save" color="success" />
                     </Grid>
                   </Grid>
                 </Form>
