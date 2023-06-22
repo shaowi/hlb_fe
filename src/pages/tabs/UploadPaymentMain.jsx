@@ -1,5 +1,5 @@
-import InfoIcon from '@mui/icons-material/Info';
-import { Box, Button, Grid, Tooltip } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
+import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
 import { FILENAME_FORMAT } from 'constants.js';
 
 export default function UploadPaymentMain() {
@@ -7,15 +7,12 @@ export default function UploadPaymentMain() {
     <Box sx={{ p: 3 }}>
       <Grid container spacing={1} alignItems="center">
         <Grid item xs={2}>
-          <Button variant="contained" component="label">
-            Choose File
-            <input type="file" hidden />
-          </Button>
-        </Grid>
-        <Grid item xs={2}>
-          <Tooltip title={FILENAME_FORMAT}>
-            <InfoIcon />
-          </Tooltip>
+          <ToolTipWrapper title={FILENAME_FORMAT}>
+            <Button variant="contained" component="label">
+              choose file
+              <input type="file" hidden />
+            </Button>
+          </ToolTipWrapper>
         </Grid>
       </Grid>
     </Box>

@@ -5,6 +5,7 @@ export default function logInUser(username, password) {
   // TODO: Make a POST request with username and encrypted password to server
 
   // TODO: If response is successful, return true else return false
+  return true;
 }
 
 function encryptPassword(password) {

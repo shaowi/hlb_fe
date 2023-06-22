@@ -89,20 +89,24 @@ export default function DataTable({ title, rows, columns }) {
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
                 >
-                  <TableSortLabel
-                    active={orderBy === column.id}
-                    direction={orderBy === column.id ? order : 'asc'}
-                    onClick={(e) => handleRequestSort(e, column.id)}
-                  >
+                  {column.sortable ? (
+                    <TableSortLabel
+                      active={orderBy === column.id}
+                      direction={orderBy === column.id ? order : 'asc'}
+                      onClick={(e) => handleRequestSort(e, column.id)}
+                    >
+                      <Typography fontWeight="bold">{column.label}</Typography>
+                      {orderBy === column.id ? (
+                        <Box component="span" sx={visuallyHidden}>
+                          {order === 'desc'
+                            ? 'sorted descending'
+                            : 'sorted ascending'}
+                        </Box>
+                      ) : null}
+                    </TableSortLabel>
+                  ) : (
                     <Typography fontWeight="bold">{column.label}</Typography>
-                    {orderBy === column.id ? (
-                      <Box component="span" sx={visuallyHidden}>
-                        {order === 'desc'
-                          ? 'sorted descending'
-                          : 'sorted ascending'}
-                      </Box>
-                    ) : null}
-                  </TableSortLabel>
+                  )}
                 </TableCell>
               ))}
             </TableRow>

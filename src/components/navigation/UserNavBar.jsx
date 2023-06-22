@@ -23,7 +23,7 @@ export default function UserNavBar() {
       >
         <Stack direction="row" spacing={2} alignItems="center">
           <img src="/images/logo.png" alt="hlb" width="20%" height="auto" />
-          <Link href="#" underline="none">
+          <Link href="/home" underline="none">
             <Typography variant="h5" align="center">
               Payment Gateway Biz Ops Portal
             </Typography>
@@ -36,7 +36,7 @@ export default function UserNavBar() {
               phbmaker
             </Typography>
           </Link>
-          <Link href="#" underline="none">
+          <Link href="/login" underline="none">
             <Typography variant="subtitle1" align="center">
               Logout
             </Typography>

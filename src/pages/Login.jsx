@@ -1,5 +1,6 @@
 import { Lock, Person } from '@mui/icons-material';
 import {
+  Alert,
   Button,
   Grid,
   InputAdornment,
@@ -8,12 +9,13 @@ import {
   Typography,
   createTheme
 } from '@mui/material';
-import { Form, Formik } from 'formik';
-import React from 'react';
-import * as Yup from 'yup';
+import { useState } from 'react';
 import Copyright from 'components/Copyright';
 import TextField from 'components/forms_ui/TextField';
+import { Form, Formik } from 'formik';
 import logInUser from 'services/LoginService';
+import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme({
   typography: {
@@ -34,10 +36,17 @@ const FORM_VALIDATION = Yup.object({
 });
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [hasError, setHasError] = useState(false);
+
   const handleSubmit = (values) => {
     console.log(values);
     const { username, password } = values;
-    logInUser(username, password);
+    if (logInUser(username, password)) {
+      navigate('/home');
+      return;
+    }
+    setHasError(true);
   };
 
   return (
@@ -71,6 +80,8 @@ export default function Login() {
               <Formik
                 initialValues={INITIAL_FORM_STATE}
                 validationSchema={FORM_VALIDATION}
+                validateOnBlur={false}
+                validationOnChange={false}
                 onSubmit={handleSubmit}
               >
                 <Form>
@@ -114,6 +125,14 @@ export default function Login() {
                 </Form>
               </Formik>
             </Grid>
+            {hasError && (
+              <Grid item>
+                <Alert variant="outlined" severity="error">
+                  Invalid username or password.
+                  <br /> Please try again.
+                </Alert>
+              </Grid>
+            )}
           </Grid>
         </Grid>
         <Copyright

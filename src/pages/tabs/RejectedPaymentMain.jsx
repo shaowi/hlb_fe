@@ -7,28 +7,32 @@ import SearchBox from 'components/search_box/index';
 import { formatToCurrency } from 'services/helper';
 
 const columns = [
-  { id: 'action', label: 'Action', minWidth: 100 },
-  { id: 'filename', label: 'Filename', minWidth: 170 },
+  { id: 'action', label: 'Action', minWidth: 100, sortable: false },
+  { id: 'filename', label: 'Filename', minWidth: 170, sortable: true },
   {
     id: 'debitType',
     label: 'Debit Type',
-    minWidth: 170
+    minWidth: 170,
+    sortable: true
   },
   {
     id: 'transactionCount',
     label: 'Total Transaction Count',
-    minWidth: 120
+    minWidth: 120,
+    sortable: true
   },
   {
     id: 'totalPaymentAmount',
     label: 'Total Payment Amount',
     minWidth: 170,
+    sortable: true,
     format: (value) => formatToCurrency(value)
   },
   {
     id: 'transactionDate',
     label: 'Transaction Date',
     minWidth: 170,
+    sortable: true,
     format: (value) => value.toLocaleString('en-US')
   }
 ];

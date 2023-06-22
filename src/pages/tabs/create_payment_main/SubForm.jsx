@@ -114,6 +114,8 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
             <Formik
               initialValues={INITIAL_FORM_STATE}
               validationSchema={FORM_VALIDATION}
+              validateOnBlur={false}
+              validationOnChange={false}
               onSubmit={handleSubmit}
             >
               {({ setFieldValue }) => (

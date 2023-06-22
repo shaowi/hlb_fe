@@ -55,6 +55,8 @@ export default function SearchBox() {
           <Formik
             initialValues={INITIAL_FORM_STATE}
             validationSchema={FORM_VALIDATION}
+            validateOnBlur={false}
+            validationOnChange={false}
             onSubmit={handleSearch}
           >
             <Form>

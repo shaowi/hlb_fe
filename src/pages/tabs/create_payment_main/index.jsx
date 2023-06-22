@@ -10,47 +10,55 @@ import MainForm from './MainForm';
 import SubForm from './SubForm';
 
 const transactionColumns = [
-  { id: 'action', label: 'Action', minWidth: 160 },
+  { id: 'action', label: 'Action', minWidth: 160, sortable: false },
   {
     id: 'channelTransactionReference',
     label: 'Channel Transaction Reference',
-    minWidth: 170
+    minWidth: 170,
+    sortable: true
   },
   {
     id: 'processingMode',
     label: 'Processing Mode',
-    minWidth: 100
+    minWidth: 100,
+    sortable: true
   },
   {
     id: 'beneficiaryAccountName',
     label: 'Beneficiary Account Name',
-    minWidth: 170
+    minWidth: 170,
+    sortable: true
   },
   {
     id: 'beneficiaryAccountNo',
     label: 'Beneficiary Account Number',
-    minWidth: 120
+    minWidth: 120,
+    sortable: true
   },
   {
     id: 'beneficiaryBankName',
     label: 'Beneficiary Bank Name',
-    minWidth: 170
+    minWidth: 170,
+    sortable: true
   },
   {
     id: 'beneficiaryAccountBic',
     label: 'Beneficiary Account Bic',
-    minWidth: 170
+    minWidth: 170,
+    sortable: true
   },
   {
     id: 'remittanceAmount',
     label: 'Remittance Amount',
     minWidth: 120,
+    sortable: true,
     format: (value) => formatToCurrency(value)
   },
   {
     id: 'fxContractReferenceNo',
     label: 'FX Contract Reference Number',
-    minWidth: 170
+    minWidth: 170,
+    sortable: true
   }
 ];
 
@@ -139,7 +147,7 @@ export default function CreatePaymentMain() {
     applicantCountryCode: { label: 'AU - Australia', value: 'AU' }
   };
 
-  const [subFormVisible, setSubFormVisible] = useState(true);
+  const [subFormVisible, setSubFormVisible] = useState(false);
   const [applicantDetails, setApplicantDetails] = useState(APPLICANT_DETAILS);
 
   const showSubForm = (values) => {
