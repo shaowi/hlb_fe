@@ -12,7 +12,7 @@ export default function FileForm() {
       <Grid item container spacing={2}>
         <Grid item xs={4}>
           <ToolTipWrapper title={FILENAME_FORMAT} placement="top">
-            <TextField name="filename" label="Filename" />
+            <TextField required name="filename" label="Filename" />
           </ToolTipWrapper>
         </Grid>
         <Grid item xs={4}>
@@ -27,26 +27,36 @@ export default function FileForm() {
       <Grid item container spacing={2}>
         <Grid item xs={4}>
           <TextField
+            disabled
             name="channelTransactionReference"
             label="Channel Transaction Reference"
           />
         </Grid>
         <Grid item xs={4}>
-          <TextField name="transactionType" label="Transaction Type" />
+          <TextField disabled name="transactionType" label="Transaction Type" />
         </Grid>
         <Grid item xs={4}>
-          <TextField name="requestChannel" label="Request Channel" />
+          <TextField disabled name="requestChannel" label="Request Channel" />
         </Grid>
       </Grid>
       <Grid item container spacing={2}>
         <Grid item xs={4}>
-          <DateTimePicker name="transactionDate" label="Transaction Date" />
+          <DateTimePicker
+            disabled
+            name="transactionDate"
+            label="Transaction Date"
+          />
         </Grid>
         <Grid item xs={4}>
-          <DateTimePicker required name="valueDate" label="Value Date" />
+          <DateTimePicker
+            disabled
+            required
+            name="valueDate"
+            label="Value Date"
+          />
         </Grid>
         <Grid item xs={4}>
-          <DateTimePicker name="businessDate" label="Business Date" />
+          <DateTimePicker disabled name="businessDate" label="Business Date" />
         </Grid>
       </Grid>
       <Grid item container spacing={2}>

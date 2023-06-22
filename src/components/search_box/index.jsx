@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Button, Box, Grid, Typography } from '@mui/material';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import DateTimePicker from '../forms_ui/DateTimePicker';
@@ -6,6 +6,7 @@ import SelectField from '../forms_ui/Select';
 import TextField from '../forms_ui/TextField';
 import ResetButton from './ResetButton';
 import SearchButton from './SearchButton';
+import FormButton from 'components/forms/FormButton';
 
 const currentDate = new Date().toJSON().slice(0, 10);
 const previousMonthDate = new Date(
@@ -115,7 +116,7 @@ export default function SearchBox() {
                   justifyContent="center"
                 >
                   <Grid item>
-                    <SearchButton />
+                    <FormButton label="Search" color="success" />
                   </Grid>
                   <Grid item>
                     <ResetButton />

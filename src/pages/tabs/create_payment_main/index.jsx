@@ -3,89 +3,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Box, Grid } from '@mui/material';
 import ActionButton from 'components/datatable/ActionButton';
 import DataTable from 'components/datatable/index';
-import ApplicantForm from 'components/forms/ApplicantForm';
-import FileForm from 'components/forms/FileForm';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
-import { Form, Formik } from 'formik';
+import { useState } from 'react';
 import { formatToCurrency } from 'services/helper';
-import * as Yup from 'yup';
-
-const currentDate = new Date().toJSON().slice(0, 10);
-
-const FILE_DETAILS = {
-  filename: '',
-  debitType: '',
-  channelTransactionReference: '',
-  transactionType: '',
-  requestChannel: '',
-  transactionDate: currentDate,
-  valueDate: currentDate,
-  businessDate: currentDate,
-  recipientReference: '',
-  otherPaymentDetails: ''
-};
-
-const APPLICANT_DETAILS = {
-  applicantName: '',
-  applicantAccountNo: '',
-  applicantAccountType: '',
-  applicantAccountCurrency: '',
-  applicantIdType: '',
-  applicantId: '',
-  applicantAccountBranchCode: '',
-  applicantBankBic: '',
-  applicantResidentCode: '',
-  applicantAccountCifId: '',
-  applicantPhone: '',
-  applicantPostalCode: '',
-  applicantAddress1: '',
-  applicantAddress2: '',
-  applicantAddress3: '',
-  applicantCountryCode: ''
-};
-
-const INITIAL_FORM_STATE = { ...FILE_DETAILS, ...APPLICANT_DETAILS };
-
-const FILE_DETAILS_VALIDATION = {
-  filename: Yup.string(),
-  debitType: Yup.string().required('Debit Type is required'),
-  channelTransactionReference: Yup.string(),
-  transactionType: Yup.string(),
-  requestChannel: Yup.string(),
-  transactionDate: Yup.date(),
-  valueDate: Yup.date().required('Value Date is required'),
-  businessDate: Yup.date().required('Business Date is required'),
-  recipientReference: Yup.string(),
-  otherPaymentDetails: Yup.string()
-};
-
-const APPLICANT_DETAILS_VALIDATION = {
-  applicantName: Yup.string().required('Name is required'),
-  applicantAccountNo: Yup.number().required('Account No is required'),
-  applicantAccountType: Yup.string().required('Account Type is required'),
-  applicantAccountCurrency: Yup.string().required(
-    'Account Currency is required'
-  ),
-  applicantIdType: Yup.string(),
-  applicantId: Yup.string(),
-  applicantAccountBranchCode: Yup.string().required(
-    'Account Branch Code is required'
-  ),
-  applicantBankBic: Yup.string(),
-  applicantResidentCode: Yup.string().required('Resident Code is required'),
-  applicantAccountCifId: Yup.string(),
-  applicantPhone: Yup.number().integer().typeError('Phone must be a number'),
-  applicantPostalCode: Yup.string(),
-  applicantAddress1: Yup.string().required('Address 1 is required'),
-  applicantAddress2: Yup.string(),
-  applicantAddress3: Yup.string(),
-  applicantCountryCode: Yup.string().required('Country Code is required')
-};
-
-const FORM_VALIDATION = Yup.object().shape({
-  ...FILE_DETAILS_VALIDATION,
-  ...APPLICANT_DETAILS_VALIDATION
-});
+import MainForm from './MainForm';
+import SubForm from './SubForm';
 
 const transactionColumns = [
   { id: 'action', label: 'Action', minWidth: 160 },
@@ -195,33 +117,57 @@ function createData({
 }
 
 export default function CreatePaymentMain() {
+  const APPLICANT_DETAILS = {
+    applicantName: 'John Doe',
+    applicantAccountNo: '9000000001',
+    applicantAccountType: 'Current',
+    applicantAccountCurrency: 'AUD',
+    applicantIdType: 'New IC',
+    applicantId: 'applicantId',
+    applicantAccountBranchCode: '90',
+    applicantBankBic: 'HLBBSGS0XXX',
+    applicantResidentCode: 'resident',
+    applicantAccountCifId: 'applicantAccountCifId',
+    applicantPhone: '12345678',
+    applicantPostalCode: '123456',
+    applicantAddress1: 'applicantAddress1',
+    applicantAddress2: 'applicantAddress2',
+    applicantAddress3: 'applicantAddress3',
+    // applicantCountryCode: { label: '', value: '' }
+    applicantCountryCode: { label: 'AU - Australia', value: 'AU' }
+  };
+
+  const [subFormVisible, setSubFormVisible] = useState(true);
+  const [applicantDetails, setApplicantDetails] = useState(APPLICANT_DETAILS);
+
+  const showSubForm = (values) => {
+    console.log(values);
+    setApplicantDetails(values);
+    setSubFormVisible(true);
+  };
+
   const addTransaction = (values) => {
     console.log(values);
   };
 
   return (
-    <Grid container direction="column" spacing={2} p={3} mb={5}>
-      <Box sx={{ p: 3 }}>
-        <Grid container direction="column" spacing={2}>
-          <Grid item>
-            <Formik
-              initialValues={INITIAL_FORM_STATE}
-              validationSchema={FORM_VALIDATION}
-              onSubmit={addTransaction}
-            >
-              <Form>
-                <FileForm />
-                <ApplicantForm />
-              </Form>
-            </Formik>
-          </Grid>
-        </Grid>
-      </Box>
+    <Box spacing={2} xs={{ p: 3, mb: 5 }}>
+      {subFormVisible ? (
+        <SubForm
+          handleSubmit={addTransaction}
+          applicantDetails={applicantDetails}
+        />
+      ) : (
+        <MainForm
+          handleSubmit={showSubForm}
+          applicantDetails={applicantDetails}
+        />
+      )}
       <DataTable
         title="Transaction Details"
         rows={transactionRows}
         columns={transactionColumns}
       />
-    </Grid>
+    </Box>
   );
 }
