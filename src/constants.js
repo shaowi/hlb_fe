@@ -17,6 +17,12 @@ export const CHARGE_BEARER = {
   SHA: 'SHA'
 };
 
+export const RECEIVER_CORRESPONDENT = {
+  receiverCorrespondent1: 'Receiver Correspondent 1',
+  receiverCorrespondent2: 'Receiver Correspondent 2',
+  receiverCorrespondent3: 'Receiver Correspondent 3'
+};
+
 // Select2 dropdown options
 export const COUNTRY_CODE = [
   { label: 'AU - Australia', value: 'AU' },

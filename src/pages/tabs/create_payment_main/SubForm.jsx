@@ -10,6 +10,7 @@ import { APPLICANT_DETAILS_VALIDATION } from 'constants.js';
 import BeneficiaryForm from 'components/forms/BeneficiaryForm';
 import PaymentDetailsForm from 'components/forms/PaymentDetailsForm';
 import ChargeDetailsForm from 'components/forms/ChargeDetailsForm';
+import CorrespondentBankDetailsForm from 'components/forms/CorrespondentBankDetailsForm';
 
 export default function SubForm({ handleSubmit, applicantDetails }) {
   // TODO: Move this to constants.js
@@ -59,12 +60,18 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
     // cableCharge: ''
   };
 
+  const CORRESPONDENT_BANK_DETAILS = {
+    sendersCorrespondent: '',
+    receiversCorrespondent: ''
+  };
+
   const INITIAL_FORM_STATE = {
     ...FILE_DETAILS,
     ...applicantDetails,
     ...BENEFICIARY_DETAILS,
     ...PAYMENT_DETAILS,
-    ...CHARGES_DETAILS
+    ...CHARGES_DETAILS,
+    ...CORRESPONDENT_BANK_DETAILS
   };
 
   const FILE_DETAILS_VALIDATION = {
@@ -108,12 +115,22 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
     commissionInLieuOfExchange: Yup.number()
   };
 
+  const CORRESPONDENT_BANK_DETAILS_VALIDATION = {
+    sendersCorrespondent: Yup.string().required(
+      "Sender's Correspondent is required"
+    ),
+    receiversCorrespondent: Yup.string().required(
+      "Receiver's Correspondent is required"
+    )
+  };
+
   const FORM_VALIDATION = Yup.object({
     ...FILE_DETAILS_VALIDATION,
     ...APPLICANT_DETAILS_VALIDATION,
     ...BENEFICIARY_DETAILS_VALIDATION,
     ...PAYMENT_DETAILS_VALIDATION,
-    ...CHARGES_DETAILS_VALIDATION
+    ...CHARGES_DETAILS_VALIDATION,
+    ...CORRESPONDENT_BANK_DETAILS_VALIDATION
   });
 
   const theme = createTheme({
@@ -157,6 +174,7 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
                     formData={CHARGES_DETAILS}
                     paymentCurrency="AUD"
                   />
+                  <CorrespondentBankDetailsForm />
                   <Grid container spacing={2} justifyContent="center" mt={1}>
                     <Grid item>
                       <FormButton label="Back" color="neutral" />
