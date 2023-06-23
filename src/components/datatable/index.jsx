@@ -81,6 +81,9 @@ export default function DataTable({ title, rows, columns }) {
       <Typography variant="h4">{title}</Typography>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
+          {rows.length === 0 && (
+            <caption className="text-center">No records found</caption>
+          )}
           <TableHead>
             <TableRow>
               {columns.map((column, index) => (
