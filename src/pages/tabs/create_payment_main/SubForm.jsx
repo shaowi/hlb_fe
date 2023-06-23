@@ -13,7 +13,11 @@ import ChargeDetailsForm from 'components/forms/ChargeDetailsForm';
 import CorrespondentBankDetailsForm from 'components/forms/CorrespondentBankDetailsForm';
 import TransactionDetailsForm from 'components/forms/TransactionDetailsForm';
 
-export default function SubForm({ handleSubmit, applicantDetails }) {
+export default function SubForm({
+  handleSubmit,
+  applicantDetails,
+  setSubFormVisible
+}) {
   // TODO: Clear data later (Mock data used for testing only)
   const FILE_DETAILS = {
     debitType: 'single',
@@ -203,7 +207,12 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
                   <TransactionDetailsForm />
                   <Grid container spacing={2} justifyContent="center" mt={1}>
                     <Grid item>
-                      <FormButton label="Back" color="neutral" />
+                      <FormButton
+                        type="button"
+                        label="Back"
+                        color="neutral"
+                        onClick={() => setSubFormVisible(false)}
+                      />
                     </Grid>
                     <Grid item>
                       <ResetButton />

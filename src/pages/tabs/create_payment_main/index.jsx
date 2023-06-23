@@ -62,8 +62,53 @@ const transactionColumns = [
   }
 ];
 
-const transactionRows = [
-  createData({
+const transactionRow = {
+  action: (
+    <Grid container spacing={2} justifyContent="center">
+      <Grid item xs={6}>
+        <ToolTipWrapper title="Edit">
+          <ActionButton
+            size="small"
+            onClick={() => console.log('transaction details row 0:edit')}
+          >
+            <EditIcon />
+          </ActionButton>
+        </ToolTipWrapper>
+      </Grid>
+      <Grid item xs={6}>
+        <ToolTipWrapper title="Delete">
+          <ActionButton
+            size="small"
+            color="error"
+            onClick={() => console.log('transaction details row 0:delete')}
+          >
+            <DeleteIcon />
+          </ActionButton>
+        </ToolTipWrapper>
+      </Grid>
+    </Grid>
+  ),
+  channelTransactionReference: '123456789',
+  processingMode: 'Normal',
+  beneficiaryAccountName: 'John Doe',
+  beneficiaryAccountNo: '123456789',
+  beneficiaryBankName: 'Bank of America',
+  beneficiaryAccountBic: '123456789',
+  remittanceAmount: 1000,
+  fxContractReferenceNo: '123456789'
+};
+
+function mapToRow({
+  channelTransactionReference,
+  processingMode,
+  beneficiaryAccountName,
+  beneficiaryAccountNo,
+  beneficiaryBankName,
+  beneficiaryAccountBic,
+  remittanceAmount,
+  fxContractReferenceNo
+}) {
+  return {
     action: (
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={6}>
@@ -89,36 +134,12 @@ const transactionRows = [
         </Grid>
       </Grid>
     ),
-    channelTransactionReference: '123456789',
-    processingMode: 'Normal',
-    beneficiaryAccountName: 'John Doe',
-    beneficiaryAccountNo: '123456789',
-    beneficiaryBankName: 'Bank of America',
-    beneficiaryAccountBic: '123456789',
-    remittanceAmount: 1000,
-    fxContractReferenceNo: '123456789'
-  })
-];
-
-function createData({
-  action,
-  channelTransactionReference,
-  processingMode,
-  beneficiaryAccountName,
-  beneficiaryAccountNo,
-  beneficiaryBankName,
-  beneficiaryAccountBic,
-  remittanceAmount,
-  fxContractReferenceNo
-}) {
-  return {
-    action,
     channelTransactionReference,
     processingMode,
     beneficiaryAccountName,
     beneficiaryAccountNo,
     beneficiaryBankName,
-    beneficiaryAccountBic,
+    beneficiaryAccountBic: beneficiaryAccountBic?.value,
     remittanceAmount,
     fxContractReferenceNo
   };
@@ -146,17 +167,19 @@ export default function CreatePaymentMain() {
     // applicantCountryCode: { label: '', value: '' }
   };
 
-  const [subFormVisible, setSubFormVisible] = useState(true);
+  const [subFormVisible, setSubFormVisible] = useState(false);
   const [applicantDetails, setApplicantDetails] = useState(APPLICANT_DETAILS);
+  const [transactionRows, setTransactionRows] = useState([transactionRow]);
 
   const showSubForm = (values) => {
-    console.log(values);
     setApplicantDetails(values);
     setSubFormVisible(true);
   };
 
   const addTransaction = (values) => {
     console.log(values);
+    setSubFormVisible(false);
+    setTransactionRows([...transactionRows, mapToRow(values)]);
   };
 
   return (
@@ -165,6 +188,7 @@ export default function CreatePaymentMain() {
         <SubForm
           handleSubmit={addTransaction}
           applicantDetails={applicantDetails}
+          setSubFormVisible={setSubFormVisible}
         />
       ) : (
         <>
