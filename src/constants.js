@@ -22,6 +22,7 @@ export const RECEIVER_CORRESPONDENT = {
   receiverCorrespondent2: 'Receiver Correspondent 2',
   receiverCorrespondent3: 'Receiver Correspondent 3'
 };
+// ----
 
 // Select2 dropdown options
 export const COUNTRY_CODE = [
@@ -35,6 +36,13 @@ export const REMITTANCE_CURRENCY = [
   { label: 'USD', value: 'USD' },
   { label: 'SGD', value: 'SGD' }
 ];
+
+export const ACCOUNT_BIC = [
+  { label: 'ANZBAU3M', value: 'ANZBAU3M' },
+  { label: 'ANZBAU3MXXX', value: 'ANZBAU3MXXX' },
+  { label: 'BNZBAU3MXXX', value: 'BNZBAU3MXXX' }
+];
+// ----
 
 export const FILENAME_FORMAT =
   'Filename should be in the format of OPFR+yyyyMMdd+7 digits of running number per day. E.g.: OPFR202306210000001.csv';
