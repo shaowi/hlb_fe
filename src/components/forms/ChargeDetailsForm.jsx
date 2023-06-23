@@ -62,22 +62,23 @@ export default function ChargeDetailsForm({ formData, paymentCurrency }) {
               />
             </Grid>
           </Grid>
-          {/* <Grid item container spacing={2} alignItems="center">
+          <Grid item container spacing={2} alignItems="center">
             <Grid item xs={4}>
               <ChargeDetailLabel label="Commission Handling" />
             </Grid>
             <Grid item xs={4}>
-              <TextField name="commissionHandlingDebit" label={debitFeeLabel} />
+              <TextField name="commissionHandling" label={debitFeeLabel} />
             </Grid>
             <Grid item xs={4}>
               <TextField
                 disabled
                 name="commissionHandlingStandard"
                 label="Standard Fee in SGD"
+                value={convertToLocalCurrency(formData.commissionHandling)}
               />
             </Grid>
           </Grid>
-          <Grid item container spacing={2} alignItems="center">
+          {/* <Grid item container spacing={2} alignItems="center">
             <Grid item xs={4}>
               <Typography variant="subtitle1">Cable Charge</Typography>
             </Grid>

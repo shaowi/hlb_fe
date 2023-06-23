@@ -47,7 +47,8 @@ export const REMITTANCE_CURRENCY = [
 export const ACCOUNT_BIC = [
   { label: 'ANZBAU3M', value: 'ANZBAU3M' },
   { label: 'ANZBAU3MXXX', value: 'ANZBAU3MXXX' },
-  { label: 'BNZBAU3MXXX', value: 'BNZBAU3MXXX' }
+  { label: 'BNZBAU3MXXX', value: 'BNZBAU3MXXX' },
+  { label: 'CATHHKH0XXX', value: 'CATHHKH0XXX' }
 ];
 // ----
 

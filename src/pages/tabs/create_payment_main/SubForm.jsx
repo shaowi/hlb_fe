@@ -14,8 +14,7 @@ import CorrespondentBankDetailsForm from 'components/forms/CorrespondentBankDeta
 import TransactionDetailsForm from 'components/forms/TransactionDetailsForm';
 
 export default function SubForm({ handleSubmit, applicantDetails }) {
-  // TODO: Move this to constants.js
-  // Data used for testing only
+  // TODO: Clear data later (Mock data used for testing only)
   const FILE_DETAILS = {
     debitType: 'single',
     transactionType: 'transactionType',
@@ -23,59 +22,59 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
   };
 
   const BENEFICIARY_DETAILS = {
-    beneficiaryName: '',
-    beneficiaryAccountNo: '',
-    beneficiaryIdType: '',
-    beneficiaryId: '',
-    beneficiaryResidentCode: '',
-    beneficiaryAccountBic: { label: 'ANZBAU3MXXX', value: 'ANZBAU3MXXX' },
-    beneficiaryBankName: '',
-    beneficiaryBankCountryCode: '',
-    beneficiaryBankAddress1: '',
-    beneficiaryBankAddress2: '',
-    beneficiaryBankAddress3: '',
-    beneficiaryAddress1: '',
-    beneficiaryAddress2: '',
-    beneficiaryAddress3: '',
+    beneficiaryName: 'Khanh Nguyen',
+    beneficiaryAccountNo: '1234567890',
+    beneficiaryIdType: 'Passport',
+    beneficiaryId: '72843',
+    beneficiaryResidentCode: 'resident',
+    beneficiaryAccountBic: { label: 'CATHHKH0XXX', value: 'CATHHKH0XXX' },
+    beneficiaryBankName: 'Cathay Bank',
+    beneficiaryBankCountryCode: 'HK',
+    beneficiaryBankAddress1: 'beneficiaryBankAddress1',
+    beneficiaryBankAddress2: 'beneficiaryBankAddress2',
+    beneficiaryBankAddress3: 'beneficiaryBankAddress3',
+    beneficiaryAddress1: 'beneficiaryAddress1',
+    beneficiaryAddress2: 'beneficiaryAddress2',
+    beneficiaryAddress3: 'beneficiaryAddress3',
     beneficiaryCountryCode: { label: 'AU - Australia', value: 'AU' }
   };
 
   const PAYMENT_DETAILS = {
     remittanceCurrency: { label: 'AUD', value: 'AUD' },
-    remittanceAmount: '',
-    fxContractReferenceNo: '',
-    exchangeRate: '',
-    creditingFxRate: '',
-    debitingFxRate: '',
-    paymentCurrency: '',
-    paymentAmount: '',
-    localEquivalentAmount: ''
+    remittanceAmount: 500,
+    fxContractReferenceNo: 'fxContractReferenceNo',
+    exchangeRate: 1.564,
+    creditingFxRate: 0.89234,
+    debitingFxRate: 0.89234,
+    paymentCurrency: 'AUD',
+    paymentAmount: 500,
+    localEquivalentAmount: 530
   };
 
   const CHARGES_DETAILS = {
-    creditMidRate: '0.90234',
-    debitMidRate: '0.90234',
+    creditMidRate: 0.90234,
+    debitMidRate: 0.90234,
     chargeBearer: 'OUR',
-    commissionInLieuOfExchange: '45'
-    // commissionHandling: '',
+    commissionInLieuOfExchange: 45,
+    commissionHandling: 30
     // cableCharge: ''
   };
 
   const CORRESPONDENT_BANK_DETAILS = {
-    sendersCorrespondent: '',
-    receiversCorrespondent: ''
+    sendersCorrespondent: 'ANZBAU30XXX',
+    receiversCorrespondent: 'receiverCorrespondent1'
   };
 
   const TRANSACTION_DETAILS = {
-    channelTransactionReference: '',
-    recipientReference: '',
-    purposeCode: '',
-    remittanceInfo: '',
-    additionalRemittanceInfo: '',
-    senderToReceiverInfo: '',
-    additionalSenderToReceiverInfo: '',
-    otherPaymentDetails: '',
-    additionalRemarks: ''
+    channelTransactionReference: '2317433323OPZ00100',
+    recipientReference: 'recipientReference',
+    purposeCode: 'transactionPurposeCode1',
+    remittanceInfo: 'remittanceInfo',
+    additionalRemittanceInfo: 'additionalRemittanceInfo',
+    senderToReceiverInfo: 'senderToReceiverInfo',
+    additionalSenderToReceiverInfo: 'additionalSenderToReceiverInfo',
+    otherPaymentDetails: 'otherPaymentDetails',
+    additionalRemarks: 'additionalRemarks'
   };
 
   const INITIAL_FORM_STATE = {

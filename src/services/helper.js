@@ -3,5 +3,5 @@ export function formatToCurrency(amount) {
 }
 
 export function convertToLocalCurrency(amount) {
-  return parseFloat(amount) + 1000;
+  return parseFloat(amount) + 0.5;
 }

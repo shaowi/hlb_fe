@@ -125,6 +125,7 @@ function createData({
 }
 
 export default function CreatePaymentMain() {
+  // TODO: Clear data later (Mock data used for testing only)
   const APPLICANT_DETAILS = {
     applicantName: 'John Doe',
     applicantAccountNo: '9000000001',
@@ -141,10 +142,8 @@ export default function CreatePaymentMain() {
     applicantAddress1: 'applicantAddress1',
     applicantAddress2: 'applicantAddress2',
     applicantAddress3: 'applicantAddress3',
-    // TODO: Move this to constants.js
-    // Data used for testing only
-    // applicantCountryCode: { label: '', value: '' }
     applicantCountryCode: { label: 'AU - Australia', value: 'AU' }
+    // applicantCountryCode: { label: '', value: '' }
   };
 
   const [subFormVisible, setSubFormVisible] = useState(true);
