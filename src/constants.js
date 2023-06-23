@@ -22,6 +22,13 @@ export const RECEIVER_CORRESPONDENT = {
   receiverCorrespondent2: 'Receiver Correspondent 2',
   receiverCorrespondent3: 'Receiver Correspondent 3'
 };
+
+export const TRANSACTION_PURPOSE_CODE = {
+  transactionPurposeCode1: 'Transaction Purpose Code 1',
+  transactionPurposeCode2: 'Transaction Purpose Code 2',
+  transactionPurposeCode3: 'Transaction Purpose Code 3'
+};
+
 // ----
 
 // Select2 dropdown options

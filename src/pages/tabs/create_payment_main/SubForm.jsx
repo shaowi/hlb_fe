@@ -11,6 +11,7 @@ import BeneficiaryForm from 'components/forms/BeneficiaryForm';
 import PaymentDetailsForm from 'components/forms/PaymentDetailsForm';
 import ChargeDetailsForm from 'components/forms/ChargeDetailsForm';
 import CorrespondentBankDetailsForm from 'components/forms/CorrespondentBankDetailsForm';
+import TransactionDetailsForm from 'components/forms/TransactionDetailsForm';
 
 export default function SubForm({ handleSubmit, applicantDetails }) {
   // TODO: Move this to constants.js
@@ -65,13 +66,26 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
     receiversCorrespondent: ''
   };
 
+  const TRANSACTION_DETAILS = {
+    channelTransactionReference: '',
+    recipientReference: '',
+    purposeCode: '',
+    remittanceInfo: '',
+    additionalRemittanceInfo: '',
+    senderToReceiverInfo: '',
+    additionalSenderToReceiverInfo: '',
+    otherPaymentDetails: '',
+    additionalRemarks: ''
+  };
+
   const INITIAL_FORM_STATE = {
     ...FILE_DETAILS,
     ...applicantDetails,
     ...BENEFICIARY_DETAILS,
     ...PAYMENT_DETAILS,
     ...CHARGES_DETAILS,
-    ...CORRESPONDENT_BANK_DETAILS
+    ...CORRESPONDENT_BANK_DETAILS,
+    ...TRANSACTION_DETAILS
   };
 
   const FILE_DETAILS_VALIDATION = {
@@ -123,13 +137,26 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
     )
   };
 
+  const TRANSACTION_DETAILS_VALIDATION = {
+    channelTransactionReference: Yup.string(),
+    recipientReference: Yup.string(),
+    purposeCode: Yup.string(),
+    remittanceInfo: Yup.string(),
+    additionalRemittanceInfo: Yup.string(),
+    senderToReceiverInfo: Yup.string(),
+    additionalSenderToReceiverInfo: Yup.string(),
+    otherPaymentDetails: Yup.string(),
+    additionalRemarks: Yup.string()
+  };
+
   const FORM_VALIDATION = Yup.object({
     ...FILE_DETAILS_VALIDATION,
     ...APPLICANT_DETAILS_VALIDATION,
     ...BENEFICIARY_DETAILS_VALIDATION,
     ...PAYMENT_DETAILS_VALIDATION,
     ...CHARGES_DETAILS_VALIDATION,
-    ...CORRESPONDENT_BANK_DETAILS_VALIDATION
+    ...CORRESPONDENT_BANK_DETAILS_VALIDATION,
+    ...TRANSACTION_DETAILS_VALIDATION
   });
 
   const theme = createTheme({
@@ -174,6 +201,7 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
                     paymentCurrency="AUD"
                   />
                   <CorrespondentBankDetailsForm />
+                  <TransactionDetailsForm />
                   <Grid container spacing={2} justifyContent="center" mt={1}>
                     <Grid item>
                       <FormButton label="Back" color="neutral" />
