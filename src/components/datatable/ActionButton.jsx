@@ -1,15 +1,13 @@
-import { Button } from '@mui/material';
-import React from 'react';
+import { IconButton } from '@mui/material';
 
 export default function ActionButton({
   color = 'success',
-  handleClick,
   children,
   ...props
 }) {
   return (
-    <Button variant="contained" color={color} onClick={handleClick} {...props}>
+    <IconButton color={color} size="large" {...props}>
       {children}
-    </Button>
+    </IconButton>
   );
 }

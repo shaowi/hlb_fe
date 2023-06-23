@@ -1,6 +1,6 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, ButtonGroup } from '@mui/material';
 import ActionButton from 'components/datatable/ActionButton';
 import DataTable from 'components/datatable/index';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
@@ -64,29 +64,23 @@ const transactionColumns = [
 
 const transactionRow = {
   action: (
-    <Grid container spacing={2} justifyContent="center">
-      <Grid item xs={6}>
-        <ToolTipWrapper title="Edit">
-          <ActionButton
-            size="small"
-            onClick={() => console.log('transaction details row 0:edit')}
-          >
-            <EditIcon />
-          </ActionButton>
-        </ToolTipWrapper>
-      </Grid>
-      <Grid item xs={6}>
-        <ToolTipWrapper title="Delete">
-          <ActionButton
-            size="small"
-            color="error"
-            onClick={() => console.log('transaction details row 0:delete')}
-          >
-            <DeleteIcon />
-          </ActionButton>
-        </ToolTipWrapper>
-      </Grid>
-    </Grid>
+    <ButtonGroup variant="text" size="small">
+      <ToolTipWrapper title="Edit">
+        <ActionButton
+          onClick={() => console.log('transaction details row 0:edit')}
+        >
+          <EditIcon />
+        </ActionButton>
+      </ToolTipWrapper>
+      <ToolTipWrapper title="Delete">
+        <ActionButton
+          color="error"
+          onClick={() => console.log('transaction details row 0:edit')}
+        >
+          <DeleteIcon />
+        </ActionButton>
+      </ToolTipWrapper>
+    </ButtonGroup>
   ),
   channelTransactionReference: '123456789',
   processingMode: 'Normal',
