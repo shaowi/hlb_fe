@@ -3,6 +3,7 @@ import React from 'react';
 import TextField from '../forms_ui/TextField';
 import SelectField from '../forms_ui/Select';
 import { COUNTRY_CODE, RESIDENT_CODE } from 'constants';
+import { ACCOUNT_BIC } from 'constants';
 
 export default function BeneficiaryForm({
   isDisabled = false,
@@ -63,11 +64,35 @@ export default function BeneficiaryForm({
           </Grid>
           <Grid item container spacing={2}>
             <Grid item xs={4}>
-              <TextField
+              <Autocomplete
                 required
+                disablePortal
+                id="beneficiaryAccountBic"
                 name="beneficiaryAccountBic"
-                label="Account BIC"
-                disabled={isDisabled}
+                defaultValue={
+                  formData.beneficiaryAccountBic.value === ''
+                    ? null
+                    : formData.beneficiaryAccountBic
+                }
+                isOptionEqualToValue={(option, value) =>
+                  option.value === value.value
+                }
+                getOptionLabel={(option) => option.label}
+                options={ACCOUNT_BIC}
+                onChange={(e, value) => {
+                  setFieldValue(
+                    'beneficiaryAccountBic',
+                    value !== null ? value : formData.beneficiaryAccountBic
+                  );
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    required
+                    {...params}
+                    label="Account BIC"
+                    name="beneficiaryAccountBic"
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={4}>

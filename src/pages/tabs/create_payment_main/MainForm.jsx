@@ -9,6 +9,7 @@ import { APPLICANT_DETAILS_VALIDATION } from 'constants.js';
 export default function MainForm({ handleSubmit, applicantDetails }) {
   const currentDate = new Date().toJSON().slice(0, 10);
 
+  // TODO: Clear data later (Mock data used for testing only)
   const FILE_DETAILS = {
     filename: `OPFR${currentDate.replace(/-/g, '')}0000001.csv`,
     debitType: 'single',

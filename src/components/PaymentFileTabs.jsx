@@ -66,7 +66,7 @@ function a11yProps(index) {
 }
 
 export default function PaymentFileTabs() {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(2);
   const [isFooterFixed, setIsFooterFixed] = useState(false);
 
   const handleChange = (event, newValue) => {
