@@ -57,18 +57,20 @@ export default function PaymentDetailsForm({ formData, setFieldValue }) {
           <Grid item container spacing={2}>
             <Grid item xs={4}>
               <TextField
+                disabled
                 name="fxContractReferenceNo"
                 label="FX Contract Reference Number"
               />
             </Grid>
             <Grid item xs={4}>
-              <TextField name="exchangeRate" label="Exchange Rate" />
+              <TextField disabled name="exchangeRate" label="Exchange Rate" />
             </Grid>
           </Grid>
           <Grid item container spacing={2}>
             <Grid item xs={4}>
               <TextField
                 required
+                disabled
                 name="creditingFxRate"
                 label="Crediting FX Rate"
               />
@@ -76,6 +78,7 @@ export default function PaymentDetailsForm({ formData, setFieldValue }) {
             <Grid item xs={4}>
               <TextField
                 required
+                disabled
                 name="debitingFxRate"
                 label="Debiting FX Rate"
               />
@@ -83,13 +86,18 @@ export default function PaymentDetailsForm({ formData, setFieldValue }) {
           </Grid>
           <Grid item container spacing={2}>
             <Grid item xs={4}>
-              <TextField name="paymentCurrency" label="Payment Currency" />
+              <TextField
+                disabled
+                name="paymentCurrency"
+                label="Payment Currency"
+              />
             </Grid>
             <Grid item xs={4}>
-              <TextField name="paymentAmount" label="Payment Amount" />
+              <TextField disabled name="paymentAmount" label="Payment Amount" />
             </Grid>
             <Grid item xs={4}>
               <TextField
+                disabled
                 name="localEquivalentAmount"
                 label="Local Equivalent Amount (In SGD)"
               />

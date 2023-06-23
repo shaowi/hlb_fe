@@ -11,6 +11,12 @@ export const RESIDENT_CODE = {
   nonResident: 'Non-Resident'
 };
 
+export const CHARGE_BEARER = {
+  OUR: 'OUR',
+  BEN: 'BEN',
+  SHA: 'SHA'
+};
+
 // Select2 dropdown options
 export const COUNTRY_CODE = [
   { label: 'AU - Australia', value: 'AU' },

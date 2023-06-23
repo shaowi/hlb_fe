@@ -9,6 +9,7 @@ import ResetButton from 'components/search_box/ResetButton';
 import { APPLICANT_DETAILS_VALIDATION } from 'constants.js';
 import BeneficiaryForm from 'components/forms/BeneficiaryForm';
 import PaymentDetailsForm from 'components/forms/PaymentDetailsForm';
+import ChargeDetailsForm from 'components/forms/ChargeDetailsForm';
 
 export default function SubForm({ handleSubmit, applicantDetails }) {
   // TODO: Move this to constants.js
@@ -49,11 +50,21 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
     localEquivalentAmount: ''
   };
 
+  const CHARGES_DETAILS = {
+    creditMidRate: '0.90234',
+    debitMidRate: '0.90234',
+    chargeBearer: 'OUR',
+    commissionInLieuOfExchange: '45'
+    // commissionHandling: '',
+    // cableCharge: ''
+  };
+
   const INITIAL_FORM_STATE = {
     ...FILE_DETAILS,
     ...applicantDetails,
     ...BENEFICIARY_DETAILS,
-    ...PAYMENT_DETAILS
+    ...PAYMENT_DETAILS,
+    ...CHARGES_DETAILS
   };
 
   const FILE_DETAILS_VALIDATION = {
@@ -90,11 +101,19 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
     localEquivalentAmount: Yup.number()
   };
 
+  const CHARGES_DETAILS_VALIDATION = {
+    creditMidRate: Yup.number(),
+    debitMidRate: Yup.number(),
+    chargeBearer: Yup.string().required('Charge Bearer is required'),
+    commissionInLieuOfExchange: Yup.number()
+  };
+
   const FORM_VALIDATION = Yup.object({
     ...FILE_DETAILS_VALIDATION,
     ...APPLICANT_DETAILS_VALIDATION,
     ...BENEFICIARY_DETAILS_VALIDATION,
-    ...PAYMENT_DETAILS_VALIDATION
+    ...PAYMENT_DETAILS_VALIDATION,
+    ...CHARGES_DETAILS_VALIDATION
   });
 
   const theme = createTheme({
@@ -133,6 +152,10 @@ export default function SubForm({ handleSubmit, applicantDetails }) {
                   <PaymentDetailsForm
                     setFieldValue={setFieldValue}
                     formData={PAYMENT_DETAILS}
+                  />
+                  <ChargeDetailsForm
+                    formData={CHARGES_DETAILS}
+                    paymentCurrency="AUD"
                   />
                   <Grid container spacing={2} justifyContent="center" mt={1}>
                     <Grid item>

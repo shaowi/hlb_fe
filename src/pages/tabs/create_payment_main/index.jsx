@@ -147,7 +147,7 @@ export default function CreatePaymentMain() {
     applicantCountryCode: { label: 'AU - Australia', value: 'AU' }
   };
 
-  const [subFormVisible, setSubFormVisible] = useState(false);
+  const [subFormVisible, setSubFormVisible] = useState(true);
   const [applicantDetails, setApplicantDetails] = useState(APPLICANT_DETAILS);
 
   const showSubForm = (values) => {
