@@ -21,7 +21,7 @@ import {
   TRANSACTION_DETAILS_VALIDATION
 } from './form_templates';
 
-export default function SubForm({ handleSubmit, setSubFormVisible }) {
+export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
   const FORM_VALIDATION = Yup.object({
     ...SUB_FILE_DETAILS_VALIDATION,
     ...APPLICANT_DETAILS_VALIDATION,
@@ -41,8 +41,7 @@ export default function SubForm({ handleSubmit, setSubFormVisible }) {
     }
   });
 
-  const state = useCreatePaymentStore();
-  const formData = state.currSubFormData;
+  const { currSubFormData } = useCreatePaymentStore();
 
   return (
     <ThemeProvider theme={theme}>
@@ -50,7 +49,7 @@ export default function SubForm({ handleSubmit, setSubFormVisible }) {
         <Grid container direction="column" spacing={2}>
           <Grid item>
             <Formik
-              initialValues={formData}
+              initialValues={currSubFormData}
               validationSchema={FORM_VALIDATION}
               validateOnBlur={false}
               validationOnChange={false}
@@ -62,19 +61,19 @@ export default function SubForm({ handleSubmit, setSubFormVisible }) {
                   <ApplicantForm
                     isDisabled={true}
                     setFieldValue={setFieldValue}
-                    formData={formData}
+                    formData={currSubFormData}
                   />
                   <BeneficiaryForm
                     setFieldValue={setFieldValue}
-                    formData={formData}
+                    formData={currSubFormData}
                   />
                   <PaymentDetailsForm
                     setFieldValue={setFieldValue}
-                    formData={formData}
+                    formData={currSubFormData}
                   />
                   <ChargeDetailsForm
-                    formData={formData}
-                    paymentCurrency={formData.remittanceCurrency.value}
+                    formData={currSubFormData}
+                    paymentCurrency={currSubFormData.remittanceCurrency.value}
                   />
                   <CorrespondentBankDetailsForm />
                   <TransactionDetailsForm />
@@ -91,7 +90,10 @@ export default function SubForm({ handleSubmit, setSubFormVisible }) {
                       <ResetButton />
                     </Grid>
                     <Grid item>
-                      <FormButton label="Save" color="success" />
+                      <FormButton
+                        label={isEdit ? 'Add' : 'Save'}
+                        color="success"
+                      />
                     </Grid>
                   </Grid>
                 </Form>

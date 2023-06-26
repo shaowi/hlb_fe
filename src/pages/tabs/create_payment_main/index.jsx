@@ -4,7 +4,7 @@ import { Box, ButtonGroup } from '@mui/material';
 import ActionButton from 'components/datatable/ActionButton';
 import DataTable from 'components/datatable/index';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { formatToCurrency } from 'services/helper';
 import MainForm from './MainForm';
 import SubForm from './SubForm';
@@ -109,12 +109,14 @@ export default function CreatePaymentMain() {
     };
   }
 
+  const [editRowNum, setEditRowNum] = useState(-1);
   const [subFormVisible, setSubFormVisible] = useState(false);
   const [transactionRows, setTransactionRows] = useState([]);
   const {
     subFormDataList,
     setSubFormDataList,
     setCurrSubFormData,
+    resetCurrSubFormData,
     setApplicantDetails
   } = useCreatePaymentStore();
 
@@ -122,6 +124,18 @@ export default function CreatePaymentMain() {
   useEffect(() => {
     const subFormDataListLength = subFormDataList.length;
     if (subFormDataListLength === 0) return;
+    // Update the edited row in the table
+    if (editRowNum !== -1) {
+      const newTransactionRows = [...transactionRows];
+      newTransactionRows[editRowNum] = mapToRow(
+        editRowNum,
+        subFormDataList[editRowNum]
+      );
+      setTransactionRows(newTransactionRows);
+      setEditRowNum(-1);
+      return;
+    }
+    // Add the last row of data list to the table
     setTransactionRows([
       ...transactionRows,
       mapToRow(
@@ -133,21 +147,31 @@ export default function CreatePaymentMain() {
   }, [subFormDataList]);
 
   const addTransaction = (values) => {
-    console.log(values);
-    console.log('add transaction');
-    console.log(subFormDataList);
-    console.log('transaction rows');
-    console.log(transactionRows);
-    setSubFormDataList([...subFormDataList, values]);
-    setSubFormVisible(false);
+    const withId = { ...values, id: subFormDataList.length };
+    setSubFormDataList([...subFormDataList, withId]);
   };
 
+  const editTransaction = (values) => {
+    setSubFormDataList(
+      subFormDataList.map((item, index) =>
+        index === values.id ? values : item
+      )
+    );
+  };
+
+  function handleSubFormSubmit(values) {
+    if (editRowNum !== -1) {
+      editTransaction(values);
+    } else {
+      addTransaction(values);
+    }
+    setSubFormVisible(false);
+    resetCurrSubFormData();
+  }
+
   function editSubForm(id) {
-    console.log('edit sub form');
-    console.log(subFormDataList);
-    console.log('transaction rows');
-    console.log(transactionRows);
-    setCurrSubFormData(subFormDataList[id]);
+    setCurrSubFormData({ ...subFormDataList[id], id });
+    setEditRowNum(id);
     setSubFormVisible(true);
   }
 
@@ -155,14 +179,16 @@ export default function CreatePaymentMain() {
     <Box spacing={2} xs={{ p: 3, mb: 5 }}>
       {subFormVisible ? (
         <SubForm
-          handleSubmit={addTransaction}
+          handleSubmit={handleSubFormSubmit}
           setSubFormVisible={setSubFormVisible}
+          isEdit={editRowNum !== -1}
         />
       ) : (
         <>
           <MainForm
             handleSubmit={(values) => {
               setApplicantDetails(values);
+              setEditRowNum(-1);
               setSubFormVisible(true);
             }}
           />

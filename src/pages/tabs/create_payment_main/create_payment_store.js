@@ -9,7 +9,7 @@ import {
   TRANSACTION_DETAILS
 } from './form_templates';
 
-const INITIAL_PAYMENT_SUB_FORM_STATE = {
+export const INITIAL_PAYMENT_SUB_FORM_STATE = {
   ...SUB_FILE_DETAILS,
   ...APPLICANT_DETAILS,
   ...BENEFICIARY_DETAILS,
@@ -27,6 +27,8 @@ export const useCreatePaymentStore = create((set) => ({
     set(() => ({ applicantDetails: applicantDetails })),
   setCurrSubFormData: (currSubFormData) =>
     set(() => ({ currSubFormData: currSubFormData })),
+  resetCurrSubFormData: () =>
+    set(() => ({ currSubFormData: INITIAL_PAYMENT_SUB_FORM_STATE })),
   setSubFormDataList: (subFormDataList) =>
     set(() => ({ subFormDataList: subFormDataList }))
 }));
