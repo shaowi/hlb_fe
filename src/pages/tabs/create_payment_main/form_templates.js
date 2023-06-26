@@ -1,3 +1,7 @@
+import * as Yup from 'yup';
+
+const currentDate = new Date().toJSON().slice(0, 10);
+
 // TODO: Clear data later (Mock data used for testing only)
 export const APPLICANT_DETAILS = {
   applicantName: 'John Doe',
@@ -19,10 +23,64 @@ export const APPLICANT_DETAILS = {
   // applicantCountryCode: { label: '', value: '' }
 };
 
-export const FILE_DETAILS = {
+export const APPLICANT_DETAILS_VALIDATION = {
+  applicantName: Yup.string().required('Name is required'),
+  applicantAccountNo: Yup.number().required('Account No is required'),
+  applicantAccountType: Yup.string().required('Account Type is required'),
+  applicantAccountCurrency: Yup.string().required(
+    'Account Currency is required'
+  ),
+  applicantIdType: Yup.string(),
+  applicantId: Yup.string(),
+  applicantAccountBranchCode: Yup.string().required(
+    'Account Branch Code is required'
+  ),
+  applicantBankBic: Yup.string(),
+  applicantResidentCode: Yup.string().required('Resident Code is required'),
+  applicantAccountCifId: Yup.string(),
+  applicantPhone: Yup.number().integer().typeError('Phone must be a number'),
+  applicantPostalCode: Yup.string(),
+  applicantAddress1: Yup.string().required('Address 1 is required'),
+  applicantAddress2: Yup.string(),
+  applicantAddress3: Yup.string()
+};
+
+export const SUB_FILE_DETAILS = {
   debitType: 'single',
   transactionType: 'transactionType',
   processingMode: 'processingMode'
+};
+
+export const SUB_FILE_DETAILS_VALIDATION = {
+  debitType: Yup.string(),
+  transactionType: Yup.string(),
+  processingMode: Yup.string()
+};
+
+export const MAIN_FILE_DETAILS = {
+  filename: `OPFR${currentDate.replace(/-/g, '')}0000001.csv`,
+  debitType: 'single',
+  channelTransactionReference: '2317333701OPZ00100',
+  transactionType: 'ISS 1-M CBFT Credit Transfer (MT103)',
+  requestChannel: 'PG BizOpsUI',
+  transactionDate: currentDate,
+  valueDate: currentDate,
+  businessDate: currentDate,
+  recipientReference: 'recipientReference',
+  otherPaymentDetails: 'otherPaymentDetails'
+};
+
+export const MAIN_FILE_DETAILS_VALIDATION = {
+  filename: Yup.string().required('Filename is required'),
+  debitType: Yup.string().required('Debit Type is required'),
+  channelTransactionReference: Yup.string(),
+  transactionType: Yup.string(),
+  requestChannel: Yup.string(),
+  transactionDate: Yup.date(),
+  valueDate: Yup.date().required('Value Date is required'),
+  businessDate: Yup.date().required('Business Date is required'),
+  recipientReference: Yup.string(),
+  otherPaymentDetails: Yup.string()
 };
 
 export const BENEFICIARY_DETAILS = {
@@ -43,6 +101,22 @@ export const BENEFICIARY_DETAILS = {
   beneficiaryCountryCode: { label: 'AU - Australia', value: 'AU' }
 };
 
+export const BENEFICIARY_DETAILS_VALIDATION = {
+  beneficiaryName: Yup.string().required('Name is required'),
+  beneficiaryAccountNo: Yup.number().required('Account No is required'),
+  beneficiaryIdType: Yup.string(),
+  beneficiaryId: Yup.string(),
+  beneficiaryResidentCode: Yup.string().required('Resident Code is required'),
+  beneficiaryBankName: Yup.string(),
+  beneficiaryBankCountryCode: Yup.string(),
+  beneficiaryBankAddress1: Yup.string(),
+  beneficiaryBankAddress2: Yup.string(),
+  beneficiaryBankAddress3: Yup.string(),
+  beneficiaryAddress1: Yup.string().required('Address 1 is required'),
+  beneficiaryAddress2: Yup.string().required('Address 2 is required'),
+  beneficiaryAddress3: Yup.string()
+};
+
 export const PAYMENT_DETAILS = {
   remittanceCurrency: { label: 'AUD', value: 'AUD' },
   remittanceAmount: 500,
@@ -55,18 +129,44 @@ export const PAYMENT_DETAILS = {
   localEquivalentAmount: 530
 };
 
+export const PAYMENT_DETAILS_VALIDATION = {
+  remittanceAmount: Yup.number().required('Remittance Amount is required'),
+  fxContractReferenceNo: Yup.string(),
+  exchangeRate: Yup.number(),
+  creditingFxRate: Yup.number(),
+  debitingFxRate: Yup.number(),
+  paymentCurrency: Yup.string(),
+  paymentAmount: Yup.number(),
+  localEquivalentAmount: Yup.number()
+};
+
 export const CHARGES_DETAILS = {
   creditMidRate: 0.90234,
   debitMidRate: 0.90234,
   chargeBearer: 'OUR',
   commissionInLieuOfExchange: 45,
   commissionHandling: 30
-  // cableCharge: ''
+};
+
+export const CHARGES_DETAILS_VALIDATION = {
+  creditMidRate: Yup.number(),
+  debitMidRate: Yup.number(),
+  chargeBearer: Yup.string().required('Charge Bearer is required'),
+  commissionInLieuOfExchange: Yup.number()
 };
 
 export const CORRESPONDENT_BANK_DETAILS = {
   sendersCorrespondent: 'ANZBAU30XXX',
   receiversCorrespondent: 'receiverCorrespondent1'
+};
+
+export const CORRESPONDENT_BANK_DETAILS_VALIDATION = {
+  sendersCorrespondent: Yup.string().required(
+    "Sender's Correspondent is required"
+  ),
+  receiversCorrespondent: Yup.string().required(
+    "Receiver's Correspondent is required"
+  )
 };
 
 export const TRANSACTION_DETAILS = {
@@ -81,12 +181,14 @@ export const TRANSACTION_DETAILS = {
   additionalRemarks: 'additionalRemarks'
 };
 
-export const PAYMENT_INITIAL_SUB_FORM_STATE = {
-  ...FILE_DETAILS,
-  ...APPLICANT_DETAILS,
-  ...BENEFICIARY_DETAILS,
-  ...PAYMENT_DETAILS,
-  ...CHARGES_DETAILS,
-  ...CORRESPONDENT_BANK_DETAILS,
-  ...TRANSACTION_DETAILS
+export const TRANSACTION_DETAILS_VALIDATION = {
+  channelTransactionReference: Yup.string(),
+  recipientReference: Yup.string(),
+  purposeCode: Yup.string(),
+  remittanceInfo: Yup.string(),
+  additionalRemittanceInfo: Yup.string(),
+  senderToReceiverInfo: Yup.string(),
+  additionalSenderToReceiverInfo: Yup.string(),
+  otherPaymentDetails: Yup.string(),
+  additionalRemarks: Yup.string()
 };
