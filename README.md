@@ -68,3 +68,23 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+### Third-party libraries
+
+1. [React](https://react.dev/) is the JavaScript library used for building user interfaces, and react-dom is the package for rendering React components into the browser.
+
+1. [Emotion](https://emotion.sh/docs/introduction) is a library for styling React components with CSS-in-JS syntax.
+
+1. [Material-UI Icons](https://mui.com/material-ui/material-icons/) & [Material-UI](https://mui.com/material-ui/getting-started/usage/) are popular React UI framework that provides pre-built components and icons following the Material Design guidelines.
+
+1. [Jest](https://jestjs.io/docs/tutorial-react) is used for testing React components and interactions using the Testing Library ecosystem.
+
+1. [Formik](https://formik.org/) is a library for building forms in React. It simplifies form management, validation, and submission.
+
+1. [Yup](https://www.npmjs.com/package/yup) is a JavaScript schema validation library often used with form libraries like Formik to define and validate the shape of data.
+
+1. [Material Design Bootstrap](https://mdbootstrap.com/docs/react)  are part of MDB React UI Kit, a library that offers a set of Bootstrap components enhanced with additional features and styles.
+
+1. [React Router](https://reactrouter.com/en/main) is a library that enables declarative routing in React applications, allowing navigation between different views or pages.
+
+1. [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) is a small, fast, and lightweight state management library for React applications.
