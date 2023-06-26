@@ -42,7 +42,7 @@ const viewFileToolTipText = 'View File';
 const rows = [
   createData({
     action: (
-      <ToolTipWrapper title={viewFileToolTipText} placement="top">
+      <ToolTipWrapper title={viewFileToolTipText}>
         <ActionButton handleClick={() => console.log('row 0 clicked')}>
           <FileOpenIcon />
         </ActionButton>
@@ -56,7 +56,7 @@ const rows = [
   }),
   createData({
     action: (
-      <ToolTipWrapper title={viewFileToolTipText} placement="top">
+      <ToolTipWrapper title={viewFileToolTipText}>
         <ActionButton handleClick={() => console.log('row 1 clicked')}>
           <FileOpenIcon />
         </ActionButton>
@@ -70,7 +70,7 @@ const rows = [
   }),
   createData({
     action: (
-      <ToolTipWrapper title={viewFileToolTipText} placement="top">
+      <ToolTipWrapper title={viewFileToolTipText}>
         <ActionButton handleClick={() => console.log('row 2 clicked')}>
           <FileOpenIcon />
         </ActionButton>

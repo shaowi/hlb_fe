@@ -16,7 +16,6 @@ export default function TransactionDetailsForm() {
         <Grid item container spacing={2}>
           <Grid item xs={4}>
             <TextField
-              disabled
               name="channelTransactionReference"
               label="Channel Transaction Reference"
             />
