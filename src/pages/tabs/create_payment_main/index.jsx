@@ -82,16 +82,14 @@ export default function CreatePaymentMain() {
       action: (
         <ButtonGroup variant="text" size="small">
           <ToolTipWrapper title="Edit">
-            <ActionButton onClick={() => editSubForm(id)}>
+            <ActionButton onClick={() => editTransactionRow(id)}>
               <EditIcon />
             </ActionButton>
           </ToolTipWrapper>
           <ToolTipWrapper title="Delete">
             <ActionButton
               color="error"
-              onClick={() =>
-                console.log(`transaction details row ${id}:delete`)
-              }
+              onClick={() => deleteTransactionRow(id)}
             >
               <DeleteIcon />
             </ActionButton>
@@ -169,10 +167,21 @@ export default function CreatePaymentMain() {
     resetCurrSubFormData();
   }
 
-  function editSubForm(id) {
+  function editTransactionRow(id) {
     setCurrSubFormData({ ...subFormDataList[id], id });
     setEditRowNum(id);
     setSubFormVisible(true);
+  }
+
+  function deleteTransactionRow(id) {
+    setSubFormDataList(subFormDataList.filter((item) => item.id !== id));
+    setTransactionRows(
+      transactionRows
+        .filter((row) => row.id !== id)
+        .map((row, index) => {
+          return { ...row, id: index };
+        })
+    );
   }
 
   return (

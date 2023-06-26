@@ -22,7 +22,7 @@ export const INITIAL_PAYMENT_SUB_FORM_STATE = {
 export const useCreatePaymentStore = create((set) => ({
   applicantDetails: APPLICANT_DETAILS,
   currSubFormData: INITIAL_PAYMENT_SUB_FORM_STATE,
-  subFormDataList: [INITIAL_PAYMENT_SUB_FORM_STATE],
+  subFormDataList: [],
   setApplicantDetails: (applicantDetails) =>
     set(() => ({ applicantDetails: applicantDetails })),
   setCurrSubFormData: (currSubFormData) =>

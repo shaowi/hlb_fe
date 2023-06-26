@@ -91,7 +91,7 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
                     </Grid>
                     <Grid item>
                       <FormButton
-                        label={isEdit ? 'Add' : 'Save'}
+                        label={isEdit ? 'Save' : 'Add'}
                         color="success"
                       />
                     </Grid>
