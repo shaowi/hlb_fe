@@ -54,14 +54,13 @@ export default function Login() {
       <Paper
         elevation={16}
         sx={{
-          p: 4,
+          p: 8,
+          pb: '1rem',
           flexGrow: 1,
           marginTop: 12,
           marginBottom: 12,
           marginLeft: 20,
-          marginRight: 20,
-          padding: 10,
-          paddingBottom: '1rem'
+          marginRight: 20
         }}
       >
         <Grid container spacing={6}>
