@@ -1,0 +1,92 @@
+// TODO: Clear data later (Mock data used for testing only)
+export const APPLICANT_DETAILS = {
+  applicantName: 'John Doe',
+  applicantAccountNo: '9000000001',
+  applicantAccountType: 'Current',
+  applicantAccountCurrency: 'AUD',
+  applicantIdType: 'New IC',
+  applicantId: 'applicantId',
+  applicantAccountBranchCode: '90',
+  applicantBankBic: 'HLBBSGS0XXX',
+  applicantResidentCode: 'resident',
+  applicantAccountCifId: 'applicantAccountCifId',
+  applicantPhone: '12345678',
+  applicantPostalCode: '123456',
+  applicantAddress1: 'applicantAddress1',
+  applicantAddress2: 'applicantAddress2',
+  applicantAddress3: 'applicantAddress3',
+  applicantCountryCode: { label: 'AU - Australia', value: 'AU' }
+  // applicantCountryCode: { label: '', value: '' }
+};
+
+export const FILE_DETAILS = {
+  debitType: 'single',
+  transactionType: 'transactionType',
+  processingMode: 'processingMode'
+};
+
+export const BENEFICIARY_DETAILS = {
+  beneficiaryName: 'Khanh Nguyen',
+  beneficiaryAccountNo: '1234567890',
+  beneficiaryIdType: 'Passport',
+  beneficiaryId: '72843',
+  beneficiaryResidentCode: 'resident',
+  beneficiaryAccountBic: { label: 'CATHHKH0XXX', value: 'CATHHKH0XXX' },
+  beneficiaryBankName: 'Cathay Bank',
+  beneficiaryBankCountryCode: 'HK',
+  beneficiaryBankAddress1: 'beneficiaryBankAddress1',
+  beneficiaryBankAddress2: 'beneficiaryBankAddress2',
+  beneficiaryBankAddress3: 'beneficiaryBankAddress3',
+  beneficiaryAddress1: 'beneficiaryAddress1',
+  beneficiaryAddress2: 'beneficiaryAddress2',
+  beneficiaryAddress3: 'beneficiaryAddress3',
+  beneficiaryCountryCode: { label: 'AU - Australia', value: 'AU' }
+};
+
+export const PAYMENT_DETAILS = {
+  remittanceCurrency: { label: 'AUD', value: 'AUD' },
+  remittanceAmount: 500,
+  fxContractReferenceNo: 'fxContractReferenceNo',
+  exchangeRate: 1.564,
+  creditingFxRate: 0.89234,
+  debitingFxRate: 0.89234,
+  paymentCurrency: 'AUD',
+  paymentAmount: 500,
+  localEquivalentAmount: 530
+};
+
+export const CHARGES_DETAILS = {
+  creditMidRate: 0.90234,
+  debitMidRate: 0.90234,
+  chargeBearer: 'OUR',
+  commissionInLieuOfExchange: 45,
+  commissionHandling: 30
+  // cableCharge: ''
+};
+
+export const CORRESPONDENT_BANK_DETAILS = {
+  sendersCorrespondent: 'ANZBAU30XXX',
+  receiversCorrespondent: 'receiverCorrespondent1'
+};
+
+export const TRANSACTION_DETAILS = {
+  channelTransactionReference: '2317433323OPZ00100',
+  recipientReference: 'recipientReference',
+  purposeCode: 'transactionPurposeCode1',
+  remittanceInfo: 'remittanceInfo',
+  additionalRemittanceInfo: 'additionalRemittanceInfo',
+  senderToReceiverInfo: 'senderToReceiverInfo',
+  additionalSenderToReceiverInfo: 'additionalSenderToReceiverInfo',
+  otherPaymentDetails: 'otherPaymentDetails',
+  additionalRemarks: 'additionalRemarks'
+};
+
+export const PAYMENT_INITIAL_SUB_FORM_STATE = {
+  ...FILE_DETAILS,
+  ...APPLICANT_DETAILS,
+  ...BENEFICIARY_DETAILS,
+  ...PAYMENT_DETAILS,
+  ...CHARGES_DETAILS,
+  ...CORRESPONDENT_BANK_DETAILS,
+  ...TRANSACTION_DETAILS
+};

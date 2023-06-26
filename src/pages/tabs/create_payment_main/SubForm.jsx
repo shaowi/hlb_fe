@@ -12,85 +12,9 @@ import PaymentDetailsForm from 'components/forms/PaymentDetailsForm';
 import ChargeDetailsForm from 'components/forms/ChargeDetailsForm';
 import CorrespondentBankDetailsForm from 'components/forms/CorrespondentBankDetailsForm';
 import TransactionDetailsForm from 'components/forms/TransactionDetailsForm';
+import { useCreatePaymentStore } from './create_payment_store';
 
-export default function SubForm({
-  handleSubmit,
-  applicantDetails,
-  setSubFormVisible
-}) {
-  // TODO: Clear data later (Mock data used for testing only)
-  const FILE_DETAILS = {
-    debitType: 'single',
-    transactionType: 'transactionType',
-    processingMode: 'processingMode'
-  };
-
-  const BENEFICIARY_DETAILS = {
-    beneficiaryName: 'Khanh Nguyen',
-    beneficiaryAccountNo: '1234567890',
-    beneficiaryIdType: 'Passport',
-    beneficiaryId: '72843',
-    beneficiaryResidentCode: 'resident',
-    beneficiaryAccountBic: { label: 'CATHHKH0XXX', value: 'CATHHKH0XXX' },
-    beneficiaryBankName: 'Cathay Bank',
-    beneficiaryBankCountryCode: 'HK',
-    beneficiaryBankAddress1: 'beneficiaryBankAddress1',
-    beneficiaryBankAddress2: 'beneficiaryBankAddress2',
-    beneficiaryBankAddress3: 'beneficiaryBankAddress3',
-    beneficiaryAddress1: 'beneficiaryAddress1',
-    beneficiaryAddress2: 'beneficiaryAddress2',
-    beneficiaryAddress3: 'beneficiaryAddress3',
-    beneficiaryCountryCode: { label: 'AU - Australia', value: 'AU' }
-  };
-
-  const PAYMENT_DETAILS = {
-    remittanceCurrency: { label: 'AUD', value: 'AUD' },
-    remittanceAmount: 500,
-    fxContractReferenceNo: 'fxContractReferenceNo',
-    exchangeRate: 1.564,
-    creditingFxRate: 0.89234,
-    debitingFxRate: 0.89234,
-    paymentCurrency: 'AUD',
-    paymentAmount: 500,
-    localEquivalentAmount: 530
-  };
-
-  const CHARGES_DETAILS = {
-    creditMidRate: 0.90234,
-    debitMidRate: 0.90234,
-    chargeBearer: 'OUR',
-    commissionInLieuOfExchange: 45,
-    commissionHandling: 30
-    // cableCharge: ''
-  };
-
-  const CORRESPONDENT_BANK_DETAILS = {
-    sendersCorrespondent: 'ANZBAU30XXX',
-    receiversCorrespondent: 'receiverCorrespondent1'
-  };
-
-  const TRANSACTION_DETAILS = {
-    channelTransactionReference: '2317433323OPZ00100',
-    recipientReference: 'recipientReference',
-    purposeCode: 'transactionPurposeCode1',
-    remittanceInfo: 'remittanceInfo',
-    additionalRemittanceInfo: 'additionalRemittanceInfo',
-    senderToReceiverInfo: 'senderToReceiverInfo',
-    additionalSenderToReceiverInfo: 'additionalSenderToReceiverInfo',
-    otherPaymentDetails: 'otherPaymentDetails',
-    additionalRemarks: 'additionalRemarks'
-  };
-
-  const INITIAL_FORM_STATE = {
-    ...FILE_DETAILS,
-    ...applicantDetails,
-    ...BENEFICIARY_DETAILS,
-    ...PAYMENT_DETAILS,
-    ...CHARGES_DETAILS,
-    ...CORRESPONDENT_BANK_DETAILS,
-    ...TRANSACTION_DETAILS
-  };
-
+export default function SubForm({ handleSubmit, setSubFormVisible }) {
   const FILE_DETAILS_VALIDATION = {
     debitType: Yup.string(),
     transactionType: Yup.string(),
@@ -171,13 +95,16 @@ export default function SubForm({
     }
   });
 
+  const state = useCreatePaymentStore();
+  const formData = state.currSubFormData;
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ p: 3 }}>
         <Grid container direction="column" spacing={2}>
           <Grid item>
             <Formik
-              initialValues={INITIAL_FORM_STATE}
+              initialValues={formData}
               validationSchema={FORM_VALIDATION}
               validateOnBlur={false}
               validationOnChange={false}
@@ -189,19 +116,19 @@ export default function SubForm({
                   <ApplicantForm
                     isDisabled={true}
                     setFieldValue={setFieldValue}
-                    formData={applicantDetails}
+                    formData={formData}
                   />
                   <BeneficiaryForm
                     setFieldValue={setFieldValue}
-                    formData={BENEFICIARY_DETAILS}
+                    formData={formData}
                   />
                   <PaymentDetailsForm
                     setFieldValue={setFieldValue}
-                    formData={PAYMENT_DETAILS}
+                    formData={formData}
                   />
                   <ChargeDetailsForm
-                    formData={CHARGES_DETAILS}
-                    paymentCurrency="AUD"
+                    formData={formData}
+                    paymentCurrency={formData.remittanceCurrency.value}
                   />
                   <CorrespondentBankDetailsForm />
                   <TransactionDetailsForm />

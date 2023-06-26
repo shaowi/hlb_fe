@@ -5,8 +5,11 @@ import FormButton from 'components/forms/FormButton';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { APPLICANT_DETAILS_VALIDATION } from 'constants.js';
+import { useCreatePaymentStore } from './create_payment_store';
 
-export default function MainForm({ handleSubmit, applicantDetails }) {
+export default function MainForm({ handleSubmit }) {
+  const { applicantDetails } = useCreatePaymentStore();
+
   const currentDate = new Date().toJSON().slice(0, 10);
 
   // TODO: Clear data later (Mock data used for testing only)
