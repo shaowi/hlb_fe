@@ -1,21 +1,17 @@
 import { Lock, Person } from '@mui/icons-material';
 import {
   Alert,
-  Button,
   Grid,
-  InputAdornment,
   Paper,
   ThemeProvider,
   Typography,
   createTheme
 } from '@mui/material';
-import { useState } from 'react';
 import Copyright from 'components/Copyright';
-import TextField from 'components/forms_ui/TextField';
-import { Form, Formik } from 'formik';
-import logInUser from 'services/LoginService';
-import * as Yup from 'yup';
+import FormBuilder from 'components/forms_ui/FormBuilder';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logInUser from 'services/LoginService';
 
 const theme = createTheme({
   typography: {
@@ -25,17 +21,50 @@ const theme = createTheme({
   }
 });
 
-const INITIAL_FORM_STATE = {
-  username: '',
-  password: ''
-};
-
-const FORM_VALIDATION = Yup.object({
-  username: Yup.string().required('Username is required'),
-  password: Yup.string().required('Password is required')
-});
-
 export default function Login() {
+  // Max fields per row = 4
+  // isReset property can be given to any button to make it a reset button
+  const formAttributes = {
+    rows: [
+      {
+        fields: [
+          {
+            type: 'text',
+            icon: <Person />,
+            defaultValue: '',
+            componentProps: {
+              name: 'username',
+              label: 'Username',
+              'data-testid': 'username',
+              autoFocus: true
+            }
+          }
+        ]
+      },
+      {
+        fields: [
+          {
+            type: 'text',
+            icon: <Lock />,
+            defaultValue: '',
+            componentProps: {
+              type: 'password',
+              name: 'password',
+              label: 'Password',
+              'data-testid': 'password'
+            }
+          }
+        ]
+      }
+    ],
+    buttons: [
+      {
+        label: 'Log in',
+        fullWidth: true
+      }
+    ]
+  };
+
   const navigate = useNavigate();
   const [hasError, setHasError] = useState(false);
 
@@ -76,53 +105,10 @@ export default function Login() {
               <Typography variant="h4">Login</Typography>
             </Grid>
             <Grid item>
-              <Formik
-                initialValues={INITIAL_FORM_STATE}
-                validationSchema={FORM_VALIDATION}
-                validateOnBlur={false}
-                validationOnChange={false}
-                onSubmit={handleSubmit}
-              >
-                <Form>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <TextField
-                        autoFocus
-                        name="username"
-                        label="Username"
-                        data-testid="username"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <Person />
-                            </InputAdornment>
-                          )
-                        }}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        name="password"
-                        label="Password"
-                        type="password"
-                        data-testid="password"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <Lock />
-                            </InputAdornment>
-                          )
-                        }}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button fullWidth type="submit" variant="contained">
-                        Log in
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Form>
-              </Formik>
+              <FormBuilder
+                handleSubmit={handleSubmit}
+                formAttributes={formAttributes}
+              />
             </Grid>
             {hasError && (
               <Grid item>
