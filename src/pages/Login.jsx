@@ -22,8 +22,6 @@ const theme = createTheme({
 });
 
 export default function Login() {
-  // Max fields per row = 4
-  // isReset property can be given to any button to make it a reset button
   const formAttributes = {
     rows: [
       {
@@ -106,7 +104,7 @@ export default function Login() {
             </Grid>
             <Grid item>
               <FormBuilder
-                handleSubmit={handleSubmit}
+                onSubmit={handleSubmit}
                 formAttributes={formAttributes}
               />
             </Grid>

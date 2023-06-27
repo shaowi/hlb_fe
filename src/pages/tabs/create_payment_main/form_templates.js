@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
-
-const currentDate = new Date().toJSON().slice(0, 10);
+import { currentDate } from 'constants.js';
 
 // TODO: Clear data later (Mock data used for testing only)
 export const APPLICANT_DETAILS = {

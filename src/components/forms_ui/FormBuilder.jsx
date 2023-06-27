@@ -3,8 +3,25 @@ import FormButton from 'components/forms/FormButton';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import TextField from './TextField';
+import SelectField from './Select';
+import DateTimePicker from './DateTimePicker';
 
-export default function FormBuilder({ handleSubmit, formAttributes }) {
+/* FormBuilder builds a form with formik based on the given formAttributes
+
+formAttributes is an object with two properties: rows and buttons
+  - rows is an array of objects with a fields property
+  - each field has a type, defaultValue and a componentProps property
+    - type: text, select, date
+    - defaultValue: string, number, date
+    - componentProps: props to be passed to the component
+
+handleSubmit is a function that takes the form values as an argument which is called when the form is submitted
+
+Notes:
+  - Max fields per row = 4
+  - isReset property can be given to any button to make it a reset button
+*/
+export default function FormBuilder({ onSubmit, formAttributes }) {
   function createInitialFormState(data) {
     const initialFormState = {};
     data.rows.forEach((row) => {
@@ -19,9 +36,11 @@ export default function FormBuilder({ handleSubmit, formAttributes }) {
     const formValidation = {};
     data.rows.forEach((row) => {
       row.fields.forEach((field) => {
-        formValidation[field.componentProps.name] = Yup.string().required(
-          `${field.componentProps.label} is required`
-        );
+        const yupType = field.type === 'date' ? Yup.date() : Yup.string();
+        const isRequired = field.componentProps.required;
+        formValidation[field.componentProps.name] = isRequired
+          ? yupType.required(`${field.componentProps.label} is required`)
+          : yupType;
       });
     });
     return Yup.object(formValidation);
@@ -37,7 +56,7 @@ export default function FormBuilder({ handleSubmit, formAttributes }) {
       validationSchema={FORM_VALIDATION}
       validateOnBlur={false}
       validationOnChange={false}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
     >
       <Form>
         <Grid container spacing={2}>
@@ -49,7 +68,7 @@ export default function FormBuilder({ handleSubmit, formAttributes }) {
               <Grid key={indexA} item container spacing={2}>
                 {fields.map((field, indexB) => (
                   <Grid key={`${indexA}, ${indexB}`} item xs={fieldSize}>
-                    {field.type === 'text' && (
+                    {field.type === 'text' ? (
                       <TextField
                         {...field.componentProps}
                         InputProps={
@@ -62,18 +81,26 @@ export default function FormBuilder({ handleSubmit, formAttributes }) {
                           }
                         }
                       />
-                    )}
+                    ) : field.type === 'select' ? (
+                      <SelectField {...field.componentProps} />
+                    ) : field.type === 'date' ? (
+                      <DateTimePicker {...field.componentProps} />
+                    ) : null}
                   </Grid>
                 ))}
               </Grid>
             );
           })}
-          <Grid item container spacing={2}>
+          <Grid
+            item
+            container
+            spacing={2}
+            justifyContent="center"
+            alignItems="center"
+          >
             {formAttributes.buttons.map((buttonProps, index) => {
-              const buttonCount = formAttributes.buttons.length;
-              const buttonSize = Math.floor(12 / buttonCount);
               return (
-                <Grid key={index} item xs={buttonSize}>
+                <Grid key={index} item>
                   <FormButton {...buttonProps} />
                 </Grid>
               );
