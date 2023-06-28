@@ -23,12 +23,32 @@ const theme = createTheme({
 
 const { TEXT } = FORM_TYPES;
 
-export default function Login() {
+export default function Login({
+  imageSrc,
+  imageAlt,
+  centerText,
+  version,
+  footerText,
+  formHeaderText,
+  formFieldLabels
+}) {
+  // map labels to camelCase
+  const formFieldNames = formFieldLabels.map((label) =>
+    label
+      .toLowerCase()
+      .split(' ')
+      .map((s, i) => (i !== 0 ? s.charAt(0).toUpperCase() + s.substring(1) : s))
+      .join('')
+  );
+
+  const [topFieldLabel, bottomFieldLabel] = formFieldLabels;
+  const [topFieldName, bottomFieldName] = formFieldNames;
+
   const formAttributes = {
     sections: [
       {
         title: {
-          value: 'Log in',
+          value: formHeaderText,
           variant: 'h4'
         },
         rows: [
@@ -39,10 +59,10 @@ export default function Login() {
                 icon: <Person />,
                 defaultValue: '',
                 componentProps: {
-                  name: 'username',
-                  label: 'Username',
-                  'data-testid': 'username',
-                  autoFocus: true
+                  label: topFieldLabel,
+                  name: topFieldName,
+                  autoFocus: true,
+                  'data-testid': topFieldName
                 }
               }
             ]
@@ -55,9 +75,9 @@ export default function Login() {
                 defaultValue: '',
                 componentProps: {
                   type: 'password',
-                  name: 'password',
-                  label: 'Password',
-                  'data-testid': 'password'
+                  label: bottomFieldLabel,
+                  name: bottomFieldName,
+                  'data-testid': bottomFieldName
                 }
               }
             ]
@@ -102,11 +122,11 @@ export default function Login() {
       >
         <Grid container spacing={6}>
           <Grid item container direction="column" alignItems="center" md={6}>
-            <img src="/images/logo.png" alt="hlb" width="60%" height="auto" />
+            <img src={imageSrc} alt={imageAlt} width="60%" height="auto" />
             <Typography variant="h4" align="center" gutterBottom>
-              Payment Gateway Biz Ops Portal
+              {centerText}
             </Typography>
-            <Typography variant="subtitle2">v0.1</Typography>
+            <Typography variant="subtitle2">{version}</Typography>
           </Grid>
           <Grid item container direction="column" md={6} spacing={2}>
             <Grid item>
@@ -118,17 +138,14 @@ export default function Login() {
             {hasError && (
               <Grid item>
                 <Alert variant="outlined" severity="error">
-                  Invalid username or password.
+                  Invalid {topFieldName} or {bottomFieldName}.
                   <br /> Please try again.
                 </Alert>
               </Grid>
             )}
           </Grid>
         </Grid>
-        <Copyright
-          sx={{ mt: 5 }}
-          content="Copyright © 2022 HL Bank. All Rights Reserved."
-        />
+        <Copyright sx={{ mt: 5 }} content={footerText} />
       </Paper>
     </ThemeProvider>
   );
