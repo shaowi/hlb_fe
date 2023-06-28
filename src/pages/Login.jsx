@@ -1,21 +1,17 @@
 import { Lock, Person } from '@mui/icons-material';
 import {
   Alert,
-  Button,
   Grid,
-  InputAdornment,
   Paper,
   ThemeProvider,
   Typography,
   createTheme
 } from '@mui/material';
-import { useState } from 'react';
 import Copyright from 'components/Copyright';
-import TextField from 'components/forms_ui/TextField';
-import { Form, Formik } from 'formik';
-import logInUser from 'services/LoginService';
-import * as Yup from 'yup';
+import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logInUser from 'services/LoginService';
 
 const theme = createTheme({
   typography: {
@@ -25,17 +21,78 @@ const theme = createTheme({
   }
 });
 
-const INITIAL_FORM_STATE = {
-  username: '',
-  password: ''
-};
+const { TEXT } = FORM_TYPES;
 
-const FORM_VALIDATION = Yup.object({
-  username: Yup.string().required('Username is required'),
-  password: Yup.string().required('Password is required')
-});
+export default function Login({
+  imageSrc,
+  imageAlt,
+  centerText,
+  version,
+  footerText,
+  formHeaderText,
+  formFieldLabels
+}) {
+  // map labels to camelCase
+  const formFieldNames = formFieldLabels.map((label) =>
+    label
+      .toLowerCase()
+      .split(' ')
+      .map((s, i) => (i !== 0 ? s.charAt(0).toUpperCase() + s.substring(1) : s))
+      .join('')
+  );
 
-export default function Login() {
+  const [topFieldLabel, bottomFieldLabel] = formFieldLabels;
+  const [topFieldName, bottomFieldName] = formFieldNames;
+
+  const formAttributes = {
+    sections: [
+      {
+        title: {
+          value: formHeaderText,
+          variant: 'h4'
+        },
+        rows: [
+          {
+            fields: [
+              {
+                type: TEXT,
+                icon: <Person />,
+                defaultValue: '',
+                componentProps: {
+                  label: topFieldLabel,
+                  name: topFieldName,
+                  autoFocus: true,
+                  'data-testid': topFieldName
+                }
+              }
+            ]
+          },
+          {
+            fields: [
+              {
+                type: TEXT,
+                icon: <Lock />,
+                defaultValue: '',
+                componentProps: {
+                  type: 'password',
+                  label: bottomFieldLabel,
+                  name: bottomFieldName,
+                  'data-testid': bottomFieldName
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    buttons: [
+      {
+        label: 'Log in',
+        fullWidth: true
+      }
+    ]
+  };
+
   const navigate = useNavigate();
   const [hasError, setHasError] = useState(false);
 
@@ -57,87 +114,38 @@ export default function Login() {
           p: 8,
           pb: '1rem',
           flexGrow: 1,
-          marginTop: 12,
-          marginBottom: 12,
-          marginLeft: 20,
-          marginRight: 20
+          mt: 12,
+          mb: 12,
+          ml: 20,
+          mr: 20
         }}
       >
         <Grid container spacing={6}>
           <Grid item container direction="column" alignItems="center" md={6}>
-            <img src="/images/logo.png" alt="hlb" width="60%" height="auto" />
+            <img src={imageSrc} alt={imageAlt} width="60%" height="auto" />
             <Typography variant="h4" align="center" gutterBottom>
-              Payment Gateway Biz Ops Portal
+              {centerText}
             </Typography>
-            <Typography variant="subtitle2">v0.1</Typography>
+            <Typography variant="subtitle2">{version}</Typography>
           </Grid>
           <Grid item container direction="column" md={6} spacing={2}>
             <Grid item>
-              <Typography variant="h4">Login</Typography>
-            </Grid>
-            <Grid item>
-              <Formik
-                initialValues={INITIAL_FORM_STATE}
-                validationSchema={FORM_VALIDATION}
-                validateOnBlur={false}
-                validationOnChange={false}
+              <FormBuilder
                 onSubmit={handleSubmit}
-              >
-                <Form>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <TextField
-                        autoFocus
-                        name="username"
-                        label="Username"
-                        data-testid="username"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <Person />
-                            </InputAdornment>
-                          )
-                        }}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        name="password"
-                        label="Password"
-                        type="password"
-                        data-testid="password"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <Lock />
-                            </InputAdornment>
-                          )
-                        }}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button fullWidth type="submit" variant="contained">
-                        Log in
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </Form>
-              </Formik>
+                formAttributes={formAttributes}
+              />
             </Grid>
             {hasError && (
               <Grid item>
                 <Alert variant="outlined" severity="error">
-                  Invalid username or password.
+                  Invalid {topFieldName} or {bottomFieldName}.
                   <br /> Please try again.
                 </Alert>
               </Grid>
             )}
           </Grid>
         </Grid>
-        <Copyright
-          sx={{ mt: 5 }}
-          content="Copyright © 2022 HL Bank. All Rights Reserved."
-        />
+        <Copyright sx={{ mt: 5 }} content={footerText} />
       </Paper>
     </ThemeProvider>
   );

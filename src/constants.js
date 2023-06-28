@@ -1,4 +1,19 @@
+export const currentDate = new Date().toJSON().slice(0, 10);
+export const previousMonthDate = new Date(
+  new Date().setMonth(new Date().getMonth() - 1)
+)
+  .toJSON()
+  .slice(0, 10);
+
 // Select dropdown options
+export const STATUSES = {
+  all: 'ALL',
+  rejected: 'REJECTED',
+  failed: 'FAILED',
+  declined: 'DECLINED',
+  pending: 'PENDING REVIEW'
+};
+
 export const DEBIT_TYPE = {
   single: 'Single Debit',
   multiple: 'Multiple Debit'

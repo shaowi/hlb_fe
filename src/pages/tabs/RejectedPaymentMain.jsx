@@ -39,6 +39,7 @@ const columns = [
 
 const viewFileToolTipText = 'View File';
 
+// TODO: Fix error
 const rows = [
   createData({
     action: (
@@ -106,7 +107,7 @@ export default function RejectedPaymentMain() {
   return (
     <Grid container direction="column" spacing={2} p={3} mb={5}>
       <SearchBox />
-      <DataTable title="Pending Action" columns={columns} rows={rows} />
+      {/* <DataTable title="Pending Action" columns={columns} rows={rows} /> */}
     </Grid>
   );
 }

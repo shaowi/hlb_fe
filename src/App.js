@@ -30,12 +30,21 @@ const theme = createTheme({
 });
 
 function App() {
+  const loginProps = {
+    imageSrc: '/images/logo.png',
+    imageAlt: 'hlb',
+    centerText: 'Payment Gateway Biz Ops Portal',
+    version: 'v0.1',
+    footerText: `Copyright &copy; ${new Date().getFullYear()} HL Bank. All Rights Reserved.`,
+    formHeaderText: 'Log in',
+    formFieldLabels: ['Username', 'Password']
+  };
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login {...loginProps} />} />
+          <Route path="/login" element={<Login {...loginProps} />} />
           <Route
             path="/home"
             element={
