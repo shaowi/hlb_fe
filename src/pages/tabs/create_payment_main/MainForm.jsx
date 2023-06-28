@@ -171,7 +171,10 @@ export default function MainForm({ handleSubmit }) {
   } = applicantDetails;
 
   const applicantFormAttributes = {
-    title: 'Applicant Details',
+    title: {
+      value: 'Applicant Details',
+      variant: 'h5'
+    },
     rows: [
       {
         fields: [

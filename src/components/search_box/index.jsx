@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import FormBuilder from 'components/forms_ui/FormBuilder';
 import { STATUSES, currentDate, previousMonthDate } from 'constants.js';
 
@@ -6,6 +6,10 @@ export default function SearchBox() {
   const formAttributes = {
     sections: [
       {
+        title: {
+          value: 'Search Criteria',
+          variant: 'h4'
+        },
         rows: [
           {
             fields: [
@@ -97,17 +101,7 @@ export default function SearchBox() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Grid container direction="column" spacing={2}>
-        <Grid item alignItems="center" md={6}>
-          <Typography variant="h4">Search Criteria</Typography>
-        </Grid>
-        <Grid item>
-          <FormBuilder
-            onSubmit={handleSearch}
-            formAttributes={formAttributes}
-          />
-        </Grid>
-      </Grid>
+      <FormBuilder onSubmit={handleSearch} formAttributes={formAttributes} />
     </Box>
   );
 }

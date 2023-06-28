@@ -86,7 +86,10 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
 
   const applicantFormAttributes = (disabled) => {
     return {
-      title: 'Applicant Details',
+      title: {
+        value: 'Applicant Details',
+        variant: 'h5'
+      },
       rows: [
         {
           fields: [
@@ -317,7 +320,10 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
 
   const beneficiaryFormAttributes = (disabled) => {
     return {
-      title: 'Beneficiary Details',
+      title: {
+        value: 'Beneficiary Details',
+        variant: 'h5'
+      },
       rows: [
         {
           fields: [

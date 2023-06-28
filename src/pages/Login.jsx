@@ -8,7 +8,7 @@ import {
   createTheme
 } from '@mui/material';
 import Copyright from 'components/Copyright';
-import FormBuilder from 'components/forms_ui/FormBuilder';
+import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logInUser from 'services/LoginService';
@@ -21,15 +21,21 @@ const theme = createTheme({
   }
 });
 
+const { TEXT } = FORM_TYPES;
+
 export default function Login() {
   const formAttributes = {
     sections: [
       {
+        title: {
+          value: 'Log in',
+          variant: 'h4'
+        },
         rows: [
           {
             fields: [
               {
-                type: 'text',
+                type: TEXT,
                 icon: <Person />,
                 defaultValue: '',
                 componentProps: {
@@ -44,7 +50,7 @@ export default function Login() {
           {
             fields: [
               {
-                type: 'text',
+                type: TEXT,
                 icon: <Lock />,
                 defaultValue: '',
                 componentProps: {
@@ -88,10 +94,10 @@ export default function Login() {
           p: 8,
           pb: '1rem',
           flexGrow: 1,
-          marginTop: 12,
-          marginBottom: 12,
-          marginLeft: 20,
-          marginRight: 20
+          mt: 12,
+          mb: 12,
+          ml: 20,
+          mr: 20
         }}
       >
         <Grid container spacing={6}>
@@ -103,9 +109,6 @@ export default function Login() {
             <Typography variant="subtitle2">v0.1</Typography>
           </Grid>
           <Grid item container direction="column" md={6} spacing={2}>
-            <Grid item>
-              <Typography variant="h4">Login</Typography>
-            </Grid>
             <Grid item>
               <FormBuilder
                 onSubmit={handleSubmit}

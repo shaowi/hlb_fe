@@ -1,17 +1,17 @@
 import {
+  Autocomplete,
+  Box,
+  Divider,
   Grid,
   InputAdornment,
-  Autocomplete,
-  Divider,
-  Typography,
-  Paper
+  Typography
 } from '@mui/material';
 import FormButton from 'components/forms/FormButton';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import TextField from './TextField';
-import SelectField from './Select';
 import DateTimePicker from './DateTimePicker';
+import SelectField from './Select';
+import TextField from './TextField';
 import ToolTipWrapper from './ToolTipWrapper';
 
 /* FormBuilder builds a form with formik based on the given formAttributes
@@ -89,15 +89,14 @@ export default function FormBuilder({ onSubmit, formAttributes, id }) {
       {({ setFieldValue }) => (
         <Form>
           {formAttributes.sections.map((section, indexA) => (
-            <Paper
-              key={indexA}
-              sx={{ width: '100%', overflow: 'hidden', p: 5, mt: 3 }}
-            >
+            <Box key={indexA} sx={{ mt: 3 }}>
               <Grid container direction="column" spacing={2}>
                 {section.title && (
                   <Grid item container direction="column" spacing={1}>
                     <Grid item alignItems="center">
-                      <Typography variant="h5">{section.title}</Typography>
+                      <Typography variant={section.title.variant}>
+                        {section.title.value}
+                      </Typography>
                     </Grid>
                     <Grid item>
                       <Divider />
@@ -183,7 +182,7 @@ export default function FormBuilder({ onSubmit, formAttributes, id }) {
                   );
                 })}
               </Grid>
-            </Paper>
+            </Box>
           ))}
           {formAttributes.buttons && (
             <Grid
@@ -195,7 +194,7 @@ export default function FormBuilder({ onSubmit, formAttributes, id }) {
             >
               {formAttributes.buttons.map((buttonProps, index) => {
                 return (
-                  <Grid key={index} item>
+                  <Grid key={index} item xs={buttonProps.fullWidth ? 12 : 0}>
                     <FormButton {...buttonProps} />
                   </Grid>
                 );
