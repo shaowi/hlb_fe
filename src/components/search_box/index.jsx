@@ -4,74 +4,78 @@ import { STATUSES, currentDate, previousMonthDate } from 'constants.js';
 
 export default function SearchBox() {
   const formAttributes = {
-    rows: [
+    sections: [
       {
-        fields: [
+        rows: [
           {
-            type: 'text',
-            defaultValue: '',
-            componentProps: {
-              name: 'filename',
-              label: 'Filename',
-              'data-testid': 'filename'
-            }
+            fields: [
+              {
+                type: 'text',
+                defaultValue: '',
+                componentProps: {
+                  name: 'filename',
+                  label: 'Filename',
+                  'data-testid': 'filename'
+                }
+              },
+              {
+                type: 'select',
+                defaultValue: '',
+                componentProps: {
+                  required: true,
+                  name: 'status',
+                  label: 'Status',
+                  'data-testid': 'status',
+                  options: STATUSES
+                }
+              }
+            ]
           },
           {
-            type: 'select',
-            defaultValue: '',
-            componentProps: {
-              required: true,
-              name: 'status',
-              label: 'Status',
-              'data-testid': 'status',
-              options: STATUSES
-            }
-          }
-        ]
-      },
-      {
-        fields: [
-          {
-            type: 'date',
-            defaultValue: previousMonthDate,
-            componentProps: {
-              required: true,
-              name: 'businessDateFrom',
-              label: 'Business Date(From)',
-              'data-testid': 'businessDateFrom'
-            }
+            fields: [
+              {
+                type: 'date',
+                defaultValue: previousMonthDate,
+                componentProps: {
+                  required: true,
+                  name: 'businessDateFrom',
+                  label: 'Business Date(From)',
+                  'data-testid': 'businessDateFrom'
+                }
+              },
+              {
+                type: 'date',
+                defaultValue: currentDate,
+                componentProps: {
+                  required: true,
+                  name: 'businessDateTo',
+                  label: 'Business Date(To)',
+                  'data-testid': 'businessDateTo'
+                }
+              }
+            ]
           },
           {
-            type: 'date',
-            defaultValue: currentDate,
-            componentProps: {
-              required: true,
-              name: 'businessDateTo',
-              label: 'Business Date(To)',
-              'data-testid': 'businessDateTo'
-            }
-          }
-        ]
-      },
-      {
-        fields: [
-          {
-            type: 'date',
-            defaultValue: '',
-            componentProps: {
-              name: 'transactionDateFrom',
-              label: 'Transaction Date(From)',
-              'data-testid': 'transactionDateFrom'
-            }
-          },
-          {
-            type: 'date',
-            defaultValue: '',
-            componentProps: {
-              name: 'transactionDateTo',
-              label: 'Transaction Date(To)',
-              'data-testid': 'transactionDateTo'
-            }
+            fields: [
+              {
+                type: 'date',
+                defaultValue: '',
+                componentProps: {
+                  name: 'transactionDateFrom',
+                  label: 'Transaction Date(From)',
+                  'data-testid': 'transactionDateFrom'
+                }
+              },
+              {
+                type: 'date',
+                defaultValue: '',
+                componentProps: {
+                  name: 'transactionDateTo',
+                  label: 'Transaction Date(To)',
+                  'data-testid': 'transactionDateTo'
+                }
+              }
+            ]
           }
         ]
       }

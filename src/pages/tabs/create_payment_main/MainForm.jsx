@@ -1,27 +1,27 @@
-import { Box, Grid } from '@mui/material';
-import ApplicantForm from 'components/forms/ApplicantForm';
-import FileForm from 'components/forms/FileForm';
-import FormButton from 'components/forms/FormButton';
-import { Form, Formik } from 'formik';
-import * as Yup from 'yup';
-import { useCreatePaymentStore } from './create_payment_store';
+import { Box } from '@mui/material';
+import FormBuilder from 'components/forms_ui/FormBuilder';
 import {
-  APPLICANT_DETAILS,
-  APPLICANT_DETAILS_VALIDATION,
-  MAIN_FILE_DETAILS,
-  MAIN_FILE_DETAILS_VALIDATION
-} from './form_templates';
-import {
-  currentDate,
+  COUNTRY_CODE,
   DEBIT_TYPE,
   FILENAME_FORMAT,
   RESIDENT_CODE
 } from 'constants.js';
-import FormBuilder from 'components/forms_ui/FormBuilder';
-import { COUNTRY_CODE } from './../../../constants';
+import { useCreatePaymentStore } from './create_payment_store';
+import { MAIN_FILE_DETAILS } from './form_templates';
 
 export default function MainForm({ handleSubmit }) {
-  const { applicantDetails } = useCreatePaymentStore();
+  const {
+    filename,
+    debitType,
+    channelTransactionReference,
+    transactionType,
+    requestChannel,
+    transactionDate,
+    valueDate,
+    businessDate,
+    recipientReference,
+    otherPaymentDetails
+  } = MAIN_FILE_DETAILS;
 
   const fileFormAttributes = {
     rows: [
@@ -29,7 +29,7 @@ export default function MainForm({ handleSubmit }) {
         fields: [
           {
             type: 'text',
-            defaultValue: `OPFR${currentDate.replace(/-/g, '')}0000001.csv`,
+            defaultValue: filename,
             componentProps: {
               name: 'filename',
               label: 'Filename',
@@ -42,7 +42,7 @@ export default function MainForm({ handleSubmit }) {
           },
           {
             type: 'select',
-            defaultValue: 'single',
+            defaultValue: debitType,
             componentProps: {
               required: true,
               name: 'debitType',
@@ -57,7 +57,7 @@ export default function MainForm({ handleSubmit }) {
         fields: [
           {
             type: 'text',
-            defaultValue: '2317333701OPZ00100',
+            defaultValue: channelTransactionReference,
             componentProps: {
               disabled: true,
               name: 'channelTransactionReference',
@@ -67,7 +67,7 @@ export default function MainForm({ handleSubmit }) {
           },
           {
             type: 'text',
-            defaultValue: 'ISS 1-M CBFT Credit Transfer (MT103)',
+            defaultValue: transactionType,
             componentProps: {
               disabled: true,
               name: 'transactionType',
@@ -77,7 +77,7 @@ export default function MainForm({ handleSubmit }) {
           },
           {
             type: 'text',
-            defaultValue: 'PG BizOpsUi',
+            defaultValue: requestChannel,
             componentProps: {
               disabled: true,
               name: 'requestChannel',
@@ -91,7 +91,7 @@ export default function MainForm({ handleSubmit }) {
         fields: [
           {
             type: 'date',
-            defaultValue: currentDate,
+            defaultValue: transactionDate,
             componentProps: {
               disabled: true,
               name: 'transactionDate',
@@ -101,7 +101,7 @@ export default function MainForm({ handleSubmit }) {
           },
           {
             type: 'date',
-            defaultValue: currentDate,
+            defaultValue: valueDate,
             componentProps: {
               disabled: true,
               required: true,
@@ -112,7 +112,7 @@ export default function MainForm({ handleSubmit }) {
           },
           {
             type: 'date',
-            defaultValue: currentDate,
+            defaultValue: businessDate,
             componentProps: {
               disabled: true,
               name: 'businessDate',
@@ -126,7 +126,7 @@ export default function MainForm({ handleSubmit }) {
         fields: [
           {
             type: 'text',
-            defaultValue: 'reference',
+            defaultValue: recipientReference,
             componentProps: {
               name: 'recipientReference',
               label: 'Recipient Reference',
@@ -135,7 +135,7 @@ export default function MainForm({ handleSubmit }) {
           },
           {
             type: 'text',
-            defaultValue: 'otherPaymentDetails',
+            defaultValue: otherPaymentDetails,
             componentProps: {
               name: 'otherPaymentDetails',
               label: 'Other Payment Details',
@@ -148,6 +148,8 @@ export default function MainForm({ handleSubmit }) {
       }
     ]
   };
+
+  const { applicantDetails } = useCreatePaymentStore();
 
   const {
     applicantName,
@@ -169,6 +171,7 @@ export default function MainForm({ handleSubmit }) {
   } = applicantDetails;
 
   const applicantFormAttributes = {
+    title: 'Applicant Details',
     rows: [
       {
         fields: [
@@ -263,9 +266,9 @@ export default function MainForm({ handleSubmit }) {
             type: 'select',
             defaultValue: applicantResidentCode,
             componentProps: {
-              name: 'applicantResidencyCode',
-              label: 'Residency Code',
-              'data-testid': 'applicantResidencyCode',
+              name: 'applicantResidentCode',
+              label: 'Resident Code',
+              'data-testid': 'applicantResidentCode',
               options: RESIDENT_CODE
             }
           }
@@ -362,19 +365,14 @@ export default function MainForm({ handleSubmit }) {
     ]
   };
 
-  const buttonFormAttributes = {
+  const formAttributes = {
+    sections: [fileFormAttributes, applicantFormAttributes],
     buttons: [
       {
         label: 'Add Transaction',
         color: 'success'
       }
     ]
-  };
-
-  const formAttributes = {
-    ...fileFormAttributes,
-    ...applicantFormAttributes,
-    ...buttonFormAttributes
   };
 
   return (

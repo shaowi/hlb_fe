@@ -23,34 +23,38 @@ const theme = createTheme({
 
 export default function Login() {
   const formAttributes = {
-    rows: [
+    sections: [
       {
-        fields: [
+        rows: [
           {
-            type: 'text',
-            icon: <Person />,
-            defaultValue: '',
-            componentProps: {
-              name: 'username',
-              label: 'Username',
-              'data-testid': 'username',
-              autoFocus: true
-            }
-          }
-        ]
-      },
-      {
-        fields: [
+            fields: [
+              {
+                type: 'text',
+                icon: <Person />,
+                defaultValue: '',
+                componentProps: {
+                  name: 'username',
+                  label: 'Username',
+                  'data-testid': 'username',
+                  autoFocus: true
+                }
+              }
+            ]
+          },
           {
-            type: 'text',
-            icon: <Lock />,
-            defaultValue: '',
-            componentProps: {
-              type: 'password',
-              name: 'password',
-              label: 'Password',
-              'data-testid': 'password'
-            }
+            fields: [
+              {
+                type: 'text',
+                icon: <Lock />,
+                defaultValue: '',
+                componentProps: {
+                  type: 'password',
+                  name: 'password',
+                  label: 'Password',
+                  'data-testid': 'password'
+                }
+              }
+            ]
           }
         ]
       }

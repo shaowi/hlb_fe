@@ -196,10 +196,9 @@ export default function CreatePaymentMain() {
         <>
           <MainForm
             handleSubmit={(values) => {
-              console.log(values);
-              // setApplicantDetails(values);
-              // setEditRowNum(-1);
-              // setSubFormVisible(true);
+              setApplicantDetails(values);
+              setEditRowNum(-1);
+              setSubFormVisible(true);
             }}
           />
           <DataTable
