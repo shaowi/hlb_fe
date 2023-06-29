@@ -1,10 +1,11 @@
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import Grid from '@mui/material/Grid';
 import ActionButton from 'components/datatable/ActionButton';
 import DataTable from 'components/datatable/index';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
-import SearchBox from 'components/search_box/index';
 import { formatToCurrency } from 'services/helper';
+import SearchBox from './SearchBox';
+
+const viewFileToolTipText = 'View File';
 
 const columns = [
   { id: 'action', label: 'Action', minWidth: 100, sortable: false },
@@ -36,8 +37,6 @@ const columns = [
     format: (value) => value.toLocaleString('en-US')
   }
 ];
-
-const viewFileToolTipText = 'View File';
 
 const rows = [
   {
@@ -85,10 +84,13 @@ const rows = [
 ];
 
 export default function RejectedPaymentMain() {
+  const handleSearch = (values) => {
+    console.log(values);
+  };
   return (
-    <Grid container direction="column" spacing={2} p={3} mb={5}>
-      <SearchBox />
+    <>
+      <SearchBox onSearch={handleSearch} />
       <DataTable title="Pending Action" columns={columns} rows={rows} />
-    </Grid>
+    </>
   );
 }

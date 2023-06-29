@@ -3,17 +3,16 @@ import {
   Paper,
   Tab,
   Tabs,
-  Typography,
   ThemeProvider,
+  Typography,
   createTheme
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import * as React from 'react';
 import { useState } from 'react';
-import RejectedPaymentMain from '../pages/tabs/RejectedPaymentMain';
 import UploadPaymentMain from '../pages/tabs/UploadPaymentMain';
-import Footer from './Footer';
 import CreatePaymentMain from './../pages/tabs/create_payment_main/index';
+import RejectedPaymentMain from './../pages/tabs/rejected_payment_main/index';
+import Footer from './Footer';
 
 const theme = createTheme({
   typography: {

@@ -6,7 +6,7 @@ import {
   InputAdornment,
   Typography
 } from '@mui/material';
-import FormButton from 'components/forms/FormButton';
+import FormButton from 'components/forms_ui/buttons/FormButton';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import DateTimePicker from './DateTimePicker';

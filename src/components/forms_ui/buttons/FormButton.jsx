@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import React from 'react';
-import ResetButton from 'components/search_box/ResetButton';
+import ResetButton from 'components/forms_ui/buttons/ResetButton';
 
 export default function FormButton({
   label,

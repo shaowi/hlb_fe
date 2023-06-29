@@ -1,10 +1,10 @@
+import { ThemeProvider, createTheme } from '@mui/material';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Footer from './components/Footer';
+import PaymentFileTabs from './components/PaymentFileTabs';
+import Home from './pages/Home';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
-import Home from './pages/Home';
-import { ThemeProvider, createTheme } from '@mui/material';
-import PaymentFileTabs from './components/PaymentFileTabs';
-import Footer from './components/Footer';
 
 const theme = createTheme({
   palette: {

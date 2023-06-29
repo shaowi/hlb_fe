@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import FormBuilder from 'components/forms_ui/FormBuilder';
+import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import {
   COUNTRY_CODE,
   DEBIT_TYPE,
@@ -8,6 +8,8 @@ import {
 } from 'constants.js';
 import { useCreatePaymentStore } from './create_payment_store';
 import { MAIN_FILE_DETAILS } from './form_templates';
+
+const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE } = FORM_TYPES;
 
 export default function MainForm({ handleSubmit }) {
   const {
@@ -28,7 +30,7 @@ export default function MainForm({ handleSubmit }) {
       {
         fields: [
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: filename,
             componentProps: {
               name: 'filename',
@@ -41,7 +43,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'select',
+            type: SELECT,
             defaultValue: debitType,
             componentProps: {
               required: true,
@@ -56,7 +58,7 @@ export default function MainForm({ handleSubmit }) {
       {
         fields: [
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: channelTransactionReference,
             componentProps: {
               disabled: true,
@@ -66,7 +68,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: transactionType,
             componentProps: {
               disabled: true,
@@ -76,7 +78,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: requestChannel,
             componentProps: {
               disabled: true,
@@ -90,7 +92,7 @@ export default function MainForm({ handleSubmit }) {
       {
         fields: [
           {
-            type: 'date',
+            type: DATE,
             defaultValue: transactionDate,
             componentProps: {
               disabled: true,
@@ -100,7 +102,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'date',
+            type: DATE,
             defaultValue: valueDate,
             componentProps: {
               disabled: true,
@@ -111,7 +113,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'date',
+            type: DATE,
             defaultValue: businessDate,
             componentProps: {
               disabled: true,
@@ -125,7 +127,7 @@ export default function MainForm({ handleSubmit }) {
       {
         fields: [
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: recipientReference,
             componentProps: {
               name: 'recipientReference',
@@ -134,7 +136,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: otherPaymentDetails,
             componentProps: {
               name: 'otherPaymentDetails',
@@ -179,7 +181,7 @@ export default function MainForm({ handleSubmit }) {
       {
         fields: [
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantName,
             componentProps: {
               required: true,
@@ -189,7 +191,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantAccountNo,
             componentProps: {
               required: true,
@@ -200,7 +202,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantAccountType,
             componentProps: {
               required: true,
@@ -214,7 +216,7 @@ export default function MainForm({ handleSubmit }) {
       {
         fields: [
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantAccountCurrency,
             componentProps: {
               required: true,
@@ -224,7 +226,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantIdType,
             componentProps: {
               name: 'applicantIdType',
@@ -233,7 +235,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantId,
             componentProps: {
               name: 'applicantId',
@@ -246,7 +248,7 @@ export default function MainForm({ handleSubmit }) {
       {
         fields: [
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantAccountBranchCode,
             componentProps: {
               required: true,
@@ -256,7 +258,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantBankBic,
             componentProps: {
               disabled: true,
@@ -266,7 +268,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'select',
+            type: SELECT,
             defaultValue: applicantResidentCode,
             componentProps: {
               name: 'applicantResidentCode',
@@ -280,7 +282,7 @@ export default function MainForm({ handleSubmit }) {
       {
         fields: [
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantAccountCifId,
             componentProps: {
               name: 'applicantAccountCifId',
@@ -289,7 +291,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantPhone,
             componentProps: {
               name: 'applicantPhone',
@@ -298,7 +300,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantPostalCode,
             componentProps: {
               name: 'applicantPostalCode',
@@ -311,7 +313,7 @@ export default function MainForm({ handleSubmit }) {
       {
         fields: [
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantAddress1,
             componentProps: {
               required: true,
@@ -323,7 +325,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantAddress2,
             componentProps: {
               required: true,
@@ -335,7 +337,7 @@ export default function MainForm({ handleSubmit }) {
             }
           },
           {
-            type: 'text',
+            type: TEXT,
             defaultValue: applicantAddress3,
             componentProps: {
               required: true,
@@ -351,7 +353,7 @@ export default function MainForm({ handleSubmit }) {
       {
         fields: [
           {
-            type: 'select-autocomplete',
+            type: SELECT_AUTOCOMPLETE,
             defaultValue: applicantCountryCode,
             componentProps: {
               required: true,

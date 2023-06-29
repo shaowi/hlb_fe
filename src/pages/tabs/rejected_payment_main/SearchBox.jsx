@@ -1,8 +1,10 @@
 import { Box } from '@mui/material';
-import FormBuilder from 'components/forms_ui/FormBuilder';
+import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { STATUSES, currentDate, previousMonthDate } from 'constants.js';
 
-export default function SearchBox() {
+const { TEXT, SELECT, DATE } = FORM_TYPES;
+
+export default function SearchBox({ onSearch }) {
   const formAttributes = {
     sections: [
       {
@@ -14,7 +16,7 @@ export default function SearchBox() {
           {
             fields: [
               {
-                type: 'text',
+                type: TEXT,
                 defaultValue: '',
                 componentProps: {
                   name: 'filename',
@@ -23,7 +25,7 @@ export default function SearchBox() {
                 }
               },
               {
-                type: 'select',
+                type: SELECT,
                 defaultValue: '',
                 componentProps: {
                   required: true,
@@ -38,7 +40,7 @@ export default function SearchBox() {
           {
             fields: [
               {
-                type: 'date',
+                type: DATE,
                 defaultValue: previousMonthDate,
                 componentProps: {
                   required: true,
@@ -48,7 +50,7 @@ export default function SearchBox() {
                 }
               },
               {
-                type: 'date',
+                type: DATE,
                 defaultValue: currentDate,
                 componentProps: {
                   required: true,
@@ -62,7 +64,7 @@ export default function SearchBox() {
           {
             fields: [
               {
-                type: 'date',
+                type: DATE,
                 defaultValue: '',
                 componentProps: {
                   name: 'transactionDateFrom',
@@ -71,7 +73,7 @@ export default function SearchBox() {
                 }
               },
               {
-                type: 'date',
+                type: DATE,
                 defaultValue: '',
                 componentProps: {
                   name: 'transactionDateTo',
@@ -95,13 +97,10 @@ export default function SearchBox() {
       }
     ]
   };
-  const handleSearch = (values) => {
-    console.log(values);
-  };
 
   return (
     <Box sx={{ p: 3 }}>
-      <FormBuilder onSubmit={handleSearch} formAttributes={formAttributes} />
+      <FormBuilder onSubmit={onSearch} formAttributes={formAttributes} />
     </Box>
   );
 }
