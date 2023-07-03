@@ -35,7 +35,7 @@ function App() {
     imageAlt: 'hlb',
     centerText: 'Payment Gateway Biz Ops Portal',
     version: 'v0.1',
-    footerText: `Copyright &copy; ${new Date().getFullYear()} HL Bank. All Rights Reserved.`,
+    footerText: `Copyright © ${new Date().getFullYear()} HL Bank. All Rights Reserved.`,
     formHeaderText: 'Log in',
     formFieldLabels: ['Username', 'Password']
   };

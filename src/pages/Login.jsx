@@ -114,10 +114,10 @@ export default function Login({
           p: 8,
           pb: '1rem',
           flexGrow: 1,
-          mt: 12,
-          mb: 12,
-          ml: 20,
-          mr: 20
+          mt: 15,
+          mb: 15,
+          ml: 25,
+          mr: 25
         }}
       >
         <Grid container spacing={6}>
