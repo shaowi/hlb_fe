@@ -1,4 +1,3 @@
-import * as Yup from 'yup';
 import { currentDate } from 'constants.js';
 
 // TODO: Clear data later (Mock data used for testing only)
@@ -68,17 +67,6 @@ export const PAYMENT_DETAILS = {
   paymentCurrency: 'AUD',
   paymentAmount: 500,
   localEquivalentAmount: 530
-};
-
-export const PAYMENT_DETAILS_VALIDATION = {
-  remittanceAmount: Yup.number().required('Remittance Amount is required'),
-  fxContractReferenceNo: Yup.string(),
-  exchangeRate: Yup.number(),
-  creditingFxRate: Yup.number(),
-  debitingFxRate: Yup.number(),
-  paymentCurrency: Yup.string(),
-  paymentAmount: Yup.number(),
-  localEquivalentAmount: Yup.number()
 };
 
 export const CHARGES_DETAILS = {

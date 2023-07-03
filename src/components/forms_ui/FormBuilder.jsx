@@ -20,7 +20,7 @@ formAttributes is an object with 2 required properties: sections and buttons. In
   - sections is an array of objects with a rows and optional title property
   - rows is an array of objects with a fields property
   - each field has a type, defaultValue and a componentProps property
-    - type: text, select, select-autocomplete, date
+    - type: text, select, select-autocomplete, date, label
     - defaultValue: string, number, date
     - componentProps: props to be passed to the component
     - toolTipProps: props to be passed to the ToolTipWrapper component
@@ -36,10 +36,11 @@ export const FORM_TYPES = {
   TEXT: 'text',
   SELECT: 'select',
   SELECT_AUTOCOMPLETE: 'select-autocomplete',
-  DATE: 'date'
+  DATE: 'date',
+  LABEL: 'label'
 };
 
-const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE } = FORM_TYPES;
+const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE, LABEL } = FORM_TYPES;
 
 export default function FormBuilder({ onSubmit, formAttributes, id }) {
   function createInitialFormState(data) {
@@ -47,7 +48,9 @@ export default function FormBuilder({ onSubmit, formAttributes, id }) {
     data.sections.forEach((section) => {
       section.rows.forEach((row) => {
         row.fields.forEach((field) => {
-          initialFormState[field.componentProps.name] = field.defaultValue;
+          if (field.type !== LABEL) {
+            initialFormState[field.componentProps.name] = field.defaultValue;
+          }
         });
       });
     });
@@ -75,7 +78,7 @@ export default function FormBuilder({ onSubmit, formAttributes, id }) {
       section.rows.forEach((row) => {
         row.fields.forEach((field) => {
           const fieldType = field.type;
-          if (fieldType === SELECT_AUTOCOMPLETE) {
+          if (fieldType === LABEL || fieldType === SELECT_AUTOCOMPLETE) {
             return;
           }
           let yupType = fieldType === DATE ? Yup.date() : Yup.string();
@@ -127,6 +130,7 @@ export default function FormBuilder({ onSubmit, formAttributes, id }) {
                       item
                       container
                       spacing={2}
+                      alignItems="center"
                     >
                       {fields.map((field, indexC) => {
                         const fieldComponent =
@@ -174,6 +178,10 @@ export default function FormBuilder({ onSubmit, formAttributes, id }) {
                             />
                           ) : field.type === DATE ? (
                             <DateTimePicker {...field.componentProps} />
+                          ) : field.type === LABEL ? (
+                            <Typography {...field.componentProps}>
+                              {field.defaultValue}
+                            </Typography>
                           ) : null;
 
                         return (

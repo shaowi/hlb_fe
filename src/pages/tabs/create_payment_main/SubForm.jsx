@@ -6,11 +6,13 @@ import {
   COUNTRY_CODE,
   DEBIT_TYPE,
   REMITTANCE_CURRENCY,
-  RESIDENT_CODE
+  RESIDENT_CODE,
+  TRANSACTION_PURPOSE_CODE
 } from 'constants.js';
 import { useCreatePaymentStore } from './create_payment_store';
+import { convertToLocalCurrency } from 'services/helper';
 
-const { TEXT, SELECT, SELECT_AUTOCOMPLETE } = FORM_TYPES;
+const { TEXT, SELECT, SELECT_AUTOCOMPLETE, LABEL } = FORM_TYPES;
 
 const theme = createTheme({
   palette: {
@@ -23,6 +25,9 @@ const theme = createTheme({
 
 export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
   const { currSubFormData } = useCreatePaymentStore();
+  const debitFeeLabel = `Debit Fee in ${currSubFormData.paymentCurrency}`;
+  const standardFeeLabel = 'Standard Fee in SGD';
+
   const { debitType, transactionType, processingMode } = currSubFormData;
   const fileFormAttributes = {
     rows: [
@@ -540,7 +545,10 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
   } = currSubFormData;
 
   const paymentFormAttributes = {
-    title: 'Payment Details',
+    title: {
+      value: 'Payment Details',
+      variant: 'h5'
+    },
     rows: [
       {
         fields: [
@@ -656,9 +664,18 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
     ]
   };
 
-  const { creditMidRate, debitMidRate, chargeBearer } = currSubFormData;
+  const {
+    creditMidRate,
+    debitMidRate,
+    chargeBearer,
+    commissionInLieuOfExchange,
+    commissionHandling
+  } = currSubFormData;
   const chargesFormAttributes = {
-    title: 'Charges Details',
+    title: {
+      value: 'Charges Details',
+      variant: 'h5'
+    },
     rows: [
       {
         fields: [
@@ -694,6 +711,223 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
             }
           }
         ]
+      },
+      {
+        fields: [
+          {
+            type: LABEL,
+            defaultValue: 'Commission In Lieu Of Exchange',
+            componentProps: {
+              variant: 'subtitle1'
+            }
+          },
+          {
+            type: TEXT,
+            defaultValue: commissionInLieuOfExchange,
+            componentProps: {
+              name: 'commissionInLieuOfExchange',
+              label: debitFeeLabel,
+              'data-testid': 'debitMidRate'
+            }
+          },
+          {
+            type: TEXT,
+            defaultValue: convertToLocalCurrency(commissionInLieuOfExchange),
+            componentProps: {
+              disabled: true,
+              name: 'commissionInLieuOfExchangeStandard',
+              label: standardFeeLabel,
+              'data-testid': 'commissionInLieuOfExchangeStandard'
+            }
+          }
+        ]
+      },
+      {
+        fields: [
+          {
+            type: LABEL,
+            defaultValue: 'Commission Handling',
+            componentProps: {
+              variant: 'subtitle1'
+            }
+          },
+          {
+            type: TEXT,
+            defaultValue: commissionHandling,
+            componentProps: {
+              name: 'commissionHandling',
+              label: debitFeeLabel,
+              'data-testid': 'commissionHandling'
+            }
+          },
+          {
+            type: TEXT,
+            defaultValue: convertToLocalCurrency(commissionHandling),
+            componentProps: {
+              disabled: true,
+              name: 'commissionHandlingStandard',
+              label: standardFeeLabel,
+              'data-testid': 'commissionHandlingStandard'
+            }
+          }
+        ]
+      }
+    ]
+  };
+
+  const { sendersCorrespondent, receiversCorrespondent } = currSubFormData;
+  const correspondentBankDetailsAttributes = {
+    title: {
+      value: 'Correspondent Bank Details',
+      variant: 'h5'
+    },
+    rows: [
+      {
+        fields: [
+          {
+            type: TEXT,
+            defaultValue: sendersCorrespondent,
+            componentProps: {
+              required: true,
+              disabled: true,
+              name: 'sendersCorrespondent',
+              label: "Sender's Correspondent",
+              'data-testid': 'sendersCorrespondent'
+            }
+          },
+          {
+            type: TEXT,
+            defaultValue: receiversCorrespondent,
+            componentProps: {
+              disabled: true,
+              name: 'receiversCorrespondent',
+              label: "Receiver's Correspondent",
+              'data-testid': 'receiversCorrespondent'
+            }
+          }
+        ]
+      }
+    ]
+  };
+
+  const {
+    channelTransactionReference,
+    recipientReference,
+    purposeCode,
+    remittanceInfo,
+    additionalRemittanceInfo,
+    senderToReceiverInfo,
+    additionalSenderToReceiverInfo,
+    otherPaymentDetails,
+    additionalRemarks
+  } = currSubFormData;
+  const transactionDetailsAttributes = {
+    title: {
+      value: 'Transaction Details',
+      variant: 'h5'
+    },
+    rows: [
+      {
+        fields: [
+          {
+            type: TEXT,
+            defaultValue: channelTransactionReference,
+            componentProps: {
+              name: 'channelTransactionReference',
+              label: 'Channel Transaction Reference',
+              'data-testid': 'channelTransactionReference'
+            }
+          },
+          {
+            type: TEXT,
+            defaultValue: recipientReference,
+            componentProps: {
+              name: 'recipientReference',
+              label: 'Recipient Reference',
+              'data-testid': 'recipientReference'
+            }
+          },
+          {
+            type: SELECT,
+            defaultValue: purposeCode,
+            componentProps: {
+              name: 'purposeCode',
+              label: 'Purpose Code',
+              'data-testid': 'purposeCode',
+              options: TRANSACTION_PURPOSE_CODE
+            }
+          }
+        ]
+      },
+      {
+        fields: [
+          {
+            type: TEXT,
+            defaultValue: remittanceInfo,
+            componentProps: {
+              name: 'remittanceInfo',
+              label: 'Remittance Information',
+              'data-testid': 'remittanceInfo'
+            }
+          },
+          {
+            type: TEXT,
+            defaultValue: additionalRemittanceInfo,
+            componentProps: {
+              name: 'additionalRemittanceInfo',
+              label: 'Additional Remittance Information',
+              'data-testid': 'additionalRemittanceInfo'
+            }
+          }
+        ]
+      },
+      {
+        fields: [
+          {
+            type: TEXT,
+            defaultValue: senderToReceiverInfo,
+            componentProps: {
+              name: 'senderToReceiverInfo',
+              label: 'Sender to Receiver Information',
+              'data-testid': 'senderToReceiverInfo'
+            }
+          },
+          {
+            type: TEXT,
+            defaultValue: additionalSenderToReceiverInfo,
+            componentProps: {
+              name: 'additionalSenderToReceiverInfo',
+              label: 'Additional Sender to Receiver Information',
+              'data-testid': 'additionalSenderToReceiverInfo'
+            }
+          }
+        ]
+      },
+      {
+        fields: [
+          {
+            type: TEXT,
+            defaultValue: otherPaymentDetails,
+            componentProps: {
+              name: 'otherPaymentDetails',
+              label: 'Other Payment Details',
+              'data-testid': 'otherPaymentDetails',
+              multiline: true,
+              rows: 3
+            }
+          },
+          {
+            type: TEXT,
+            defaultValue: additionalRemarks,
+            componentProps: {
+              name: 'additionalRemarks',
+              label: 'Additional Remarks',
+              'data-testid': 'additionalRemarks',
+              multiline: true,
+              rows: 3
+            }
+          }
+        ]
       }
     ]
   };
@@ -704,7 +938,9 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
       applicantFormAttributes(true),
       beneficiaryFormAttributes(false),
       paymentFormAttributes,
-      chargesFormAttributes
+      chargesFormAttributes,
+      correspondentBankDetailsAttributes,
+      transactionDetailsAttributes
     ],
     buttons: [
       {
