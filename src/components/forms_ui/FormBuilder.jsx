@@ -55,6 +55,21 @@ export default function FormBuilder({ onSubmit, formAttributes, id }) {
   }
 
   function createFormValidation(data) {
+    function setRequiredValidation(field, yupType) {
+      if (field.componentProps.required) {
+        return yupType.required(`${field.componentProps.label} is required`);
+      }
+      return yupType;
+    }
+    function setDateComparisonValidation(field, yupType) {
+      if (field.type === DATE && field.validateDateComparison) {
+        return yupType.when(
+          field.validateDateComparison.other,
+          field.validateDateComparison.func
+        );
+      }
+      return yupType;
+    }
     const formValidation = {};
     data.sections.forEach((section) => {
       section.rows.forEach((row) => {
@@ -63,11 +78,10 @@ export default function FormBuilder({ onSubmit, formAttributes, id }) {
           if (fieldType === SELECT_AUTOCOMPLETE) {
             return;
           }
-          const yupType = fieldType === DATE ? Yup.date() : Yup.string();
-          const isRequired = field.componentProps.required;
-          formValidation[field.componentProps.name] = isRequired
-            ? yupType.required(`${field.componentProps.label} is required`)
-            : yupType;
+          let yupType = fieldType === DATE ? Yup.date() : Yup.string();
+          yupType = setRequiredValidation(field, yupType);
+          yupType = setDateComparisonValidation(field, yupType);
+          formValidation[field.componentProps.name] = yupType;
         });
       });
     });
@@ -82,8 +96,8 @@ export default function FormBuilder({ onSubmit, formAttributes, id }) {
     <Formik
       initialValues={{ ...INITIAL_FORM_STATE, id }}
       validationSchema={FORM_VALIDATION}
-      validateOnBlur={false}
       validationOnChange={false}
+      validateOnBlur={false}
       onSubmit={onSubmit}
     >
       {({ setFieldValue }) => (

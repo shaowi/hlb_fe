@@ -57,6 +57,17 @@ export default function SearchBox({ onSearch }) {
                   name: 'businessDateTo',
                   label: 'Business Date(To)',
                   'data-testid': 'businessDateTo'
+                },
+                validateDateComparison: {
+                  other: 'businessDateFrom',
+                  func: ([businessDateFrom], schema) => {
+                    return businessDateFrom
+                      ? schema.min(
+                          businessDateFrom,
+                          'Business Date(To) must be later than Business Date(From)'
+                        )
+                      : schema;
+                  }
                 }
               }
             ]
@@ -79,6 +90,17 @@ export default function SearchBox({ onSearch }) {
                   name: 'transactionDateTo',
                   label: 'Transaction Date(To)',
                   'data-testid': 'transactionDateTo'
+                },
+                validateDateComparison: {
+                  other: 'transactionDateFrom',
+                  func: ([transactionDateFrom], schema) => {
+                    return transactionDateFrom
+                      ? schema.min(
+                          transactionDateFrom,
+                          'Transaction Date(To) must be later than Transaction Date(From)'
+                        )
+                      : schema;
+                  }
                 }
               }
             ]
