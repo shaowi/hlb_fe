@@ -16,7 +16,8 @@ import logInUser from 'services/LoginService';
 const theme = createTheme({
   typography: {
     h4: {
-      color: '#BBB'
+      color: '#BBB',
+      fontSize: '1.5rem'
     }
   }
 });
@@ -116,12 +117,19 @@ export default function Login({
           flexGrow: 1,
           mt: 15,
           mb: 15,
-          ml: 25,
-          mr: 25
+          ml: 22,
+          mr: 22
         }}
       >
         <Grid container spacing={6}>
-          <Grid item container direction="column" alignItems="center" md={6}>
+          <Grid
+            item
+            container
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+            md={6}
+          >
             <img src={imageSrc} alt={imageAlt} width="60%" height="auto" />
             <Typography variant="h4" align="center" gutterBottom>
               {centerText}
