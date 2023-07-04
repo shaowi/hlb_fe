@@ -93,3 +93,9 @@ export const TRANSACTION_DETAILS = {
   otherPaymentDetails: 'otherPaymentDetails',
   additionalRemarks: 'additionalRemarks'
 };
+
+export const TRANSACTION_SUMMARY = {
+  totalTransactionCount: 0,
+  totalPaymentAmount: 0,
+  requesterComments: 'requesterComments'
+};

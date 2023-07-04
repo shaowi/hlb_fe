@@ -9,6 +9,7 @@ import { formatToCurrency } from 'services/helper';
 import MainForm from './MainForm';
 import SubForm from './SubForm';
 import { useCreatePaymentStore } from './create_payment_store';
+import SummaryForm from './SummaryForm';
 
 const transactionColumns = [
   { id: 'action', label: 'Action', minWidth: 160, sortable: false },
@@ -206,6 +207,7 @@ export default function CreatePaymentMain() {
             rows={transactionRows}
             columns={transactionColumns}
           />
+          <SummaryForm transactionRows={transactionRows} />
         </>
       )}
     </Box>
