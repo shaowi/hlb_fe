@@ -1,68 +1,70 @@
-import React from 'react';
-import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { Box } from '@mui/material';
+import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
+import { cloneDeep } from 'lodash';
+import { useEffect, useState } from 'react';
 
 const { TEXT } = FORM_TYPES;
-export default function SummaryForm({ transactionRows, handleSubmit }) {
+
+export default function SummaryForm({ transactionRows, onSubmit }) {
   const totalTransactionCount = transactionRows.length;
   const totalPaymentAmount = transactionRows.reduce(
-    (acc, curr) => acc + curr.paymentAmount,
+    (acc, curr) => acc + curr.remittanceAmount,
     0
   );
 
-  const transactionSummaryAttributes = {
-    title: {
-      value: 'Transaction Summary',
-      variant: 'h5'
-    },
-    rows: [
+  const initFormAttributes = {
+    sections: [
       {
-        fields: [
+        title: {
+          value: 'Transaction Summary',
+          variant: 'h5'
+        },
+        rows: [
           {
-            type: TEXT,
-            defaultValue: totalTransactionCount,
-            componentProps: {
-              disabled: true,
-              name: 'totalTransactionCount',
-              label: 'Total Transaction Count',
-              'data-testid': 'totalTransactionCount',
-              type: 'number'
-            }
+            fields: [
+              {
+                type: TEXT,
+                defaultValue: totalTransactionCount,
+                componentProps: {
+                  disabled: true,
+                  name: 'totalTransactionCount',
+                  label: 'Total Transaction Count',
+                  'data-testid': 'totalTransactionCount',
+                  type: 'number'
+                }
+              },
+              {
+                type: TEXT,
+                defaultValue: totalPaymentAmount,
+                componentProps: {
+                  disabled: true,
+                  name: 'totalPaymentAmount',
+                  label: 'Total Payment Amount',
+                  'data-testid': 'totalPaymentAmount',
+                  type: 'number'
+                }
+              }
+            ]
           },
           {
-            type: TEXT,
-            defaultValue: totalPaymentAmount,
-            componentProps: {
-              disabled: true,
-              name: 'totalPaymentAmount',
-              label: 'Total Payment Amount',
-              'data-testid': 'totalPaymentAmount',
-              type: 'number'
-            }
-          }
-        ]
-      },
-      {
-        fields: [
-          {
-            type: TEXT,
-            defaultValue: '',
-            componentProps: {
-              required: true,
-              name: 'requesterComments',
-              label: 'Requester Comments',
-              'data-testid': 'requesterComments',
-              multiline: true,
-              rows: 3
-            }
+            fields: [
+              {
+                type: TEXT,
+                defaultValue: '',
+                componentProps: {
+                  required: true,
+                  name: 'requesterComments',
+                  label: 'Requester Comments',
+                  'data-testid': 'requesterComments',
+                  multiline: true,
+                  rows: 3
+                }
+              }
+            ]
           }
         ]
       }
-    ]
-  };
-
-  const formAttributes = {
-    sections: [transactionSummaryAttributes],
+    ],
     buttons: [
       {
         label: 'Submit',
@@ -70,10 +72,33 @@ export default function SummaryForm({ transactionRows, handleSubmit }) {
       }
     ]
   };
+  const [formAttributes, setFormAttributes] = useState(initFormAttributes);
+
+  useEffect(() => {
+    const formAttributesCopy = cloneDeep(formAttributes);
+    formAttributesCopy.sections.forEach((section) => {
+      section.rows.forEach((row) => {
+        row.fields.forEach((field) => {
+          if (field.componentProps.name === 'totalTransactionCount') {
+            field.defaultValue = totalTransactionCount;
+          }
+          if (field.componentProps.name === 'totalPaymentAmount') {
+            field.defaultValue = totalPaymentAmount;
+          }
+        });
+      });
+    });
+    setFormAttributes(formAttributesCopy);
+  }, [
+    formAttributes,
+    totalPaymentAmount,
+    totalTransactionCount,
+    transactionRows
+  ]);
 
   return (
     <Box sx={{ p: 3 }}>
-      <FormBuilder onSubmit={handleSubmit} formAttributes={formAttributes} />
+      <FormBuilder onSubmit={onSubmit} formAttributes={formAttributes} />
     </Box>
   );
 }

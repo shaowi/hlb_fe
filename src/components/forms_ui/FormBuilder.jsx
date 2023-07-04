@@ -42,7 +42,12 @@ export const FORM_TYPES = {
 
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE, LABEL } = FORM_TYPES;
 
-export default function FormBuilder({ onSubmit, formAttributes, id }) {
+export default function FormBuilder({
+  onSubmit,
+  formAttributes,
+  id = -1,
+  transactionRowsUpdated
+}) {
   function createInitialFormState(data) {
     const initialFormState = {};
     data.sections.forEach((section) => {
@@ -97,134 +102,137 @@ export default function FormBuilder({ onSubmit, formAttributes, id }) {
 
   return (
     <Formik
+      enableReinitialize={true}
       initialValues={{ ...INITIAL_FORM_STATE, id }}
       validationSchema={FORM_VALIDATION}
       validationOnChange={false}
       validateOnBlur={false}
       onSubmit={onSubmit}
     >
-      {({ setFieldValue }) => (
-        <Form>
-          {formAttributes.sections.map((section, indexA) => (
-            <Box key={indexA} sx={{ mt: 3 }}>
-              <Grid container direction="column" spacing={2}>
-                {section.title && (
-                  <Grid item container direction="column" spacing={1}>
-                    <Grid item alignItems="center">
-                      <Typography variant={section.title.variant}>
-                        {section.title.value}
-                      </Typography>
+      {({ setFieldValue }) => {
+        return (
+          <Form>
+            {formAttributes.sections.map((section, indexA) => (
+              <Box key={indexA} sx={{ mt: 3 }}>
+                <Grid container direction="column" spacing={2}>
+                  {section.title && (
+                    <Grid item container direction="column" spacing={1}>
+                      <Grid item alignItems="center">
+                        <Typography variant={section.title.variant}>
+                          {section.title.value}
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Divider />
+                      </Grid>
                     </Grid>
-                    <Grid item>
-                      <Divider />
-                    </Grid>
-                  </Grid>
-                )}
-                {section.rows.map((row, indexB) => {
-                  const fields = row.fields.slice(0, 4);
-                  const fieldCount = fields.length;
-                  const fieldSize = 12 / fieldCount;
-                  return (
-                    <Grid
-                      key={`${indexA}, ${indexB}`}
-                      item
-                      container
-                      spacing={2}
-                      alignItems="center"
-                    >
-                      {fields.map((field, indexC) => {
-                        const fieldComponent =
-                          field.type === TEXT ? (
-                            <TextField
-                              {...field.componentProps}
-                              InputProps={
-                                field.icon && {
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      {field.icon}
-                                    </InputAdornment>
-                                  )
+                  )}
+                  {section.rows.map((row, indexB) => {
+                    const fields = row.fields.slice(0, 4);
+                    const fieldCount = fields.length;
+                    const fieldSize = 12 / fieldCount;
+                    return (
+                      <Grid
+                        key={`${indexA}, ${indexB}`}
+                        item
+                        container
+                        spacing={2}
+                        alignItems="center"
+                      >
+                        {fields.map((field, indexC) => {
+                          const fieldComponent =
+                            field.type === TEXT ? (
+                              <TextField
+                                {...field.componentProps}
+                                InputProps={
+                                  field.icon && {
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        {field.icon}
+                                      </InputAdornment>
+                                    )
+                                  }
                                 }
-                              }
-                            />
-                          ) : field.type === SELECT ? (
-                            <SelectField {...field.componentProps} />
-                          ) : field.type === SELECT_AUTOCOMPLETE ? (
-                            <Autocomplete
-                              {...field.componentProps}
-                              defaultValue={
-                                field.defaultValue.value === ''
-                                  ? null
-                                  : field.defaultValue
-                              }
-                              isOptionEqualToValue={(option, value) =>
-                                option.value === value.value
-                              }
-                              getOptionLabel={(option) => option.label}
-                              onChange={(e, value) => {
-                                setFieldValue(
-                                  field.componentProps.name,
-                                  value !== null ? value : field.defaultValue
-                                );
-                              }}
-                              renderInput={(params) => (
-                                <TextField
-                                  required
-                                  {...params}
-                                  name={field.componentProps.name}
-                                  label={field.componentProps.label}
-                                />
-                              )}
-                            />
-                          ) : field.type === DATE ? (
-                            <DateTimePicker {...field.componentProps} />
-                          ) : field.type === LABEL ? (
-                            <Typography {...field.componentProps}>
-                              {field.defaultValue}
-                            </Typography>
-                          ) : null;
+                              />
+                            ) : field.type === SELECT ? (
+                              <SelectField {...field.componentProps} />
+                            ) : field.type === SELECT_AUTOCOMPLETE ? (
+                              <Autocomplete
+                                {...field.componentProps}
+                                defaultValue={
+                                  field.defaultValue.value === ''
+                                    ? null
+                                    : field.defaultValue
+                                }
+                                isOptionEqualToValue={(option, value) =>
+                                  option.value === value.value
+                                }
+                                getOptionLabel={(option) => option.label}
+                                onChange={(e, value) => {
+                                  setFieldValue(
+                                    field.componentProps.name,
+                                    value !== null ? value : field.defaultValue
+                                  );
+                                }}
+                                renderInput={(params) => (
+                                  <TextField
+                                    required
+                                    {...params}
+                                    name={field.componentProps.name}
+                                    label={field.componentProps.label}
+                                  />
+                                )}
+                              />
+                            ) : field.type === DATE ? (
+                              <DateTimePicker {...field.componentProps} />
+                            ) : field.type === LABEL ? (
+                              <Typography {...field.componentProps}>
+                                {field.defaultValue}
+                              </Typography>
+                            ) : null;
 
-                        return (
-                          <Grid
-                            key={`${indexA}, ${indexB}, ${indexC}`}
-                            item
-                            xs={fieldSize}
-                          >
-                            {field.toolTipProps ? (
-                              <ToolTipWrapper {...field.toolTipProps}>
-                                {fieldComponent}
-                              </ToolTipWrapper>
-                            ) : (
-                              fieldComponent
-                            )}
-                          </Grid>
-                        );
-                      })}
+                          return (
+                            <Grid
+                              key={`${indexA}, ${indexB}, ${indexC}`}
+                              item
+                              xs={fieldSize}
+                            >
+                              {field.toolTipProps ? (
+                                <ToolTipWrapper {...field.toolTipProps}>
+                                  {fieldComponent}
+                                </ToolTipWrapper>
+                              ) : (
+                                fieldComponent
+                              )}
+                            </Grid>
+                          );
+                        })}
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Box>
+            ))}
+            {formAttributes.buttons && (
+              <Grid
+                container
+                spacing={2}
+                justifyContent="center"
+                alignItems="center"
+                mt={1}
+              >
+                {formAttributes.buttons.map((buttonProps, index) => {
+                  return (
+                    <Grid key={index} item xs={buttonProps.fullWidth ? 12 : 0}>
+                      <FormButton {...buttonProps} />
                     </Grid>
                   );
                 })}
               </Grid>
-            </Box>
-          ))}
-          {formAttributes.buttons && (
-            <Grid
-              container
-              spacing={2}
-              justifyContent="center"
-              alignItems="center"
-              mt={1}
-            >
-              {formAttributes.buttons.map((buttonProps, index) => {
-                return (
-                  <Grid key={index} item xs={buttonProps.fullWidth ? 12 : 0}>
-                    <FormButton {...buttonProps} />
-                  </Grid>
-                );
-              })}
-            </Grid>
-          )}
-        </Form>
-      )}
+            )}
+          </Form>
+        );
+      }}
     </Formik>
   );
 }

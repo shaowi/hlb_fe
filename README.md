@@ -88,3 +88,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 1. [React Router](https://reactrouter.com/en/main) is a library that enables declarative routing in React applications, allowing navigation between different views or pages.
 
 1. [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) is a small, fast, and lightweight state management library for React applications.
+
+1. [Lodash](https://lodash.com/docs) is a utility library that provides helper functions for common programming tasks, such as array manipulation, object iteration, and data manipulation.

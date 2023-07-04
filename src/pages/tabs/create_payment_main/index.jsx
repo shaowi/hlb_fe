@@ -185,6 +185,10 @@ export default function CreatePaymentMain() {
     );
   }
 
+  function submitTransactions(values) {
+    console.log(values);
+  }
+
   return (
     <Box spacing={2} xs={{ p: 3, mb: 5 }}>
       {subFormVisible ? (
@@ -207,7 +211,10 @@ export default function CreatePaymentMain() {
             rows={transactionRows}
             columns={transactionColumns}
           />
-          <SummaryForm transactionRows={transactionRows} />
+          <SummaryForm
+            transactionRows={transactionRows}
+            onSubmit={submitTransactions}
+          />
         </>
       )}
     </Box>
