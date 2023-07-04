@@ -5,15 +5,15 @@ This page covers the props type and an example of the component usage.
 [Login](../src/pages/Login.jsx)
 
 ```ts
-  interface LoginProps {
-    imageSrc: string;
-    imageAlt: string;
-    centerText: string;
-    version: string;
-    footerText: string;
-    formHeaderText: string;
-    formFieldLabels: string[];
-  }
+interface LoginProps {
+  imageSrc: string;
+  imageAlt: string;
+  centerText: string;
+  version: string;
+  footerText: string;
+  formHeaderText: string;
+  formFieldLabels: string[];
+}
 ```
 
 E.g:
@@ -37,13 +37,13 @@ const props = {
 [UserNavBar](../src/components/navigation/UserNavBar.jsx)
 
 ```ts
-  interface UserNavBarProps {
-    imageSrc: string;
-    imageAlt: string;
-    centerText: string;
-    username: string;
-    logoutText: string;
-  }
+interface UserNavBarProps {
+  imageSrc: string;
+  imageAlt: string;
+  centerText: string;
+  username: string;
+  logoutText: string;
+}
 ```
 
 E.g:
@@ -182,10 +182,10 @@ E.g:
 [Footer](../src/components/Footer.jsx)
 
 ```ts
-  interface FooterProps {
-    isFixed: boolean; // Set fixed at bottom if true
-    bankName: string;
-  }
+interface FooterProps {
+  isFixed: boolean; // Fixed footer at bottom of screen if true
+  bankName: string;
+}
 ```
 
 E.g:
@@ -204,12 +204,11 @@ const props = {
 [PageTabs](../src/components/PageTabs.jsx)
 
 ```ts
-  interface PaymentFileTabsProps {
-    title: string;
-    label: string;
-    content: React.ReactNode;
-  }
-
+interface PaymentFileTabsProps {
+  title: string;
+  label: string;
+  content: React.ReactNode;
+}
 ```
 
 E.g:
@@ -534,4 +533,30 @@ const formAttributesProp = {
   };
 
 <FormBuilder onSubmit={() => console.log('submit')} formAttributes={formAttributesProp} />
+```
+
+[NotFound](../src/pages/NotFound.jsx)
+
+```ts
+interface NotFoundProps {
+  centerText: string;
+  subText: string;
+  buttonText: string;
+  buttonLink: string;
+}
+```
+
+E.g:
+
+![notFound_component](./images/NotFoundComponent.png)
+
+```js
+const props = {
+  centerText: 'Oops! Page not found.',
+  subText: 'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.',
+  buttonText: 'Go to Home',
+  buttonLink: '/'
+}
+
+<NotFound {...props} />
 ```

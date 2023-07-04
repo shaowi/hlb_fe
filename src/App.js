@@ -66,6 +66,14 @@ function App() {
     }
   ];
 
+  const notFoundProps = {
+    centerText: 'Oops! Page not found.',
+    subText:
+      'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.',
+    buttonText: 'Go to Home',
+    buttonLink: '/'
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
@@ -88,7 +96,7 @@ function App() {
               </Home>
             }
           />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<NotFound {...notFoundProps} />} />
         </Routes>
       </Router>
     </ThemeProvider>
