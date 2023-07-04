@@ -1,6 +1,6 @@
 import { MDBFooter } from 'mdb-react-ui-kit';
 
-export default function Footer({ isFixed }) {
+export default function Footer({ isFixed, bankName = 'HL Bank' }) {
   return (
     <MDBFooter
       bgColor="primary"
@@ -13,7 +13,7 @@ export default function Footer({ isFixed }) {
         className="text-center p-3"
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
       >
-        Copyright &copy; {new Date().getFullYear()} HL Bank. All Rights
+        Copyright &copy; {new Date().getFullYear()} {bankName}. All Rights
         Reserved.
       </div>
     </MDBFooter>

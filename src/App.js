@@ -1,10 +1,16 @@
 import { ThemeProvider, createTheme } from '@mui/material';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Footer from './components/Footer';
-import PaymentFileTabs from './components/PaymentFileTabs';
+import PageTabs from './components/PageTabs';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
+import { REJECTED_PAYMENT_FILE } from 'constants';
+import { UPLOAD_PAYMENT_FILE } from 'constants';
+import { CREATE_PAYMENT_FILE } from 'constants';
+import RejectedPaymentMain from './pages/tabs/rejected_payment_main';
+import CreatePaymentMain from 'pages/tabs/create_payment_main';
+import UploadPaymentMain from 'pages/tabs/UploadPaymentMain';
 
 const theme = createTheme({
   palette: {
@@ -39,6 +45,27 @@ function App() {
     formHeaderText: 'Log in',
     formFieldLabels: ['Username', 'Password']
   };
+
+  const paymentFileTabsProps = [
+    {
+      title:
+        'Creation of Outward ISS CBFT Credit Transfer (MT103) Payment File',
+      label: REJECTED_PAYMENT_FILE,
+      content: <RejectedPaymentMain />
+    },
+    {
+      title: 'Upload of Outward ISS CBFT Credit Transfer (MT103) Payment File',
+      label: UPLOAD_PAYMENT_FILE,
+      content: <UploadPaymentMain />
+    },
+    {
+      title:
+        'Creation of Outward ISS CBFT Credit Transfer (MT103) Payment File',
+      label: CREATE_PAYMENT_FILE,
+      content: <CreatePaymentMain />
+    }
+  ];
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
@@ -57,7 +84,7 @@ function App() {
             path="/outward-iss-cbft-credit-transfer"
             element={
               <Home>
-                <PaymentFileTabs />
+                <PageTabs tabsContent={paymentFileTabsProps} />
               </Home>
             }
           />

@@ -1,7 +1,13 @@
 import { Link, Paper, Stack, Typography } from '@mui/material';
 import React from 'react';
 
-export default function UserNavBar() {
+export default function UserNavBar({
+  imageSrc,
+  imageAlt,
+  centerText,
+  username,
+  logoutText
+}) {
   return (
     <Paper
       elevation={8}
@@ -22,10 +28,10 @@ export default function UserNavBar() {
         spacing={2}
       >
         <Stack direction="row" spacing={2} alignItems="center">
-          <img src="/images/logo.png" alt="hlb" width="20%" height="auto" />
+          <img src={imageSrc} alt={imageAlt} width="20%" height="auto" />
           <Link href="/home" underline="none">
             <Typography variant="h5" align="center">
-              Payment Gateway Biz Ops Portal
+              {centerText}
             </Typography>
           </Link>
         </Stack>
@@ -33,12 +39,12 @@ export default function UserNavBar() {
         <Stack direction="row" spacing={4}>
           <Link href="#" underline="none">
             <Typography variant="subtitle1" align="center">
-              phbmaker
+              {username}
             </Typography>
           </Link>
           <Link href="/login" underline="none">
             <Typography variant="subtitle1" align="center">
-              Logout
+              {logoutText}
             </Typography>
           </Link>
         </Stack>

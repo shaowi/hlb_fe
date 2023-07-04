@@ -67,3 +67,7 @@ export const ACCOUNT_BIC = [
 
 export const FILENAME_FORMAT =
   'Filename should be in the format of OPFR+yyyyMMdd+7 digits of running number per day. E.g.: OPFR202306210000001.csv';
+
+export const REJECTED_PAYMENT_FILE = 'Rejected Payment File';
+export const UPLOAD_PAYMENT_FILE = 'Upload Payment File';
+export const CREATE_PAYMENT_FILE = 'Create Payment File';

@@ -9,9 +9,6 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import UploadPaymentMain from '../pages/tabs/UploadPaymentMain';
-import CreatePaymentMain from './../pages/tabs/create_payment_main/index';
-import RejectedPaymentMain from './../pages/tabs/rejected_payment_main/index';
 import Footer from './Footer';
 
 const theme = createTheme({
@@ -21,19 +18,6 @@ const theme = createTheme({
     }
   }
 });
-
-const REJECTED = 'Rejected Payment File';
-const UPLOAD = 'Upload Payment File';
-const CREATE = 'Create Payment File';
-
-const TABS = [
-  {
-    label: REJECTED,
-    content: <RejectedPaymentMain />
-  },
-  { label: UPLOAD, content: <UploadPaymentMain /> },
-  { label: CREATE, content: <CreatePaymentMain /> }
-];
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,13 +48,13 @@ function a11yProps(index) {
   };
 }
 
-export default function PaymentFileTabs() {
+export default function PageTabs({ tabsContent }) {
   const [value, setValue] = useState(0);
   const [isFooterFixed, setIsFooterFixed] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    setIsFooterFixed(newValue === 1);
+    setIsFooterFixed(newValue === 1); // Can be removed if content covers the whole page
   };
 
   return (
@@ -88,11 +72,7 @@ export default function PaymentFileTabs() {
         }}
       >
         <Box sx={{ pt: 1, pb: 1 }}>
-          <Typography variant="h4">
-            {`${
-              value === 1 ? 'Upload' : 'Creation'
-            } of Outward ISS CBFT Credit Transfer (MT103) Payment File`}
-          </Typography>
+          <Typography variant="h4">{tabsContent[value].title}</Typography>
         </Box>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
@@ -100,7 +80,7 @@ export default function PaymentFileTabs() {
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            {TABS.map((tab, index) => (
+            {tabsContent.map((tab, index) => (
               <Tab
                 key={tab.label + index}
                 label={tab.label}
@@ -109,7 +89,7 @@ export default function PaymentFileTabs() {
             ))}
           </Tabs>
         </Box>
-        {TABS.map((tab, index) => (
+        {tabsContent.map((tab, index) => (
           <TabPanel key={tab.label + index} value={value} index={index}>
             {tab.content}
           </TabPanel>

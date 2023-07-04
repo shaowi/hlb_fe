@@ -7,7 +7,6 @@ import {
   Typography,
   createTheme
 } from '@mui/material';
-import Copyright from 'components/Copyright';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -153,7 +152,14 @@ export default function Login({
             )}
           </Grid>
         </Grid>
-        <Copyright sx={{ mt: 5 }} content={footerText} />
+        <Typography
+          sx={{ mt: 5 }}
+          variant="body2"
+          color="text.secondary"
+          align="center"
+        >
+          {footerText}
+        </Typography>
       </Paper>
     </ThemeProvider>
   );
