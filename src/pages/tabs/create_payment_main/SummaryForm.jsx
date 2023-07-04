@@ -1,16 +1,18 @@
 import { Box } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { cloneDeep } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const { TEXT } = FORM_TYPES;
 
 export default function SummaryForm({ transactionRows, onSubmit }) {
   const totalTransactionCount = transactionRows.length;
-  const totalPaymentAmount = transactionRows.reduce(
-    (acc, curr) => acc + curr.remittanceAmount,
-    0
-  );
+  const totalPaymentAmount = useMemo(() => {
+    return transactionRows.reduce(
+      (acc, curr) => acc + curr.remittanceAmount,
+      0
+    );
+  }, [transactionRows]);
 
   const initFormAttributes = {
     sections: [
