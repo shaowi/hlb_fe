@@ -570,3 +570,56 @@ const props = {
 
 <NotFound {...props} />
 ```
+
+[ModalBox](../src/components/ModalBox.jsx)
+
+```ts
+interface ModalBoxProps {
+  isOpen: boolean;
+  handleClose: () => void;
+  title: string;
+  description: string;
+  buttons: {
+    type: 'button' | 'reset' | 'submit' | 'loading';
+    label: string;
+    componentProps: {
+      color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error';
+      onClick: () => void;
+    };
+  }[];
+}
+```
+
+E.g:
+
+![modalBox_component](./images/modalBoxComponent.png)
+
+```js
+const [isModalOpen, setIsModalOpen] = React.useState(false);
+const props = {
+  isOpen: false,
+  handleClose: () => setIsModalOpen(false)
+  title: 'Logout',
+  description: 'Are you sure you want to logout?',
+  buttons: [
+    {
+      type: 'button',
+      label: 'Yes',
+      componentProps: {
+        color: 'success',
+        onClick: handleLogout
+      }
+    },
+    {
+      type: 'button',
+      label: 'No',
+      componentProps: {
+        color: 'error',
+        onClick: () => setIsModalOpen(false)
+      }
+    }
+  ]
+};
+
+<ModalBox {...props} />
+```
