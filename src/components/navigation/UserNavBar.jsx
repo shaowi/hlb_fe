@@ -1,5 +1,7 @@
 import { Link, Paper, Stack, Typography } from '@mui/material';
 import React from 'react';
+import { logOutUser } from 'services/UserService';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserNavBar({
   imageSrc,
@@ -8,6 +10,13 @@ export default function UserNavBar({
   username,
   logoutText
 }) {
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logOutUser();
+    navigate('/login');
+  }
+
   return (
     <Paper
       elevation={8}
@@ -42,7 +51,7 @@ export default function UserNavBar({
               {username}
             </Typography>
           </Link>
-          <Link href="/login" underline="none">
+          <Link underline="none" component="button" onClick={handleLogout}>
             <Typography variant="subtitle1" align="center">
               {logoutText}
             </Typography>

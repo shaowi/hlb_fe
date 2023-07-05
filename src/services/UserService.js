@@ -1,4 +1,4 @@
-import { LOGIN_USER_URL } from 'endpoints';
+import { LOGIN_USER_URL, LOGOUT_USER_URL } from 'endpoints';
 import { postRequest } from './HttpRequests';
 
 export async function logInUser(username, password) {
@@ -26,6 +26,12 @@ function encryptPassword(password) {
 
 export async function getCurrentUser() {
   return new Promise((resolve, _) =>
-    setTimeout(() => resolve(JSON.parse(localStorage.getItem('user'))), 1000)
+    setTimeout(() => resolve(JSON.parse(localStorage.getItem('user'))), 300)
   );
+}
+
+export async function logOutUser() {
+  const response = await postRequest(LOGOUT_USER_URL, {});
+  localStorage.removeItem('user');
+  return response.status;
 }
