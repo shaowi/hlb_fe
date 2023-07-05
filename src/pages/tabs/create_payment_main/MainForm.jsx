@@ -375,7 +375,9 @@ export default function MainForm({ handleSubmit }) {
     buttons: [
       {
         label: 'Add Transaction',
-        color: 'success'
+        componentProps: {
+          color: 'success'
+        }
       }
     ]
   };

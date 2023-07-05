@@ -945,9 +945,11 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
     buttons: [
       {
         label: 'Back',
-        color: 'neutral',
         type: 'button',
-        onClick: () => setSubFormVisible(false)
+        componentProps: {
+          color: 'neutral',
+          onClick: () => setSubFormVisible(false)
+        }
       },
       {
         label: 'Reset',
@@ -955,7 +957,9 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
       },
       {
         label: isEdit ? 'Save' : 'Add',
-        color: 'success'
+        componentProps: {
+          color: 'success'
+        }
       }
     ]
   };

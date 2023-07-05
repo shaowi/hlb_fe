@@ -531,7 +531,9 @@ const formAttributesProp = {
     buttons: [
       {
         label: 'Search',
-        color: 'success'
+        componentProps: {
+          color: 'success'
+        }
       },
       {
         label: 'Reset',

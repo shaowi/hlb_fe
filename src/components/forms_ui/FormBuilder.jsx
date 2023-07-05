@@ -218,7 +218,11 @@ export default function FormBuilder({ onSubmit, formAttributes, id = -1 }) {
               >
                 {formAttributes.buttons.map((buttonProps, index) => {
                   return (
-                    <Grid key={index} item xs={buttonProps.fullWidth ? 12 : 0}>
+                    <Grid
+                      key={index}
+                      item
+                      xs={buttonProps.componentProps?.fullWidth ? 12 : 0}
+                    >
                       <FormButton {...buttonProps} />
                     </Grid>
                   );

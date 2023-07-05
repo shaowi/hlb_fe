@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import UserNavBar from 'components/navigation/UserNavBar';
 import ModuleNavBar from 'components/navigation/ModuleNavBar';
+import { getCurrentUser } from 'services/UserService';
+import Loader from 'pages/Loader';
 
 export default function Home({ children }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [username, setUsername] = useState('');
   const userNavBarProps = {
     imageSrc: '/images/logo.png',
     imageAlt: 'hlb',
     centerText: 'Payment Gateway Biz Ops Portal',
-    username: 'phbmaker',
+    username: username,
     logoutText: 'Logout'
   };
 
@@ -105,6 +109,18 @@ export default function Home({ children }) {
       ]
     }
   ];
+
+  useEffect(() => {
+    async function fetchAndSetUser() {
+      const user = await getCurrentUser();
+      setUsername(user?.name);
+    }
+    fetchAndSetUser().then(() => setIsLoading(false));
+  }, []);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <>

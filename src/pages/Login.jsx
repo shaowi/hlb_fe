@@ -8,9 +8,9 @@ import {
   createTheme
 } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logInUser from 'services/LoginService';
+import { logInUser } from 'services/UserService';
 
 const theme = createTheme({
   typography: {
@@ -40,71 +40,97 @@ export default function Login({
       .map((s, i) => (i !== 0 ? s.charAt(0).toUpperCase() + s.substring(1) : s))
       .join('')
   );
+  const navigate = useNavigate();
 
   const [topFieldLabel, bottomFieldLabel] = formFieldLabels;
   const [topFieldName, bottomFieldName] = formFieldNames;
-
-  const formAttributes = {
-    sections: [
-      {
-        title: {
-          value: formHeaderText,
-          variant: 'h4'
-        },
-        rows: [
-          {
-            fields: [
-              {
-                type: TEXT,
-                icon: <Person />,
-                defaultValue: '',
-                componentProps: {
-                  label: topFieldLabel,
-                  name: topFieldName,
-                  autoFocus: true,
-                  'data-testid': topFieldName
-                }
-              }
-            ]
-          },
-          {
-            fields: [
-              {
-                type: TEXT,
-                icon: <Lock />,
-                defaultValue: '',
-                componentProps: {
-                  type: 'password',
-                  label: bottomFieldLabel,
-                  name: bottomFieldName,
-                  'data-testid': bottomFieldName
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    buttons: [
-      {
-        label: 'Log in',
-        fullWidth: true
-      }
-    ]
-  };
-
-  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (values) => {
-    console.log(values);
-    const { username, password } = values;
-    if (logInUser(username, password)) {
+  const formAttributes = useMemo(() => {
+    return {
+      sections: [
+        {
+          title: {
+            value: formHeaderText,
+            variant: 'h4'
+          },
+          rows: [
+            {
+              fields: [
+                {
+                  type: TEXT,
+                  icon: <Person />,
+                  defaultValue: '',
+                  componentProps: {
+                    label: topFieldLabel,
+                    name: topFieldName,
+                    autoFocus: true,
+                    'data-testid': topFieldName
+                  }
+                }
+              ]
+            },
+            {
+              fields: [
+                {
+                  type: TEXT,
+                  icon: <Lock />,
+                  defaultValue: '',
+                  componentProps: {
+                    type: 'password',
+                    label: bottomFieldLabel,
+                    name: bottomFieldName,
+                    'data-testid': bottomFieldName
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      buttons: [
+        {
+          type: 'loading',
+          isLoading: isSubmitting,
+          label: 'Log in',
+          componentProps: {
+            fullWidth: true
+          }
+        }
+      ]
+    };
+  }, [
+    topFieldLabel,
+    bottomFieldLabel,
+    topFieldName,
+    bottomFieldName,
+    formHeaderText,
+    isSubmitting
+  ]);
+
+  async function handleSubmit(values) {
+    setIsSubmitting(true);
+    setHasError(false);
+
+    const { [topFieldName]: username, [bottomFieldName]: password } = values;
+    const responseCode = await logInUser(username, password);
+    const isSuccess = responseCode === 200;
+    const hasNetworkError = responseCode === 0;
+    if (isSuccess) {
       navigate('/home');
       return;
     }
+    if (hasNetworkError) {
+      setErrorMessage('Network error in the server.');
+    } else {
+      setErrorMessage(`Invalid ${topFieldName} or ${bottomFieldName}.`);
+    }
+
+    setIsSubmitting(false);
     setHasError(true);
-  };
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -145,7 +171,7 @@ export default function Login({
             {hasError && (
               <Grid item>
                 <Alert variant="outlined" severity="error">
-                  Invalid {topFieldName} or {bottomFieldName}.
+                  {errorMessage}
                   <br /> Please try again.
                 </Alert>
               </Grid>

@@ -70,7 +70,9 @@ export default function SummaryForm({ transactionRows, onSubmit }) {
     buttons: [
       {
         label: 'Submit',
-        color: 'success'
+        componentProps: {
+          color: 'success'
+        }
       }
     ]
   };

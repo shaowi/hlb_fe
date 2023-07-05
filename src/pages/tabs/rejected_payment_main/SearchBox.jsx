@@ -111,7 +111,9 @@ export default function SearchBox({ onSearch }) {
     buttons: [
       {
         label: 'Search',
-        color: 'success'
+        componentProps: {
+          color: 'success'
+        }
       },
       {
         label: 'Reset',
