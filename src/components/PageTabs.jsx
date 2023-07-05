@@ -50,11 +50,11 @@ function a11yProps(index) {
 
 export default function PageTabs({ tabsContent }) {
   const [value, setValue] = useState(0);
-  const [isFooterFixed, setIsFooterFixed] = useState(false);
+  const [isFooterFixed, setIsFooterFixed] = useState(false); // Can be removed if content can cover the whole page
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    setIsFooterFixed(newValue === 1); // Can be removed if content covers the whole page
+    setIsFooterFixed(newValue === 1);
   };
 
   return (
@@ -75,11 +75,7 @@ export default function PageTabs({ tabsContent }) {
           <Typography variant="h4">{tabsContent[value].title}</Typography>
         </Box>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
+          <Tabs value={value} onChange={handleChange} aria-label="basicTabs">
             {tabsContent.map((tab, index) => (
               <Tab
                 key={tab.label + index}

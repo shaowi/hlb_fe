@@ -218,8 +218,7 @@ E.g:
 ```js
 const props = [
     {
-      title:
-        'Creation of Outward ISS CBFT Credit Transfer (MT103) Payment File',
+      title: 'Rejection of Outward ISS CBFT Credit Transfer (MT103) Payment File',
       label: 'Rejected Payment File',
       content: <RejectedPaymentMain />
     },
@@ -229,8 +228,7 @@ const props = [
       content: <UploadPaymentMain />
     },
     {
-      title:
-        'Creation of Outward ISS CBFT Credit Transfer (MT103) Payment File',
+      title: 'Creation of Outward ISS CBFT Credit Transfer (MT103) Payment File',
       label: 'Create Payment File',
       content: <CreatePaymentMain />
     }
