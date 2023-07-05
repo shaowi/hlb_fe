@@ -90,3 +90,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 1. [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) is a small, fast, and lightweight state management library for React applications.
 
 1. [Lodash](https://lodash.com/docs) is a utility library that provides helper functions for common programming tasks, such as array manipulation, object iteration, and data manipulation.
+
+1. [Axios](https://axios-http.com/docs/intro) is a popular JavaScript library used for making HTTP requests from the browser or Node.js. It simplifies the process of sending asynchronous requests and handling responses.
