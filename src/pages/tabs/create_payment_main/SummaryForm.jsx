@@ -1,7 +1,6 @@
 import { Box } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
-import { cloneDeep } from 'lodash';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 const { TEXT } = FORM_TYPES;
 
@@ -14,7 +13,7 @@ export default function SummaryForm({ transactionRows, onSubmit }) {
     );
   }, [transactionRows]);
 
-  const initFormAttributes = {
+  const formAttributes = {
     sections: [
       {
         title: {
@@ -76,29 +75,6 @@ export default function SummaryForm({ transactionRows, onSubmit }) {
       }
     ]
   };
-  const [formAttributes, setFormAttributes] = useState(initFormAttributes);
-
-  useEffect(() => {
-    const formAttributesCopy = cloneDeep(formAttributes);
-    formAttributesCopy.sections.forEach((section) => {
-      section.rows.forEach((row) => {
-        row.fields.forEach((field) => {
-          if (field.componentProps.name === 'totalTransactionCount') {
-            field.defaultValue = totalTransactionCount;
-          }
-          if (field.componentProps.name === 'totalPaymentAmount') {
-            field.defaultValue = totalPaymentAmount;
-          }
-        });
-      });
-    });
-    setFormAttributes(formAttributesCopy);
-  }, [
-    formAttributes,
-    totalPaymentAmount,
-    totalTransactionCount,
-    transactionRows
-  ]);
 
   return (
     <Box sx={{ p: 3 }}>
