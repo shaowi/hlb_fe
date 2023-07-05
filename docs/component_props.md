@@ -220,18 +220,18 @@ const props = [
     {
       title:
         'Creation of Outward ISS CBFT Credit Transfer (MT103) Payment File',
-      label: REJECTED_PAYMENT_FILE,
+      label: 'Rejected Payment File',
       content: <RejectedPaymentMain />
     },
     {
       title: 'Upload of Outward ISS CBFT Credit Transfer (MT103) Payment File',
-      label: UPLOAD_PAYMENT_FILE,
+      label: 'Upload Payment File',
       content: <UploadPaymentMain />
     },
     {
       title:
         'Creation of Outward ISS CBFT Credit Transfer (MT103) Payment File',
-      label: CREATE_PAYMENT_FILE,
+      label: 'Create Payment File',
       content: <CreatePaymentMain />
     }
   ];
@@ -417,6 +417,10 @@ E.g:
 ![formBuilder_component](./images/formBuilderComponent.png)
 
 ```js
+const currentDate = new Date().toJSON().slice(0, 10);
+const previousMonthDate = new Date(
+  new Date().setMonth(new Date().getMonth() - 1)
+)
 const formAttributesProp = {
     sections: [
       {
@@ -428,7 +432,7 @@ const formAttributesProp = {
           {
             fields: [
               {
-                type: TEXT,
+                type: 'text',
                 defaultValue: '',
                 componentProps: {
                   name: 'filename',
@@ -437,14 +441,20 @@ const formAttributesProp = {
                 }
               },
               {
-                type: SELECT,
+                type: 'select',
                 defaultValue: '',
                 componentProps: {
                   required: true,
                   name: 'status',
                   label: 'Status',
                   'data-testid': 'status',
-                  options: STATUSES
+                  options: {
+                    all: 'ALL',
+                    rejected: 'REJECTED',
+                    failed: 'FAILED',
+                    declined: 'DECLINED',
+                    pending: 'PENDING REVIEW'
+                  }
                 }
               }
             ]
@@ -452,7 +462,7 @@ const formAttributesProp = {
           {
             fields: [
               {
-                type: DATE,
+                type: 'date',
                 defaultValue: previousMonthDate,
                 componentProps: {
                   required: true,
@@ -462,7 +472,7 @@ const formAttributesProp = {
                 }
               },
               {
-                type: DATE,
+                type: 'date',
                 defaultValue: currentDate,
                 componentProps: {
                   required: true,
@@ -487,7 +497,7 @@ const formAttributesProp = {
           {
             fields: [
               {
-                type: DATE,
+                type: 'date',
                 defaultValue: '',
                 componentProps: {
                   name: 'transactionDateFrom',
@@ -496,7 +506,7 @@ const formAttributesProp = {
                 }
               },
               {
-                type: DATE,
+                type: 'date',
                 defaultValue: '',
                 componentProps: {
                   name: 'transactionDateTo',
