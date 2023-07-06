@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { useMemo } from 'react';
+import { useCreatePaymentStore } from './create_payment_store';
 
 const { TEXT } = FORM_TYPES;
 
@@ -13,6 +14,7 @@ export default function SummaryForm({ transactionRows, onSubmit }) {
     );
   }, [transactionRows]);
 
+  const { requesterComments } = useCreatePaymentStore();
   const formAttributes = {
     sections: [
       {
@@ -51,7 +53,7 @@ export default function SummaryForm({ transactionRows, onSubmit }) {
             fields: [
               {
                 type: TEXT,
-                defaultValue: '',
+                defaultValue: requesterComments,
                 componentProps: {
                   required: true,
                   name: 'requesterComments',

@@ -6,12 +6,17 @@ import {
   FILENAME_FORMAT,
   RESIDENT_CODE
 } from 'constants.js';
-import { useCreatePaymentStore } from './create_payment_store';
 import { theme } from 'theme';
+import { useCreatePaymentStore } from './create_payment_store';
 
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE } = FORM_TYPES;
 
-export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
+export default function MainForm({
+  handleSubmit,
+  mainFileDetails,
+  formButtons,
+  disabled = false
+}) {
   const {
     filename,
     debitType,
@@ -33,6 +38,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: filename,
             componentProps: {
+              disabled,
               name: 'filename',
               label: 'Filename',
               'data-testid': 'filename'
@@ -46,6 +52,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: SELECT,
             defaultValue: debitType,
             componentProps: {
+              disabled,
               required: true,
               name: 'debitType',
               label: 'Debit Type',
@@ -130,6 +137,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: recipientReference,
             componentProps: {
+              disabled,
               name: 'recipientReference',
               label: 'Recipient Reference',
               'data-testid': 'recipientReference'
@@ -139,6 +147,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: otherPaymentDetails,
             componentProps: {
+              disabled,
               name: 'otherPaymentDetails',
               label: 'Other Payment Details',
               multiline: true,
@@ -184,6 +193,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantName,
             componentProps: {
+              disabled,
               required: true,
               name: 'applicantName',
               label: 'Name',
@@ -194,6 +204,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantAccountNo,
             componentProps: {
+              disabled,
               required: true,
               name: 'applicantAccountNo',
               label: 'Account Number',
@@ -205,6 +216,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantAccountType,
             componentProps: {
+              disabled,
               required: true,
               name: 'applicantAccountType',
               label: 'Account Type',
@@ -219,6 +231,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantAccountCurrency,
             componentProps: {
+              disabled,
               required: true,
               name: 'applicantAccountCurrency',
               label: 'Account Currency',
@@ -229,6 +242,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantIdType,
             componentProps: {
+              disabled,
               name: 'applicantIdType',
               label: 'ID Type',
               'data-testid': 'applicantIdType'
@@ -238,6 +252,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantId,
             componentProps: {
+              disabled,
               name: 'applicantId',
               label: 'ID',
               'data-testid': 'applicantId'
@@ -251,6 +266,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantAccountBranchCode,
             componentProps: {
+              disabled,
               required: true,
               name: 'applicantAccountBranchCode',
               label: 'Account Branch Code',
@@ -271,6 +287,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: SELECT,
             defaultValue: applicantResidentCode,
             componentProps: {
+              disabled,
               name: 'applicantResidentCode',
               label: 'Resident Code',
               'data-testid': 'applicantResidentCode',
@@ -285,6 +302,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantAccountCifId,
             componentProps: {
+              disabled,
               name: 'applicantAccountCifId',
               label: 'Account CIF ID',
               'data-testid': 'applicantAccountCifId'
@@ -294,6 +312,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantPhone,
             componentProps: {
+              disabled,
               name: 'applicantPhone',
               label: 'Phone',
               'data-testid': 'applicantPhone'
@@ -303,6 +322,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantPostalCode,
             componentProps: {
+              disabled,
               name: 'applicantPostalCode',
               label: 'Postal Code',
               'data-testid': 'applicantPostalCode'
@@ -316,6 +336,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantAddress1,
             componentProps: {
+              disabled,
               required: true,
               name: 'applicantAddress1',
               label: 'Address 1',
@@ -328,6 +349,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantAddress2,
             componentProps: {
+              disabled,
               required: true,
               name: 'applicantAddress2',
               label: 'Address 2',
@@ -340,6 +362,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: TEXT,
             defaultValue: applicantAddress3,
             componentProps: {
+              disabled,
               required: true,
               name: 'applicantAddress3',
               label: 'Address 3',
@@ -356,6 +379,7 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
             type: SELECT_AUTOCOMPLETE,
             defaultValue: applicantCountryCode,
             componentProps: {
+              disabled,
               required: true,
               disablePortal: true,
               id: 'applicantCountryCode',
@@ -369,18 +393,6 @@ export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
       }
     ]
   };
-
-  const { isViewing, revertToHome } = props;
-  const formButtons = [
-    {
-      label: isViewing ? 'Back' : 'Add Transaction',
-      type: isViewing && 'button',
-      componentProps: {
-        color: isViewing ? 'neutral' : 'success',
-        onClick: isViewing ? revertToHome : () => {}
-      }
-    }
-  ];
 
   const formAttributes = {
     sections: [fileFormAttributes, applicantFormAttributes],

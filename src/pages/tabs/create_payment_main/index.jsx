@@ -11,6 +11,8 @@ import MainForm from './MainForm';
 import SubForm from './SubForm';
 import SummaryForm from './SummaryForm';
 import { useCreatePaymentStore } from './create_payment_store';
+import ModalBox from 'components/ModalBox';
+import ConfirmationPage from './ConfirmationPage';
 
 const transactionColumns = [
   { id: 'action', label: 'Action', minWidth: 160, sortable: false },
@@ -69,13 +71,43 @@ export default function CreatePaymentMain() {
   const [editRowNum, setEditRowNum] = useState(-1);
   const [subFormVisible, setSubFormVisible] = useState(false);
   const [transactionRows, setTransactionRows] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showConfirmationPage, setShowConfirmationPage] = useState(false);
   const {
+    currMainFormData,
     subFormDataList,
     setSubFormDataList,
     setCurrSubFormData,
     resetCurrSubFormData,
-    setApplicantDetails
+    setApplicantDetails,
+    setRequesterComments
   } = useCreatePaymentStore();
+
+  const modalProps = {
+    title: 'Confirm',
+    description: `Are you sure you want to submit the Payment File: ${currMainFormData.filename}?`,
+    buttons: [
+      {
+        type: 'button',
+        label: 'Yes',
+        componentProps: {
+          color: 'success',
+          onClick: () => {
+            setIsModalOpen(false);
+            setShowConfirmationPage(true);
+          }
+        }
+      },
+      {
+        type: 'button',
+        label: 'No',
+        componentProps: {
+          color: 'error',
+          onClick: () => setIsModalOpen(false)
+        }
+      }
+    ]
+  };
 
   // Keep the state and the table in sync
   useEffect(() => {
@@ -188,16 +220,34 @@ export default function CreatePaymentMain() {
 
   function submitTransactions(values) {
     console.log(values);
+    setRequesterComments(values.requesterComments);
+    setIsModalOpen(true);
   }
+
+  const formButtons = [
+    {
+      label: 'Add Transaction',
+      componentProps: {
+        color: 'success'
+      }
+    }
+  ];
 
   return (
     <Box spacing={2} xs={{ p: 3, mb: 5 }}>
+      <ModalBox
+        isOpen={isModalOpen}
+        handleClose={() => setIsModalOpen(false)}
+        {...modalProps}
+      />
       {subFormVisible ? (
         <SubForm
           handleSubmit={handleSubFormSubmit}
           setSubFormVisible={setSubFormVisible}
           isEdit={editRowNum !== -1}
         />
+      ) : showConfirmationPage ? (
+        <ConfirmationPage setShowConfirmationPage={setShowConfirmationPage} />
       ) : (
         <>
           <MainForm
@@ -207,6 +257,7 @@ export default function CreatePaymentMain() {
               setSubFormVisible(true);
             }}
             mainFileDetails={MAIN_FILE_DETAILS}
+            formButtons={formButtons}
           />
           <DataTable
             title="Transaction Details"

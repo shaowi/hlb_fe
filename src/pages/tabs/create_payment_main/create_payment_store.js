@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import {
+  MAIN_FILE_DETAILS,
   APPLICANT_DETAILS,
   BENEFICIARY_DETAILS,
   CHARGES_DETAILS,
@@ -21,8 +22,10 @@ export const INITIAL_PAYMENT_SUB_FORM_STATE = {
 
 export const useCreatePaymentStore = create((set) => ({
   applicantDetails: APPLICANT_DETAILS,
+  currMainFormData: MAIN_FILE_DETAILS,
   currSubFormData: INITIAL_PAYMENT_SUB_FORM_STATE,
   subFormDataList: [],
+  requesterComments: 'requester comments',
   setApplicantDetails: (applicantDetails) =>
     set(() => ({ applicantDetails: applicantDetails })),
   setCurrSubFormData: (currSubFormData) =>
@@ -30,5 +33,7 @@ export const useCreatePaymentStore = create((set) => ({
   resetCurrSubFormData: () =>
     set(() => ({ currSubFormData: INITIAL_PAYMENT_SUB_FORM_STATE })),
   setSubFormDataList: (subFormDataList) =>
-    set(() => ({ subFormDataList: subFormDataList }))
+    set(() => ({ subFormDataList: subFormDataList })),
+  setRequesterComments: (requesterComments) =>
+    set(() => ({ requesterComments: requesterComments }))
 }));
