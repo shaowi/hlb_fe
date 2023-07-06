@@ -252,6 +252,7 @@ interface DatatableProps {
   title: string;
   columns: Column[];
   rows: Object[];
+  showPagination?: boolean
 }
 ```
 
