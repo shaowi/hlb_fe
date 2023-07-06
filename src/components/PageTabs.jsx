@@ -4,20 +4,12 @@ import {
   Tab,
   Tabs,
   ThemeProvider,
-  Typography,
-  createTheme
+  Typography
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import Footer from './Footer';
-
-const theme = createTheme({
-  typography: {
-    h4: {
-      fontSize: '1.5rem'
-    }
-  }
-});
+import { theme } from 'theme';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

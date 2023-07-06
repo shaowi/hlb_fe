@@ -5,22 +5,17 @@ import {
   Grid,
   Paper,
   ThemeProvider,
-  Typography,
-  createTheme
+  Typography
 } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logInUser } from 'services/UserService';
+import { theme } from 'theme';
+import { cloneDeep } from 'lodash';
 
-const theme = createTheme({
-  typography: {
-    h4: {
-      color: '#BBB',
-      fontSize: '1.5rem'
-    }
-  }
-});
+const themeCopy = cloneDeep(theme);
+themeCopy.typography.h4.color = '#BBB';
 
 const { TEXT } = FORM_TYPES;
 
@@ -125,7 +120,7 @@ export default function Login({
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={themeCopy}>
       <div
         style={{
           height: '100vh',

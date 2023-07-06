@@ -1,4 +1,4 @@
-import { Box, ThemeProvider, createTheme } from '@mui/material';
+import { Box, ThemeProvider } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import {
   ACCOUNT_BIC,
@@ -9,19 +9,11 @@ import {
   RESIDENT_CODE,
   TRANSACTION_PURPOSE_CODE
 } from 'constants.js';
-import { useCreatePaymentStore } from './create_payment_store';
 import { convertToLocalCurrency } from 'services/helper';
+import { theme } from 'theme';
+import { useCreatePaymentStore } from './create_payment_store';
 
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, LABEL } = FORM_TYPES;
-
-const theme = createTheme({
-  palette: {
-    neutral: {
-      main: '#64748B',
-      contrastText: '#fff'
-    }
-  }
-});
 
 export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
   const { currSubFormData } = useCreatePaymentStore();

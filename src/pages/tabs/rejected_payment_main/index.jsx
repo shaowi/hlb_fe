@@ -6,111 +6,120 @@ import { formatToCurrency } from 'services/helper';
 import SearchBox from './SearchBox';
 import { STATUSES } from 'constants.js';
 import { useState } from 'react';
+import PaymentFile from './PaymentFile';
+import { getFileDetails } from 'services/PaymentFileService';
+import { useRejectedPaymentStore } from 'pages/tabs/rejected_payment_main/rejected_payment_store';
 
 const { all, rejected, failed, pending } = STATUSES;
 
 const viewFileToolTipText = 'View File';
 
-const columns = [
-  { id: 'action', label: 'Action', minWidth: 100, sortable: false },
-  { id: 'filename', label: 'Filename', minWidth: 170, sortable: true },
-  {
-    id: 'debitType',
-    label: 'Debit Type',
-    minWidth: 170,
-    sortable: true
-  },
-  {
-    id: 'transactionCount',
-    label: 'Total Transaction Count',
-    minWidth: 120,
-    sortable: true
-  },
-  {
-    id: 'totalPaymentAmount',
-    label: 'Total Payment Amount',
-    minWidth: 170,
-    sortable: true,
-    format: (value) => formatToCurrency(value)
-  },
-  {
-    id: 'transactionDate',
-    label: 'Transaction Date',
-    minWidth: 170,
-    sortable: true,
-    format: (value) => value.toLocaleString('en-US')
-  },
-  {
-    id: 'businessDate',
-    label: 'Business Date',
-    minWidth: 170,
-    sortable: true,
-    format: (value) => value.toLocaleString('en-US')
-  },
-  {
-    id: 'status',
-    label: 'File Status',
-    minWidth: 170,
-    sortable: true
-  }
-];
-
-const FETCHED_ROWS = [
-  {
-    action: (
-      <ToolTipWrapper title={viewFileToolTipText}>
-        <ActionButton onClick={() => console.log('row 0 clicked')}>
-          <FileOpenIcon />
-        </ActionButton>
-      </ToolTipWrapper>
-    ),
-    filename: 'OPFR202305150000021.csv',
-    debitType: 'Single Debit',
-    transactionCount: 2,
-    totalPaymentAmount: 19957.5,
-    transactionDate: '2023-04-15',
-    businessDate: '2023-05-15',
-    status: rejected
-  },
-  {
-    action: (
-      <ToolTipWrapper title={viewFileToolTipText}>
-        <ActionButton onClick={() => console.log('row 1 clicked')}>
-          <FileOpenIcon />
-        </ActionButton>
-      </ToolTipWrapper>
-    ),
-    filename: 'OPFR202305150000022.csv',
-    debitType: 'Multiple Debit',
-    transactionCount: 2,
-    totalPaymentAmount: 900.5,
-    transactionDate: '2023-05-15',
-    businessDate: '2023-06-15',
-    status: failed
-  },
-  {
-    action: (
-      <ToolTipWrapper title={viewFileToolTipText}>
-        <ActionButton onClick={() => console.log('row 2 clicked')}>
-          <FileOpenIcon />
-        </ActionButton>
-      </ToolTipWrapper>
-    ),
-    filename: 'OPFR202305150000023.csv',
-    debitType: 'Single Debit',
-    transactionCount: 2,
-    totalPaymentAmount: 800.5,
-    transactionDate: '2023-05-15',
-    businessDate: '2023-06-15',
-    status: pending
-  }
-];
-
 export default function RejectedPaymentMain() {
+  const columns = [
+    { id: 'action', label: 'Action', minWidth: 100, sortable: false },
+    { id: 'filename', label: 'Filename', minWidth: 170, sortable: true },
+    {
+      id: 'debitType',
+      label: 'Debit Type',
+      minWidth: 170,
+      sortable: true
+    },
+    {
+      id: 'transactionCount',
+      label: 'Total Transaction Count',
+      minWidth: 120,
+      sortable: true
+    },
+    {
+      id: 'totalPaymentAmount',
+      label: 'Total Payment Amount',
+      minWidth: 170,
+      sortable: true,
+      format: (value) => formatToCurrency(value)
+    },
+    {
+      id: 'transactionDate',
+      label: 'Transaction Date',
+      minWidth: 170,
+      sortable: true,
+      format: (value) => value.toLocaleString('en-US')
+    },
+    {
+      id: 'businessDate',
+      label: 'Business Date',
+      minWidth: 170,
+      sortable: true,
+      format: (value) => value.toLocaleString('en-US')
+    },
+    {
+      id: 'status',
+      label: 'File Status',
+      minWidth: 170,
+      sortable: true
+    }
+  ];
+
+  const FETCHED_ROWS = [
+    {
+      action: (
+        <ToolTipWrapper title={viewFileToolTipText}>
+          <ActionButton onClick={() => setStoreData(0)}>
+            <FileOpenIcon />
+          </ActionButton>
+        </ToolTipWrapper>
+      ),
+      filename: 'OPFR202305150000021.csv',
+      debitType: 'Single Debit',
+      transactionCount: 2,
+      totalPaymentAmount: 19957.5,
+      transactionDate: '2023-04-15',
+      businessDate: '2023-05-15',
+      status: rejected
+    },
+    {
+      action: (
+        <ToolTipWrapper title={viewFileToolTipText}>
+          <ActionButton onClick={() => console.log('row 1 clicked')}>
+            <FileOpenIcon />
+          </ActionButton>
+        </ToolTipWrapper>
+      ),
+      filename: 'OPFR202305150000022.csv',
+      debitType: 'Multiple Debit',
+      transactionCount: 2,
+      totalPaymentAmount: 900.5,
+      transactionDate: '2023-05-15',
+      businessDate: '2023-06-15',
+      status: failed
+    },
+    {
+      action: (
+        <ToolTipWrapper title={viewFileToolTipText}>
+          <ActionButton onClick={() => console.log('row 2 clicked')}>
+            <FileOpenIcon />
+          </ActionButton>
+        </ToolTipWrapper>
+      ),
+      filename: 'OPFR202305150000023.csv',
+      debitType: 'Single Debit',
+      transactionCount: 2,
+      totalPaymentAmount: 800.5,
+      transactionDate: '2023-05-15',
+      businessDate: '2023-06-15',
+      status: pending
+    }
+  ];
+
   const [rows, setRows] = useState(FETCHED_ROWS);
+  const {
+    currMainFormData,
+    setCurrMainFormData,
+    setCurrSubFormData,
+    setSubFormDataList,
+    setApplicantDetails
+  } = useRejectedPaymentStore();
 
   function filterTableRecords(values) {
-    console.log(values);
     setRows(
       rows.filter((row) => {
         const matchFilename =
@@ -137,7 +146,22 @@ export default function RejectedPaymentMain() {
     );
   }
 
-  return (
+  async function setStoreData(id) {
+    const [
+      currMainFormData,
+      currSubFormData,
+      applicantDetails,
+      subFormDataList
+    ] = await getFileDetails(id);
+    setApplicantDetails(applicantDetails);
+    setCurrMainFormData(currMainFormData);
+    setCurrSubFormData(currSubFormData);
+    setSubFormDataList(subFormDataList);
+  }
+
+  return currMainFormData ? (
+    <PaymentFile />
+  ) : (
     <>
       <SearchBox onSearch={filterTableRecords} />
       <DataTable title="Pending Action" columns={columns} rows={rows} />

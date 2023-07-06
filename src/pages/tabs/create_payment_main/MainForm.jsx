@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, ThemeProvider } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import {
   COUNTRY_CODE,
@@ -7,11 +7,11 @@ import {
   RESIDENT_CODE
 } from 'constants.js';
 import { useCreatePaymentStore } from './create_payment_store';
-import { MAIN_FILE_DETAILS } from './form_templates';
+import { theme } from 'theme';
 
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE } = FORM_TYPES;
 
-export default function MainForm({ handleSubmit }) {
+export default function MainForm({ handleSubmit, mainFileDetails, ...props }) {
   const {
     filename,
     debitType,
@@ -23,7 +23,7 @@ export default function MainForm({ handleSubmit }) {
     businessDate,
     recipientReference,
     otherPaymentDetails
-  } = MAIN_FILE_DETAILS;
+  } = mainFileDetails;
 
   const fileFormAttributes = {
     rows: [
@@ -370,21 +370,28 @@ export default function MainForm({ handleSubmit }) {
     ]
   };
 
+  const { isViewing, revertToHome } = props;
+  const formButtons = [
+    {
+      label: isViewing ? 'Back' : 'Add Transaction',
+      type: isViewing && 'button',
+      componentProps: {
+        color: isViewing ? 'neutral' : 'success',
+        onClick: isViewing ? revertToHome : () => {}
+      }
+    }
+  ];
+
   const formAttributes = {
     sections: [fileFormAttributes, applicantFormAttributes],
-    buttons: [
-      {
-        label: 'Add Transaction',
-        componentProps: {
-          color: 'success'
-        }
-      }
-    ]
+    buttons: formButtons
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <FormBuilder onSubmit={handleSubmit} formAttributes={formAttributes} />
-    </Box>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ p: 3 }}>
+        <FormBuilder onSubmit={handleSubmit} formAttributes={formAttributes} />
+      </Box>
+    </ThemeProvider>
   );
 }

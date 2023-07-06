@@ -1,4 +1,4 @@
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Footer from './components/Footer';
 import PageTabs from './components/PageTabs';
@@ -11,29 +11,7 @@ import { CREATE_PAYMENT_FILE } from 'constants';
 import RejectedPaymentMain from './pages/tabs/rejected_payment_main';
 import CreatePaymentMain from 'pages/tabs/create_payment_main';
 import UploadPaymentMain from 'pages/tabs/UploadPaymentMain';
-
-const theme = createTheme({
-  palette: {
-    white: {
-      main: '#fff'
-    }
-  },
-  typography: {
-    h4: {
-      fontSize: '1.5rem'
-    },
-    h5: {
-      fontSize: '1.2rem',
-      color: '#888'
-    },
-    subtitle1: {
-      color: '#888'
-    },
-    subtitle2: {
-      color: 'red'
-    }
-  }
-});
+import { theme } from 'theme';
 
 function App() {
   const loginProps = {

@@ -6,11 +6,10 @@ import DataTable from 'components/datatable/index';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
 import { useEffect, useState } from 'react';
 import { formatToCurrency } from 'services/helper';
-import { MAIN_FILE_DETAILS } from '../form_templates';
-import MainForm from './MainForm';
-import SubForm from './SubForm';
-import SummaryForm from './SummaryForm';
-import { useCreatePaymentStore } from './create_payment_store';
+import MainForm from '../create_payment_main/MainForm';
+import SubForm from '../create_payment_main/SubForm';
+import SummaryForm from '../create_payment_main/SummaryForm';
+import { useRejectedPaymentStore } from 'pages/tabs/rejected_payment_main/rejected_payment_store';
 
 const transactionColumns = [
   { id: 'action', label: 'Action', minWidth: 160, sortable: false },
@@ -65,17 +64,19 @@ const transactionColumns = [
   }
 ];
 
-export default function CreatePaymentMain() {
+export default function PaymentFile() {
   const [editRowNum, setEditRowNum] = useState(-1);
   const [subFormVisible, setSubFormVisible] = useState(false);
   const [transactionRows, setTransactionRows] = useState([]);
   const {
+    currMainFormData,
     subFormDataList,
     setSubFormDataList,
     setCurrSubFormData,
     resetCurrSubFormData,
-    setApplicantDetails
-  } = useCreatePaymentStore();
+    setApplicantDetails,
+    resetStore
+  } = useRejectedPaymentStore();
 
   // Keep the state and the table in sync
   useEffect(() => {
@@ -206,7 +207,9 @@ export default function CreatePaymentMain() {
               setEditRowNum(-1);
               setSubFormVisible(true);
             }}
-            mainFileDetails={MAIN_FILE_DETAILS}
+            mainFileDetails={currMainFormData}
+            isViewing={true}
+            revertToHome={resetStore}
           />
           <DataTable
             title="Transaction Details"
