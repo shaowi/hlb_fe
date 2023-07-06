@@ -558,7 +558,7 @@ interface NotFoundProps {
 
 E.g:
 
-![notFound_component](./images/NotFoundComponent.png)
+![notFound_component](./images/notFoundComponent.png)
 
 ```js
 const props = {
