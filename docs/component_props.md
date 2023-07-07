@@ -391,8 +391,13 @@ interface Section {
 
 interface Button {
   label: string;
-  color?: string;
   isReset?: boolean;
+  type: 'button' | 'reset' | 'submit' | 'loading';
+  label: string;
+  componentProps: {
+    color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error';
+    onClick: () => void;
+  }
 }
 
 interface Option {
@@ -575,19 +580,21 @@ const props = {
 [ModalBox](../src/components/ModalBox.jsx)
 
 ```ts
+interface Button {
+  label: string;
+  type: 'button' | 'reset' | 'submit' | 'loading';
+  label: string;
+  componentProps: {
+    color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error';
+    onClick: () => void;
+  }
+}
 interface ModalBoxProps {
   isOpen: boolean;
   handleClose: () => void;
   title: string;
   description: string;
-  buttons: {
-    type: 'button' | 'reset' | 'submit' | 'loading';
-    label: string;
-    componentProps: {
-      color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error';
-      onClick: () => void;
-    };
-  }[];
+  buttons: Button[];
 }
 ```
 
@@ -608,7 +615,7 @@ const props = {
       label: 'Yes',
       componentProps: {
         color: 'success',
-        onClick: handleLogout
+        onClick: () => void
       }
     },
     {
@@ -623,4 +630,51 @@ const props = {
 };
 
 <ModalBox {...props} />
+```
+
+[AlertDialog](../src/components/AlertDialog.jsx)
+
+```ts
+interface Button {
+  label: string;
+  type: 'button' | 'reset' | 'submit' | 'loading';
+  label: string;
+  componentProps: {
+    color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error';
+    onClick: () => void;
+  }
+}
+interface AlertDialogProps {
+  isOpen: boolean;
+  handleClose: () => void;
+  title: string;
+  description: string;
+  buttons: Button[];
+}
+```
+
+E.g:
+
+![alertDialog_component](./images/alertDialogComponent.png)
+
+```js
+const [openAlert, setOpenAlert] = useState(false)
+const props = {
+  open: openAlert,
+  handleClose: () => setOpenAlert(false)
+  title: 'Error in submitting',
+  content: 'Please add at least one transaction to proceed',
+  buttons: [
+    {
+      type: 'button',
+      label: 'Ok',
+      componentProps: {
+        color: 'error',
+        onClick: () => setOpenAlert(false)
+      }
+    }
+  ]
+};
+
+<AlertDialog {...props} />
 ```
