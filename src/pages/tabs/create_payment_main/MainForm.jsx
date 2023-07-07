@@ -38,7 +38,6 @@ export default function MainForm({
             type: TEXT,
             defaultValue: filename,
             componentProps: {
-              autoFocus: true,
               disabled,
               name: 'filename',
               label: 'Filename',
