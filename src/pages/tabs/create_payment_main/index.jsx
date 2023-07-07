@@ -13,6 +13,7 @@ import SummaryForm from './SummaryForm';
 import { useCreatePaymentStore } from './create_payment_store';
 import ModalBox from 'components/ModalBox';
 import ConfirmationPage from './ConfirmationPage';
+import AlertDialog from 'components/AlertDialog';
 
 const transactionColumns = [
   { id: 'action', label: 'Action', minWidth: 160, sortable: false },
@@ -73,6 +74,7 @@ export default function CreatePaymentMain() {
   const [transactionRows, setTransactionRows] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showConfirmationPage, setShowConfirmationPage] = useState(false);
+  const [openAlert, setOpenAlert] = useState(true);
   const {
     currMainFormData,
     subFormDataList,
@@ -219,9 +221,17 @@ export default function CreatePaymentMain() {
   }
 
   function submitTransactions(values) {
+    if (subFormDataList.length === 0) {
+      setOpenAlert(true);
+      return;
+    }
     console.log(values);
     setRequesterComments(values.requesterComments);
     setIsModalOpen(true);
+  }
+
+  function closeAlert() {
+    setOpenAlert(false);
   }
 
   const formButtons = [
@@ -233,12 +243,32 @@ export default function CreatePaymentMain() {
     }
   ];
 
+  const alertDialogProps = {
+    title: 'Error in submitting',
+    content: 'Please add at least one transaction to proceed',
+    buttons: [
+      {
+        type: 'button',
+        label: 'Ok',
+        componentProps: {
+          color: 'error',
+          onClick: closeAlert
+        }
+      }
+    ]
+  };
+
   return (
     <Box spacing={2} xs={{ p: 3, mb: 5 }}>
       <ModalBox
         isOpen={isModalOpen}
         handleClose={() => setIsModalOpen(false)}
         {...modalProps}
+      />
+      <AlertDialog
+        open={openAlert}
+        handleClose={closeAlert}
+        {...alertDialogProps}
       />
       {subFormVisible ? (
         <SubForm
