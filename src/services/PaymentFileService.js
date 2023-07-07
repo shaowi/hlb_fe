@@ -19,3 +19,7 @@ export async function getFileDetails(id) {
     subFormDataList
   ]);
 }
+
+export async function createPaymentFile() {
+  return new Promise((resolve, _) => resolve('success'));
+}

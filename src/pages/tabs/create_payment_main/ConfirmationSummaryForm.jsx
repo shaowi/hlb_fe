@@ -7,11 +7,7 @@ import DataTable from 'components/datatable';
 
 const { TEXT } = FORM_TYPES;
 
-export default function ConfirmationSummaryForm({
-  transactionRows,
-  onSubmit,
-  setShowConfirmationPage
-}) {
+export default function ConfirmationSummaryForm({ transactionRows, onSubmit }) {
   const totalTransactionCount = transactionRows.length;
   const totalPaymentAmount = useMemo(() => {
     return transactionRows.reduce(
@@ -19,7 +15,8 @@ export default function ConfirmationSummaryForm({
       0
     );
   }, [transactionRows]);
-  const { requesterComments } = useCreatePaymentStore();
+  const { requesterComments, setShowConfirmationPage, setShowReviewPage } =
+    useCreatePaymentStore();
 
   const summaryColumns = [
     {
@@ -88,12 +85,19 @@ export default function ConfirmationSummaryForm({
       },
       {
         label: 'Confirm',
+        type: 'button',
         componentProps: {
-          color: 'success'
+          color: 'success',
+          onClick: handleConfirm
         }
       }
     ]
   };
+
+  function handleConfirm() {
+    setShowConfirmationPage(false);
+    setShowReviewPage(true);
+  }
 
   return (
     <Box sx={{ mt: 3 }}>

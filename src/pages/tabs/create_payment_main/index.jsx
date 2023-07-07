@@ -14,6 +14,7 @@ import { useCreatePaymentStore } from './create_payment_store';
 import ModalBox from 'components/ModalBox';
 import ConfirmationPage from './ConfirmationPage';
 import AlertDialog from 'components/AlertDialog';
+import ReviewPage from './ReviewPage';
 
 const transactionColumns = [
   { id: 'action', label: 'Action', minWidth: 160, sortable: false },
@@ -71,18 +72,21 @@ const transactionColumns = [
 export default function CreatePaymentMain() {
   const [editRowNum, setEditRowNum] = useState(-1);
   const [subFormVisible, setSubFormVisible] = useState(false);
-  const [transactionRows, setTransactionRows] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showConfirmationPage, setShowConfirmationPage] = useState(false);
-  const [openAlert, setOpenAlert] = useState(true);
+  const [openAlert, setOpenAlert] = useState(false);
   const {
     currMainFormData,
     subFormDataList,
+    transactionRows,
     setSubFormDataList,
+    setTransactionRows,
     setCurrSubFormData,
     resetCurrSubFormData,
     setApplicantDetails,
-    setRequesterComments
+    setRequesterComments,
+    showConfirmationPage,
+    setShowConfirmationPage,
+    showReviewPage
   } = useCreatePaymentStore();
 
   const modalProps = {
@@ -225,7 +229,6 @@ export default function CreatePaymentMain() {
       setOpenAlert(true);
       return;
     }
-    console.log(values);
     setRequesterComments(values.requesterComments);
     setIsModalOpen(true);
   }
@@ -258,6 +261,27 @@ export default function CreatePaymentMain() {
     ]
   };
 
+  const reviewPageProps = {
+    title:
+      'Outward ISS 1-M CBFT Credit Transfer (MT103) Payment File Request Summary',
+    subTitle:
+      'Outward ISS 1-M CBFT Credit Transfer (MT103) Payment File Request Submitted Successfully',
+    body: [
+      { label: 'Filename', value: 'OPFR202307070000001.csv' },
+      { label: 'File Reference', value: '20230707133212001' },
+      {
+        label: 'Transaction Type',
+        value: 'ISS 1-M CBFT Credit Transfer (MT103)'
+      },
+      { label: 'Total Transaction Count', value: '1' },
+      { label: 'Payment Currency', value: 'USD' },
+      { label: 'Debit Type', value: 'Single Debit' },
+      { label: 'Transaction Date', value: '2023-07-07' },
+      { label: 'Value Date', value: '2023-07-07' },
+      { label: 'Business Date', value: '2023-07-07' }
+    ]
+  };
+
   return (
     <Box spacing={2} xs={{ p: 3, mb: 5 }}>
       <ModalBox
@@ -277,7 +301,9 @@ export default function CreatePaymentMain() {
           isEdit={editRowNum !== -1}
         />
       ) : showConfirmationPage ? (
-        <ConfirmationPage setShowConfirmationPage={setShowConfirmationPage} />
+        <ConfirmationPage />
+      ) : showReviewPage ? (
+        <ReviewPage {...reviewPageProps} />
       ) : (
         <>
           <MainForm
@@ -293,11 +319,9 @@ export default function CreatePaymentMain() {
             title="Transaction Details"
             rows={transactionRows}
             columns={transactionColumns}
+            emptyTableMessage="No transactions added"
           />
-          <SummaryForm
-            transactionRows={transactionRows}
-            onSubmit={submitTransactions}
-          />
+          <SummaryForm onSubmit={submitTransactions} />
         </>
       )}
     </Box>

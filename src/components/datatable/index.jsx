@@ -44,7 +44,8 @@ export default function DataTable({
   title,
   rows,
   columns,
-  showPagination = true
+  showPagination = true,
+  emptyTableMessage = 'No records found'
 }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -87,7 +88,7 @@ export default function DataTable({
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           {rows.length === 0 && (
-            <caption className="text-center">No records found</caption>
+            <caption className="text-center">{emptyTableMessage}</caption>
           )}
           <TableHead>
             <TableRow>

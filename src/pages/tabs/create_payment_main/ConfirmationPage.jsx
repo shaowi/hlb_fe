@@ -57,7 +57,7 @@ const transactionColumns = [
   }
 ];
 
-export default function ConfirmationPage({ setShowConfirmationPage }) {
+export default function ConfirmationPage() {
   const { currMainFormData, subFormDataList } = useCreatePaymentStore();
   const transactionRows = subFormDataList.map(mapToRow);
 
@@ -91,10 +91,7 @@ export default function ConfirmationPage({ setShowConfirmationPage }) {
         rows={transactionRows}
         columns={transactionColumns}
       />
-      <ConfirmationSummaryForm
-        transactionRows={transactionRows}
-        setShowConfirmationPage={setShowConfirmationPage}
-      />
+      <ConfirmationSummaryForm transactionRows={transactionRows} />
     </Box>
   );
 }
