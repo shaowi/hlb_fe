@@ -40,7 +40,13 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export default function DataTable({ title, rows, columns }) {
+export default function DataTable({
+  title,
+  rows,
+  columns,
+  showPagination = true,
+  emptyTableMessage = 'No records found'
+}) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [order, setOrder] = React.useState('asc');
@@ -82,7 +88,7 @@ export default function DataTable({ title, rows, columns }) {
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           {rows.length === 0 && (
-            <caption className="text-center">No records found</caption>
+            <caption className="text-center">{emptyTableMessage}</caption>
           )}
           <TableHead>
             <TableRow>
@@ -143,16 +149,18 @@ export default function DataTable({ title, rows, columns }) {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        className="grandchildren-no-mb"
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      {showPagination && (
+        <TablePagination
+          className="grandchildren-no-mb"
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      )}
     </Paper>
   );
 }

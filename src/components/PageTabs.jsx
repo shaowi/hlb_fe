@@ -41,7 +41,7 @@ function a11yProps(index) {
 }
 
 export default function PageTabs({ tabsContent }) {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(2); // TODO: Change this to 0
   const [isFooterFixed, setIsFooterFixed] = useState(false); // Can be removed if content can cover the whole page
 
   const handleChange = (event, newValue) => {

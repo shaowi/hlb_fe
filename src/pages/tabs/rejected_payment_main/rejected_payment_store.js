@@ -20,9 +20,9 @@ const INITIAL_PAYMENT_SUB_FORM_STATE = {
 };
 
 export const useRejectedPaymentStore = create((set) => ({
+  applicantDetails: null,
   currMainFormData: null,
   currSubFormData: null,
-  applicantDetails: null,
   subFormDataList: [],
   setApplicantDetails: (applicantDetails) =>
     set(() => ({ applicantDetails: applicantDetails })),

@@ -191,6 +191,17 @@ export default function PaymentFile() {
     console.log(values);
   }
 
+  const formButtons = [
+    {
+      label: 'Back',
+      type: 'button',
+      componentProps: {
+        color: 'neutral',
+        onClick: resetStore
+      }
+    }
+  ];
+
   return (
     <Box spacing={2} xs={{ p: 3, mb: 5 }}>
       {subFormVisible ? (
@@ -208,8 +219,7 @@ export default function PaymentFile() {
               setSubFormVisible(true);
             }}
             mainFileDetails={currMainFormData}
-            isViewing={true}
-            revertToHome={resetStore}
+            formButtons={formButtons}
           />
           <DataTable
             title="Transaction Details"
