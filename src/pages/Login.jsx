@@ -59,6 +59,7 @@ export default function Login({
                 icon: <Person />,
                 defaultValue: '',
                 componentProps: {
+                  required: true,
                   label: topFieldLabel,
                   name: topFieldName,
                   autoFocus: true,
@@ -74,6 +75,7 @@ export default function Login({
                 icon: <Lock />,
                 defaultValue: '',
                 componentProps: {
+                  required: true,
                   type: 'password',
                   label: bottomFieldLabel,
                   name: bottomFieldName,

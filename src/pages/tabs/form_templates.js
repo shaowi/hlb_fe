@@ -5,7 +5,7 @@ export const APPLICANT_DETAILS = {
   applicantName: 'John Doe',
   applicantAccountNo: '9000000001',
   applicantAccountType: 'Current',
-  applicantAccountCurrency: 'AUD',
+  applicantAccountCurrency: { label: 'SGD', value: 'SGD' },
   applicantIdType: 'New IC',
   applicantId: 'applicantId',
   applicantAccountBranchCode: '90',

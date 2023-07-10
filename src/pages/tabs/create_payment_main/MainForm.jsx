@@ -4,6 +4,7 @@ import {
   COUNTRY_CODE,
   DEBIT_TYPE,
   FILENAME_FORMAT,
+  REMITTANCE_CURRENCY,
   RESIDENT_CODE
 } from 'constants.js';
 import { theme } from 'theme';
@@ -228,14 +229,15 @@ export default function MainForm({
       {
         fields: [
           {
-            type: TEXT,
+            type: SELECT_AUTOCOMPLETE,
             defaultValue: applicantAccountCurrency,
             componentProps: {
               disabled,
               required: true,
               name: 'applicantAccountCurrency',
               label: 'Account Currency',
-              'data-testid': 'applicantAccountCurrency'
+              'data-testid': 'applicantAccountCurrency',
+              options: REMITTANCE_CURRENCY
             }
           },
           {

@@ -7,7 +7,8 @@ import {
   CORRESPONDENT_BANK_DETAILS,
   PAYMENT_DETAILS,
   SUB_FILE_DETAILS,
-  TRANSACTION_DETAILS
+  TRANSACTION_DETAILS,
+  TRANSACTION_SUMMARY
 } from '../form_templates';
 
 export const INITIAL_PAYMENT_SUB_FORM_STATE = {
@@ -26,7 +27,7 @@ export const useCreatePaymentStore = create((set) => ({
   currSubFormData: INITIAL_PAYMENT_SUB_FORM_STATE,
   subFormDataList: [],
   transactionRows: [],
-  requesterComments: 'requester comments',
+  requesterComments: TRANSACTION_SUMMARY.requesterComments,
   showConfirmationPage: false,
   showReviewPage: false,
   errorInCreation: false,

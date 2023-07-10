@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import UserNavBar from 'components/navigation/UserNavBar';
 
-xdescribe('UserNavBar', () => {
+describe('UserNavBar', () => {
   const props = {
     imageSrc: '/images/logo.png',
     imageAlt: 'hlb',
