@@ -529,8 +529,8 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
     remittanceAmount,
     fxContractReferenceNo,
     exchangeRate,
-    creditingFxRate,
-    debitingFxRate,
+    creditFxRate,
+    debitFxRate,
     paymentCurrency,
     paymentAmount,
     localEquivalentAmount
@@ -597,24 +597,24 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
         fields: [
           {
             type: TEXT,
-            defaultValue: creditingFxRate,
+            defaultValue: creditFxRate,
             componentProps: {
               required: true,
               disabled: true,
-              name: 'creditingFxRate',
-              label: 'Crediting FX Rate',
-              'data-testid': 'creditingFxRate'
+              name: 'creditFxRate',
+              label: 'Credit FX Rate',
+              'data-testid': 'creditFxRate'
             }
           },
           {
             type: TEXT,
-            defaultValue: debitingFxRate,
+            defaultValue: debitFxRate,
             componentProps: {
               required: true,
               disabled: true,
-              name: 'debitingFxRate',
-              label: 'Debiting FX Rate',
-              'data-testid': 'debitingFxRate'
+              name: 'debitFxRate',
+              label: 'Debit FX Rate',
+              'data-testid': 'debitFxRate'
             }
           }
         ]

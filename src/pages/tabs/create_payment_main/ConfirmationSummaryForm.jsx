@@ -1,9 +1,16 @@
 import { Box } from '@mui/material';
+import DataTable from 'components/datatable';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { useMemo } from 'react';
-import { useCreatePaymentStore } from './create_payment_store';
+import {
+  createPaymentFile,
+  mapToApplicantPayload,
+  mapToBeneficiaryPayload,
+  mapToPaymentPayload,
+  mapToForeignPaymentPayload
+} from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
-import DataTable from 'components/datatable';
+import { useCreatePaymentStore } from './create_payment_store';
 
 const { TEXT } = FORM_TYPES;
 
@@ -15,8 +22,16 @@ export default function ConfirmationSummaryForm({ transactionRows, onSubmit }) {
       0
     );
   }, [transactionRows]);
-  const { requesterComments, setShowConfirmationPage, setShowReviewPage } =
-    useCreatePaymentStore();
+  const {
+    applicantDetails,
+    currSubFormData,
+    currMainFormData,
+    subFormDataList,
+    requesterComments,
+    setShowConfirmationPage,
+    setShowReviewPage,
+    setErrorInCreation
+  } = useCreatePaymentStore();
 
   const summaryColumns = [
     {
@@ -42,11 +57,12 @@ export default function ConfirmationSummaryForm({ transactionRows, onSubmit }) {
     }
   ];
 
+  const { processingMode, paymentCurrency } = currSubFormData;
   const summaryRow = [
     {
-      processingMode: 'Normal',
+      processingMode,
       transactionCount: totalTransactionCount,
-      paymentCurrency: 'USD',
+      paymentCurrency,
       totalPaymentAmount: totalPaymentAmount
     }
   ];
@@ -94,9 +110,46 @@ export default function ConfirmationSummaryForm({ transactionRows, onSubmit }) {
     ]
   };
 
-  function handleConfirm() {
-    setShowConfirmationPage(false);
-    setShowReviewPage(true);
+  async function handleConfirm() {
+    const applicantPayload = mapToApplicantPayload(applicantDetails);
+    handleCreatePaymentFiles(
+      applicantPayload,
+      currMainFormData,
+      subFormDataList
+    )
+      .then((values) => {
+        console.log(values);
+        setErrorInCreation(values.some(({ status }) => status !== 201));
+      })
+      .catch((error) => {
+        console.log(error);
+        setErrorInCreation(true);
+      })
+      .finally(() => {
+        setShowConfirmationPage(false);
+        setShowReviewPage(true);
+      });
+  }
+
+  async function handleCreatePaymentFiles(
+    applicantPayload,
+    currMainFormData,
+    subFormDataList
+  ) {
+    const resolvedPromisesArray = subFormDataList.map((subFormData) => {
+      const beneficiaryPayload = mapToBeneficiaryPayload(subFormData);
+      const foreignPaymentPayload = mapToForeignPaymentPayload(subFormData);
+      const paymentPayload = mapToPaymentPayload(currMainFormData, subFormData);
+      const payload = {
+        ...applicantPayload,
+        ...beneficiaryPayload,
+        ...foreignPaymentPayload,
+        ...paymentPayload,
+        requesterComments
+      };
+      return createPaymentFile(payload);
+    });
+    return Promise.all(resolvedPromisesArray);
   }
 
   return (

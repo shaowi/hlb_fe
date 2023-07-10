@@ -29,6 +29,7 @@ export const useCreatePaymentStore = create((set) => ({
   requesterComments: 'requester comments',
   showConfirmationPage: false,
   showReviewPage: false,
+  errorInCreation: false,
   setApplicantDetails: (applicantDetails) =>
     set(() => ({ applicantDetails: applicantDetails })),
   setCurrSubFormData: (currSubFormData) =>
@@ -45,6 +46,8 @@ export const useCreatePaymentStore = create((set) => ({
     set(() => ({ showConfirmationPage: showConfirmationPage })),
   setShowReviewPage: (showReviewPage) =>
     set(() => ({ showReviewPage: showReviewPage })),
+  setErrorInCreation: (errorInCreation) =>
+    set(() => ({ errorInCreation: errorInCreation })),
   resetStore: () =>
     set(() => ({
       applicantDetails: APPLICANT_DETAILS,
