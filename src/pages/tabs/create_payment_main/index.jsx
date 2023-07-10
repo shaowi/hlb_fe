@@ -75,6 +75,7 @@ export default function CreatePaymentMain() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const {
+    applicantDetails,
     currMainFormData,
     subFormDataList,
     transactionRows,
@@ -86,7 +87,8 @@ export default function CreatePaymentMain() {
     setRequesterComments,
     showConfirmationPage,
     setShowConfirmationPage,
-    showReviewPage
+    showReviewPage,
+    errorInCreation
   } = useCreatePaymentStore();
 
   const modalProps = {
@@ -130,14 +132,9 @@ export default function CreatePaymentMain() {
       setEditRowNum(-1);
       return;
     }
-    // Add the last row of data list to the table
-    setTransactionRows([
-      ...transactionRows,
-      mapToRow(
-        transactionRows.length,
-        subFormDataList[subFormDataListLength - 1]
-      )
-    ]);
+    setTransactionRows(
+      subFormDataList.map((item, index) => mapToRow(index, item))
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subFormDataList]);
 
@@ -261,24 +258,40 @@ export default function CreatePaymentMain() {
     ]
   };
 
+  const {
+    filename,
+    debitType,
+    channelTransactionReference,
+    transactionType,
+    transactionDate,
+    valueDate,
+    businessDate
+  } = currMainFormData;
   const reviewPageProps = {
     title:
       'Outward ISS 1-M CBFT Credit Transfer (MT103) Payment File Request Summary',
-    subTitle:
-      'Outward ISS 1-M CBFT Credit Transfer (MT103) Payment File Request Submitted Successfully',
+    subTitle: {
+      severity: errorInCreation ? 'error' : 'success',
+      text: `Outward ISS 1-M CBFT Credit Transfer (MT103) Payment File Request Submitted ${
+        errorInCreation ? 'Unsuccessfully' : 'Successfully'
+      }`
+    },
     body: [
-      { label: 'Filename', value: 'OPFR202307070000001.csv' },
-      { label: 'File Reference', value: '20230707133212001' },
+      { label: 'Filename', value: filename },
+      { label: 'File Reference', value: channelTransactionReference },
       {
         label: 'Transaction Type',
-        value: 'ISS 1-M CBFT Credit Transfer (MT103)'
+        value: transactionType
       },
-      { label: 'Total Transaction Count', value: '1' },
-      { label: 'Payment Currency', value: 'USD' },
-      { label: 'Debit Type', value: 'Single Debit' },
-      { label: 'Transaction Date', value: '2023-07-07' },
-      { label: 'Value Date', value: '2023-07-07' },
-      { label: 'Business Date', value: '2023-07-07' }
+      { label: 'Total Transaction Count', value: transactionRows.length },
+      {
+        label: 'Payment Currency',
+        value: applicantDetails.applicantAccountCurrency
+      },
+      { label: 'Debit Type', value: debitType },
+      { label: 'Transaction Date', value: transactionDate },
+      { label: 'Value Date', value: valueDate },
+      { label: 'Business Date', value: businessDate }
     ]
   };
 

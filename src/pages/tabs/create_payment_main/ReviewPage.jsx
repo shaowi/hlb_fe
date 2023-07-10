@@ -6,7 +6,8 @@ import { useCreatePaymentStore } from './create_payment_store';
 
 export default function ReviewPage({ ...props }) {
   const { title, subTitle, body } = props;
-  const { transactionRows, resetStore } = useCreatePaymentStore();
+  const { transactionRows, currSubFormData, resetStore } =
+    useCreatePaymentStore();
   const totalTransactionCount = transactionRows.length;
   const totalPaymentAmount = transactionRows.reduce(
     (acc, curr) => acc + curr.remittanceAmount,
@@ -37,11 +38,12 @@ export default function ReviewPage({ ...props }) {
     }
   ];
 
+  const { processingMode, paymentCurrency } = currSubFormData;
   const summaryRow = [
     {
-      processingMode: 'Normal',
+      processingMode,
       transactionCount: totalTransactionCount,
-      paymentCurrency: 'USD',
+      paymentCurrency,
       totalPaymentAmount: totalPaymentAmount
     }
   ];
@@ -51,13 +53,9 @@ export default function ReviewPage({ ...props }) {
     type: 'button',
     componentProps: {
       color: 'neutral',
-      onClick: handleBackToMain
+      onClick: resetStore
     }
   };
-
-  function handleBackToMain() {
-    resetStore();
-  }
 
   return (
     <Box sx={{ p: 3 }}>
@@ -68,7 +66,7 @@ export default function ReviewPage({ ...props }) {
           </Typography>
         </Grid>
         <Grid item>
-          <Alert severity="success">{subTitle}</Alert>
+          <Alert severity={subTitle.severity}>{subTitle.text}</Alert>
         </Grid>
         <Grid item container direction="column" alignItems="center" spacing={2}>
           {body.map(({ label, value }, index) => (

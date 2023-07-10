@@ -22,7 +22,7 @@ export const APPLICANT_DETAILS = {
 
 export const SUB_FILE_DETAILS = {
   debitType: 'single',
-  transactionType: 'transactionType',
+  transactionType: 'ISS 1-M CBFT Credit Transfer (MT103)',
   processingMode: 'processingMode'
 };
 
@@ -62,8 +62,8 @@ export const PAYMENT_DETAILS = {
   remittanceAmount: 500,
   fxContractReferenceNo: 'fxContractReferenceNo',
   exchangeRate: 1.564,
-  creditingFxRate: 0.89234,
-  debitingFxRate: 0.89234,
+  creditFxRate: 0.89234,
+  debitFxRate: 0.89234,
   paymentCurrency: 'AUD',
   paymentAmount: 500,
   localEquivalentAmount: 530
