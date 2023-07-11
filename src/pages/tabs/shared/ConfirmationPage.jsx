@@ -1,9 +1,8 @@
 import { Box } from '@mui/material';
 import DataTable from 'components/datatable';
 import { formatToCurrency } from 'services/helper';
-import MainForm from './MainForm';
-import { useCreatePaymentStore } from './create_payment_store';
 import ConfirmationSummaryForm from './ConfirmationSummaryForm';
+import MainForm from './MainForm';
 
 const transactionColumns = [
   {
@@ -57,8 +56,8 @@ const transactionColumns = [
   }
 ];
 
-export default function ConfirmationPage() {
-  const { currMainFormData, subFormDataList } = useCreatePaymentStore();
+export default function ConfirmationPage({ ...props }) {
+  const { currMainFormData, subFormDataList } = props;
   const transactionRows = subFormDataList.map(mapToRow);
 
   function mapToRow({

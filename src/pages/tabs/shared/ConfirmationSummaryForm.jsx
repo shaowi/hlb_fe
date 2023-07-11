@@ -10,18 +10,10 @@ import {
   mapToForeignPaymentPayload
 } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
-import { useCreatePaymentStore } from './create_payment_store';
 
 const { TEXT } = FORM_TYPES;
 
-export default function ConfirmationSummaryForm({ transactionRows, onSubmit }) {
-  const totalTransactionCount = transactionRows.length;
-  const totalPaymentAmount = useMemo(() => {
-    return transactionRows.reduce(
-      (acc, curr) => acc + curr.remittanceAmount,
-      0
-    );
-  }, [transactionRows]);
+export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
   const {
     applicantDetails,
     currSubFormData,
@@ -30,8 +22,16 @@ export default function ConfirmationSummaryForm({ transactionRows, onSubmit }) {
     requesterComments,
     setShowConfirmationPage,
     setShowReviewPage,
-    setErrorInCreation
-  } = useCreatePaymentStore();
+    setErrorInCreation,
+    transactionRows
+  } = props;
+  const totalTransactionCount = transactionRows.length;
+  const totalPaymentAmount = useMemo(() => {
+    return transactionRows.reduce(
+      (acc, curr) => acc + curr.remittanceAmount,
+      0
+    );
+  }, [transactionRows]);
 
   const summaryColumns = [
     {
@@ -118,11 +118,9 @@ export default function ConfirmationSummaryForm({ transactionRows, onSubmit }) {
       subFormDataList
     )
       .then((values) => {
-        console.log(values);
         setErrorInCreation(values.some(({ status }) => status !== 201));
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         setErrorInCreation(true);
       })
       .finally(() => {

@@ -51,6 +51,12 @@ export const COUNTRY_CODE = [
   { label: 'SG - Singapore', value: 'SG' }
 ];
 
+export const COUNTRY_CODE_TO_LABEL = {
+  AU: 'AU - Australia',
+  CN: 'CN - China',
+  SG: 'SG - Singapore'
+};
+
 export const REMITTANCE_CURRENCY = [
   { label: 'AUD', value: 'AUD' },
   { label: 'USD', value: 'USD' },

@@ -24,6 +24,7 @@ export const useRejectedPaymentStore = create((set) => ({
   currMainFormData: null,
   currSubFormData: null,
   subFormDataList: [],
+  requesterComments: '',
   setApplicantDetails: (applicantDetails) =>
     set(() => ({ applicantDetails: applicantDetails })),
   setCurrMainFormData: (currMainFormData) =>

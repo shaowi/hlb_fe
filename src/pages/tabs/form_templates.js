@@ -74,7 +74,7 @@ export const CHARGES_DETAILS = {
   debitMidRate: 0.90234,
   chargeBearer: 'OUR',
   commissionInLieuOfExchange: 45,
-  commissionHandling: 30
+  commissionHandle: 30
 };
 
 export const CORRESPONDENT_BANK_DETAILS = {

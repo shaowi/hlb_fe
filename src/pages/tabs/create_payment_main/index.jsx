@@ -1,20 +1,19 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, ButtonGroup } from '@mui/material';
+import AlertDialog from 'components/AlertDialog';
+import ModalBox from 'components/ModalBox';
 import ActionButton from 'components/datatable/ActionButton';
 import DataTable from 'components/datatable/index';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
 import { useEffect, useState } from 'react';
 import { formatToCurrency } from 'services/helper';
-import { MAIN_FILE_DETAILS } from '../form_templates';
-import MainForm from './MainForm';
-import SubForm from './SubForm';
-import SummaryForm from './SummaryForm';
+import ConfirmationPage from '../shared/ConfirmationPage';
+import MainForm from '../shared/MainForm';
+import SummaryForm from '../shared/SummaryForm';
+import ReviewPage from '../shared/ReviewPage';
 import { useCreatePaymentStore } from './create_payment_store';
-import ModalBox from 'components/ModalBox';
-import ConfirmationPage from './ConfirmationPage';
-import AlertDialog from 'components/AlertDialog';
-import ReviewPage from './ReviewPage';
+import SubForm from '../shared/SubForm';
 
 const transactionColumns = [
   { id: 'action', label: 'Action', minWidth: 160, sortable: false },
@@ -76,6 +75,7 @@ export default function CreatePaymentMain() {
   const [openAlert, setOpenAlert] = useState(false);
   const {
     applicantDetails,
+    currSubFormData,
     currMainFormData,
     subFormDataList,
     transactionRows,
@@ -88,34 +88,12 @@ export default function CreatePaymentMain() {
     showConfirmationPage,
     setShowConfirmationPage,
     showReviewPage,
-    errorInCreation
+    setShowReviewPage,
+    requesterComments,
+    errorInCreation,
+    setErrorInCreation,
+    resetStore
   } = useCreatePaymentStore();
-
-  const modalProps = {
-    title: 'Confirm',
-    description: `Are you sure you want to submit the Payment File: ${currMainFormData.filename}?`,
-    buttons: [
-      {
-        type: 'button',
-        label: 'Yes',
-        componentProps: {
-          color: 'success',
-          onClick: () => {
-            setIsModalOpen(false);
-            setShowConfirmationPage(true);
-          }
-        }
-      },
-      {
-        type: 'button',
-        label: 'No',
-        componentProps: {
-          color: 'error',
-          onClick: () => setIsModalOpen(false)
-        }
-      }
-    ]
-  };
 
   // Keep the state and the table in sync
   useEffect(() => {
@@ -234,6 +212,32 @@ export default function CreatePaymentMain() {
     setOpenAlert(false);
   }
 
+  const modalProps = {
+    title: 'Confirm',
+    description: `Are you sure you want to submit the Payment File: ${currMainFormData.filename}?`,
+    buttons: [
+      {
+        type: 'button',
+        label: 'Yes',
+        componentProps: {
+          color: 'success',
+          onClick: () => {
+            setIsModalOpen(false);
+            setShowConfirmationPage(true);
+          }
+        }
+      },
+      {
+        type: 'button',
+        label: 'No',
+        componentProps: {
+          color: 'error',
+          onClick: () => setIsModalOpen(false)
+        }
+      }
+    ]
+  };
+
   const formButtons = [
     {
       label: 'Add Transaction',
@@ -286,13 +290,28 @@ export default function CreatePaymentMain() {
       { label: 'Total Transaction Count', value: transactionRows.length },
       {
         label: 'Payment Currency',
-        value: applicantDetails.applicantAccountCurrency
+        value: currSubFormData.paymentCurrency
       },
       { label: 'Debit Type', value: debitType },
       { label: 'Transaction Date', value: transactionDate },
       { label: 'Value Date', value: valueDate },
       { label: 'Business Date', value: businessDate }
-    ]
+    ],
+    transactionRows,
+    currSubFormData,
+    resetStore
+  };
+
+  const confirmationPageProps = {
+    applicantDetails,
+    currSubFormData,
+    currMainFormData,
+    subFormDataList,
+    requesterComments,
+    setShowConfirmationPage,
+    setShowReviewPage,
+    setErrorInCreation,
+    transactionRows
   };
 
   return (
@@ -312,9 +331,10 @@ export default function CreatePaymentMain() {
           handleSubmit={handleSubFormSubmit}
           setSubFormVisible={setSubFormVisible}
           isEdit={editRowNum !== -1}
+          currSubFormData={currSubFormData}
         />
       ) : showConfirmationPage ? (
-        <ConfirmationPage />
+        <ConfirmationPage {...confirmationPageProps} />
       ) : showReviewPage ? (
         <ReviewPage {...reviewPageProps} />
       ) : (
@@ -325,7 +345,8 @@ export default function CreatePaymentMain() {
               setEditRowNum(-1);
               setSubFormVisible(true);
             }}
-            mainFileDetails={MAIN_FILE_DETAILS}
+            mainFileDetails={currMainFormData}
+            applicantDetails={applicantDetails}
             formButtons={formButtons}
           />
           <DataTable
@@ -334,7 +355,11 @@ export default function CreatePaymentMain() {
             columns={transactionColumns}
             emptyTableMessage="No transactions added"
           />
-          <SummaryForm onSubmit={submitTransactions} />
+          <SummaryForm
+            onSubmit={submitTransactions}
+            transactionRows={transactionRows}
+            requesterComments={requesterComments}
+          />
         </>
       )}
     </Box>

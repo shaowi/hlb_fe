@@ -1,12 +1,14 @@
 import { Box } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { useMemo } from 'react';
-import { useCreatePaymentStore } from './create_payment_store';
 
 const { TEXT } = FORM_TYPES;
 
-export default function SummaryForm({ onSubmit }) {
-  const { requesterComments, transactionRows } = useCreatePaymentStore();
+export default function SummaryForm({
+  onSubmit,
+  transactionRows,
+  requesterComments
+}) {
   const totalTransactionCount = transactionRows.length;
   const totalPaymentAmount = useMemo(() => {
     return transactionRows.reduce(

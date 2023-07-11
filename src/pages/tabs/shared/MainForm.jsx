@@ -8,13 +8,13 @@ import {
   RESIDENT_CODE
 } from 'constants.js';
 import { theme } from 'theme';
-import { useCreatePaymentStore } from './create_payment_store';
 
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE } = FORM_TYPES;
 
 export default function MainForm({
   handleSubmit,
   mainFileDetails,
+  applicantDetails,
   formButtons,
   disabled = false
 }) {
@@ -160,8 +160,6 @@ export default function MainForm({
       }
     ]
   };
-
-  const { applicantDetails } = useCreatePaymentStore();
 
   const {
     applicantName,
@@ -352,7 +350,6 @@ export default function MainForm({
             defaultValue: applicantAddress2,
             componentProps: {
               disabled,
-              required: true,
               name: 'applicantAddress2',
               label: 'Address 2',
               'data-testid': 'applicantAddress2',
@@ -365,7 +362,6 @@ export default function MainForm({
             defaultValue: applicantAddress3,
             componentProps: {
               disabled,
-              required: true,
               name: 'applicantAddress3',
               label: 'Address 3',
               'data-testid': 'applicantAddress3',

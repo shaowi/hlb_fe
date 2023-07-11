@@ -2,15 +2,18 @@ import FileOpenIcon from '@mui/icons-material/FileOpen';
 import ActionButton from 'components/datatable/ActionButton';
 import DataTable from 'components/datatable/index';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
-import { formatToCurrency } from 'services/helper';
-import SearchBox from './SearchBox';
 import { STATUSES } from 'constants.js';
-import { useState } from 'react';
-import PaymentFile from './PaymentFile';
-import { getFileDetails } from 'services/PaymentFileService';
 import { useRejectedPaymentStore } from 'pages/tabs/rejected_payment_main/rejected_payment_store';
+import { useEffect, useState } from 'react';
+import {
+  getFileDetails,
+  getRejectedPaymentFiles
+} from 'services/PaymentFileService';
+import { formatToCurrency } from 'services/helper';
+import PaymentFile from './PaymentFile';
+import SearchBox from './SearchBox';
 
-const { all, rejected, failed, pending } = STATUSES;
+const { all } = STATUSES;
 
 const viewFileToolTipText = 'View File';
 
@@ -58,66 +61,66 @@ export default function RejectedPaymentMain() {
       sortable: true
     }
   ];
-
-  const FETCHED_ROWS = [
-    {
-      action: (
-        <ToolTipWrapper title={viewFileToolTipText}>
-          <ActionButton onClick={() => setStoreData(0)}>
-            <FileOpenIcon />
-          </ActionButton>
-        </ToolTipWrapper>
-      ),
-      filename: 'OPFR202305150000021.csv',
-      debitType: 'Single Debit',
-      transactionCount: 2,
-      totalPaymentAmount: 19957.5,
-      transactionDate: '2023-04-15',
-      businessDate: '2023-05-15',
-      status: rejected
-    },
-    {
-      action: (
-        <ToolTipWrapper title={viewFileToolTipText}>
-          <ActionButton onClick={() => console.log('row 1 clicked')}>
-            <FileOpenIcon />
-          </ActionButton>
-        </ToolTipWrapper>
-      ),
-      filename: 'OPFR202305150000022.csv',
-      debitType: 'Multiple Debit',
-      transactionCount: 2,
-      totalPaymentAmount: 900.5,
-      transactionDate: '2023-05-15',
-      businessDate: '2023-06-15',
-      status: failed
-    },
-    {
-      action: (
-        <ToolTipWrapper title={viewFileToolTipText}>
-          <ActionButton onClick={() => console.log('row 2 clicked')}>
-            <FileOpenIcon />
-          </ActionButton>
-        </ToolTipWrapper>
-      ),
-      filename: 'OPFR202305150000023.csv',
-      debitType: 'Single Debit',
-      transactionCount: 2,
-      totalPaymentAmount: 800.5,
-      transactionDate: '2023-05-15',
-      businessDate: '2023-06-15',
-      status: pending
-    }
-  ];
-
-  const [rows, setRows] = useState(FETCHED_ROWS);
   const {
     currMainFormData,
     setCurrMainFormData,
-    setCurrSubFormData,
     setSubFormDataList,
     setApplicantDetails
   } = useRejectedPaymentStore();
+  const [files, setFiles] = useState([]);
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    async function setStoreData(id) {
+      try {
+        const [currMainFormData, applicantDetails, subFormDataList] =
+          await getFileDetails(rows[id].filename);
+        setApplicantDetails(applicantDetails);
+        setCurrMainFormData(currMainFormData);
+        setSubFormDataList(subFormDataList);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    const rows = [];
+    Object.entries(files).forEach(([key, value], index) => {
+      const { debitType, transactionDate, businessDate, status } = value[0];
+      rows.push({
+        debitType,
+        transactionCount: value.length,
+        totalPaymentAmount: value.reduce(
+          (acc, curr) => acc + curr.foreignPaymentForm.paymentAmount,
+          0
+        ),
+        transactionDate,
+        businessDate,
+        status: STATUSES[status],
+        filename: key,
+        action: (
+          <ToolTipWrapper title={viewFileToolTipText}>
+            <ActionButton onClick={() => setStoreData(index)}>
+              <FileOpenIcon />
+            </ActionButton>
+          </ToolTipWrapper>
+        )
+      });
+    });
+    setRows(rows);
+  }, [files, setApplicantDetails, setCurrMainFormData, setSubFormDataList]);
+
+  useEffect(() => {
+    async function fetchFiles() {
+      try {
+        const files = await getRejectedPaymentFiles();
+        setFiles(files);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchFiles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function filterTableRecords(values) {
     setRows(
@@ -144,19 +147,6 @@ export default function RejectedPaymentMain() {
         );
       })
     );
-  }
-
-  async function setStoreData(id) {
-    const [
-      currMainFormData,
-      currSubFormData,
-      applicantDetails,
-      subFormDataList
-    ] = await getFileDetails(id);
-    setApplicantDetails(applicantDetails);
-    setCurrMainFormData(currMainFormData);
-    setCurrSubFormData(currSubFormData);
-    setSubFormDataList(subFormDataList);
   }
 
   return currMainFormData ? (

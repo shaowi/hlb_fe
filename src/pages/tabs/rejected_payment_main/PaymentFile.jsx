@@ -6,9 +6,9 @@ import DataTable from 'components/datatable/index';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
 import { useEffect, useState } from 'react';
 import { formatToCurrency } from 'services/helper';
-import MainForm from '../create_payment_main/MainForm';
-import SubForm from '../create_payment_main/SubForm';
-import SummaryForm from '../create_payment_main/SummaryForm';
+import MainForm from '../shared/MainForm';
+import SubForm from '../shared/SubForm';
+import SummaryForm from '../shared/SummaryForm';
 import { useRejectedPaymentStore } from 'pages/tabs/rejected_payment_main/rejected_payment_store';
 
 const transactionColumns = [
@@ -69,12 +69,14 @@ export default function PaymentFile() {
   const [subFormVisible, setSubFormVisible] = useState(false);
   const [transactionRows, setTransactionRows] = useState([]);
   const {
+    applicantDetails,
     currMainFormData,
     subFormDataList,
     setSubFormDataList,
     setCurrSubFormData,
     resetCurrSubFormData,
     setApplicantDetails,
+    requesterComments,
     resetStore
   } = useRejectedPaymentStore();
 
@@ -93,14 +95,9 @@ export default function PaymentFile() {
       setEditRowNum(-1);
       return;
     }
-    // Add the last row of data list to the table
-    setTransactionRows([
-      ...transactionRows,
-      mapToRow(
-        transactionRows.length,
-        subFormDataList[subFormDataListLength - 1]
-      )
-    ]);
+    setTransactionRows(
+      subFormDataList.map((item, index) => mapToRow(index, item))
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subFormDataList]);
 
@@ -219,6 +216,7 @@ export default function PaymentFile() {
               setSubFormVisible(true);
             }}
             mainFileDetails={currMainFormData}
+            applicantDetails={applicantDetails}
             formButtons={formButtons}
           />
           <DataTable
@@ -227,8 +225,9 @@ export default function PaymentFile() {
             columns={transactionColumns}
           />
           <SummaryForm
-            transactionRows={transactionRows}
             onSubmit={submitTransactions}
+            transactionRows={transactionRows}
+            requesterComments={requesterComments}
           />
         </>
       )}

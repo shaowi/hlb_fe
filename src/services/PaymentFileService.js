@@ -1,25 +1,235 @@
+import { COUNTRY_CODE_TO_LABEL } from 'constants';
 import {
-  MAIN_FILE_DETAILS,
-  APPLICANT_DETAILS
-} from 'pages/tabs/form_templates';
-import { INITIAL_PAYMENT_SUB_FORM_STATE } from './../pages/tabs/create_payment_main/create_payment_store';
-import { postRequest } from './HttpRequests';
-import { CREATE_ONLINE_CBFT_URL } from 'endpoints';
+  CREATE_ONLINE_CBFT_URL,
+  ONLINE_CBFT_URL,
+  GET_ALL_ONLINE_CBFT_URL
+} from 'endpoints';
+import { getRequest, postRequest } from './HttpRequests';
 
-// TODO: Remove this mock data and implement the actual API call
-export async function getFileDetails(id) {
-  const mainFileData = new Promise((resolve, _) => resolve(MAIN_FILE_DETAILS));
-  const applicantData = new Promise((resolve, _) => resolve(APPLICANT_DETAILS));
-  const subFormData = new Promise((resolve, _) =>
-    resolve(INITIAL_PAYMENT_SUB_FORM_STATE)
-  );
-  const subFormDataList = new Promise((resolve, _) => resolve([]));
-  return Promise.all([
-    mainFileData,
-    applicantData,
-    subFormData,
-    subFormDataList
-  ]);
+export async function getFileDetails(filename) {
+  const response = await getRequest(ONLINE_CBFT_URL, { filename });
+  if (response.status !== 200) {
+    return new Error('Error in fetching file details');
+  }
+  const transactionList = response.data;
+  if (transactionList.length === 0) {
+    return new Error('No transactions found');
+  }
+  const mainFileData = mapToMainFileData(transactionList);
+  const applicantData = mapToApplicantData(transactionList);
+  const subFormDataList = mapToSubFormDataList(applicantData, transactionList);
+
+  console.log('mainFileData', mainFileData);
+  console.log('applicantData', applicantData);
+  console.log('subFormDataList', subFormDataList);
+
+  return [mainFileData, applicantData, subFormDataList];
+}
+
+function mapToMainFileData(transactionList) {
+  const {
+    filename,
+    debitType,
+    channelTransactionReference,
+    transactionType,
+    requestChannel,
+    transactionDate,
+    valueDate,
+    businessDate,
+    recipientReference,
+    otherPaymentDetails
+  } = transactionList[0];
+  return {
+    filename,
+    debitType,
+    channelTransactionReference,
+    transactionType,
+    requestChannel,
+    transactionDate,
+    valueDate,
+    businessDate,
+    recipientReference,
+    otherPaymentDetails
+  };
+}
+
+function mapToApplicantData(transactionList) {
+  const applicant = transactionList[0].applicant;
+  const {
+    id,
+    idType,
+    name,
+    accountNumber,
+    isResident,
+    bankBic,
+    addresses,
+    accountType,
+    accountCurrency,
+    accountCifId,
+    branchCode,
+    postalCode,
+    countryCode,
+    phoneNumber
+  } = applicant;
+  const [applicantAddress1, applicantAddress2, applicantAddress3] =
+    addresses.split(',');
+
+  return {
+    applicantName: name,
+    applicantAccountNo: accountNumber,
+    applicantAccountType: accountType,
+    applicantAccountCurrency: {
+      label: accountCurrency,
+      value: accountCurrency
+    },
+    applicantIdType: idType,
+    applicantId: id,
+    applicantAccountBranchCode: branchCode,
+    applicantBankBic: bankBic,
+    applicantResidentCode: isResident ? 'resident' : 'nonResident',
+    applicantAccountCifId: accountCifId,
+    applicantPhone: phoneNumber,
+    applicantPostalCode: postalCode,
+    applicantAddress1,
+    applicantAddress2,
+    applicantAddress3,
+    applicantCountryCode: {
+      label: COUNTRY_CODE_TO_LABEL[countryCode],
+      value: countryCode
+    }
+  };
+}
+
+function mapToSubFormDataList(applicantDetails, transactionList) {
+  return transactionList.map((transaction) => {
+    const {
+      beneficiary,
+      processingMode,
+      transactionType,
+      sendersCorrespondent,
+      receiversCorrespondent,
+      channelTransactionReference,
+      recipientReference,
+      purposeOfPayment,
+      remittanceInfo,
+      additionalRemittanceInfo,
+      senderToReceiverInfo,
+      additionalSenderToReceiverInfo,
+      otherPaymentDetails,
+      foreignPaymentForm,
+      debitType,
+      creditMidRate,
+      debitMidRate,
+      chargeBearer,
+      commissionInLieuOfExchange,
+      commissionHandle
+    } = transaction;
+    const subFileDetails = { debitType, transactionType, processingMode };
+    const beneficiaryDetails = mapToBeneficiaryData(beneficiary);
+    const foreignPaymentDetails = mapToForeignPaymentData(foreignPaymentForm);
+    const chargesDetail = {
+      creditMidRate,
+      debitMidRate,
+      chargeBearer,
+      commissionInLieuOfExchange,
+      commissionHandle
+    };
+    const correspondentBankDetails = {
+      sendersCorrespondent,
+      receiversCorrespondent
+    };
+    const transactionDetails = {
+      channelTransactionReference,
+      recipientReference,
+      purposeCode: purposeOfPayment,
+      remittanceInfo,
+      additionalRemittanceInfo,
+      senderToReceiverInfo,
+      additionalSenderToReceiverInfo,
+      otherPaymentDetails,
+      additionalRemarks: ''
+    };
+    return {
+      ...subFileDetails,
+      ...applicantDetails,
+      ...beneficiaryDetails,
+      ...foreignPaymentDetails,
+      ...chargesDetail,
+      ...correspondentBankDetails,
+      ...transactionDetails
+    };
+  });
+}
+
+function mapToBeneficiaryData(beneficiary) {
+  const {
+    id,
+    idType,
+    name,
+    accountNumber,
+    isResident,
+    bankBic,
+    addresses,
+    bankAddresses,
+    bankName,
+    bankCountryCode,
+    countryCode
+  } = beneficiary;
+  const [beneficiaryAddress1, beneficiaryAddress2, beneficiaryAddress3] =
+    addresses.split(',');
+  const [
+    beneficiaryBankAddress1,
+    beneficiaryBankAddress2,
+    beneficiaryBankAddress3
+  ] = bankAddresses.split(',');
+  return {
+    beneficiaryName: name,
+    beneficiaryAccountNo: accountNumber,
+    beneficiaryIdType: idType,
+    beneficiaryId: id,
+    beneficiaryResidentCode: isResident ? 'resident' : 'non-resident',
+    beneficiaryAccountBic: { label: bankBic, value: bankBic },
+    beneficiaryBankName: bankName,
+    beneficiaryBankCountryCode: bankCountryCode,
+    beneficiaryBankAddress1,
+    beneficiaryBankAddress2,
+    beneficiaryBankAddress3,
+    beneficiaryAddress1,
+    beneficiaryAddress2,
+    beneficiaryAddress3,
+    beneficiaryCountryCode: {
+      label: COUNTRY_CODE_TO_LABEL[countryCode],
+      value: countryCode
+    }
+  };
+}
+
+function mapToForeignPaymentData(form) {
+  const {
+    remittanceCurrency,
+    remittanceAmount,
+    paymentCurrency,
+    paymentAmount,
+    localEquivalentAmount,
+    fxContractReferenceNo,
+    exchangeRate,
+    creditFxRate,
+    debitFxRate
+  } = form;
+  return {
+    remittanceCurrency: {
+      label: remittanceCurrency,
+      value: remittanceCurrency
+    },
+    remittanceAmount,
+    fxContractReferenceNo,
+    exchangeRate,
+    creditFxRate,
+    debitFxRate,
+    paymentCurrency,
+    paymentAmount,
+    localEquivalentAmount
+  };
 }
 
 export function createPaymentFile(payload) {
@@ -55,7 +265,7 @@ export function mapToApplicantPayload(applicantDetails) {
       bankBic: applicantBankBic,
       addresses,
       accountType: applicantAccountType,
-      accountCurrency: applicantAccountCurrency,
+      accountCurrency: applicantAccountCurrency.value,
       accountCifId: applicantAccountCifId,
       branchCode: applicantAccountBranchCode,
       postalCode: applicantPostalCode,
@@ -119,7 +329,7 @@ export function mapToForeignPaymentPayload(subFormData) {
       paymentCurrency,
       paymentAmount,
       localEquivalentAmount,
-      fxRefNumber: fxContractReferenceNo,
+      fxContractReferenceNo,
       exchangeRate,
       creditFxRate,
       debitFxRate
@@ -129,18 +339,9 @@ export function mapToForeignPaymentPayload(subFormData) {
 
 export function mapToPaymentPayload(mainFormData, subFormData) {
   const {
-    transactionType,
-    requestChannel,
-    transactionDate,
-    valueDate,
-    businessDate,
-    recipientReference,
-    otherPaymentDetails
-  } = mainFormData;
-  const {
+    processingMode,
     sendersCorrespondent,
     receiversCorrespondent,
-    channelTransactionReference,
     purposeCode,
     remittanceInfo,
     additionalRemittanceInfo,
@@ -153,30 +354,40 @@ export function mapToPaymentPayload(mainFormData, subFormData) {
     commissionInLieuOfExchange,
     commissionHandle
   } = subFormData;
-  const mainFormPayload = {
-    transactionDate,
-    transactionType,
-    requestChannel,
-    valueDate,
-    businessDate,
-    recipientRef: recipientReference,
-    otherPaymentDetails
-  };
+  const { channelTransactionReference } = mainFormData;
   const subFormPayload = {
+    processingMode,
     sendersCorrespondent,
     receiversCorrespondent,
-    channelTransactionRef: channelTransactionReference,
+    channelTransactionReference,
     purposeOfPayment: purposeCode,
     remittanceInfo,
-    addRemittanceInfo: additionalRemittanceInfo,
+    additionalRemittanceInfo,
     senderToReceiverInfo,
-    addSenderToReceiverInfo: additionalSenderToReceiverInfo,
+    additionalSenderToReceiverInfo,
     requesterComments,
     creditMidRate,
     debitMidRate,
     chargeBearer,
-    commissionExchange: commissionInLieuOfExchange,
+    commissionInLieuOfExchange,
     commissionHandle
   };
-  return { ...mainFormPayload, ...subFormPayload };
+  return { ...mainFormData, ...subFormPayload };
+}
+
+export async function getRejectedPaymentFiles() {
+  const response = await getRequest(GET_ALL_ONLINE_CBFT_URL);
+  if (response.status !== 200) {
+    return new Error('Error in fetching rejected payments');
+  }
+  const transactions = response.data;
+  const files = {};
+  transactions.forEach((transaction) => {
+    const { filename } = transaction;
+    if (!files[filename]) {
+      files[filename] = [];
+    }
+    files[filename].push(transaction);
+  });
+  return files;
 }

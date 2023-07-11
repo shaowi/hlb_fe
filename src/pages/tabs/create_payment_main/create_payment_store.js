@@ -25,7 +25,7 @@ export const useCreatePaymentStore = create((set) => ({
   applicantDetails: APPLICANT_DETAILS,
   currMainFormData: MAIN_FILE_DETAILS,
   currSubFormData: INITIAL_PAYMENT_SUB_FORM_STATE,
-  subFormDataList: [],
+  subFormDataList: [INITIAL_PAYMENT_SUB_FORM_STATE],
   transactionRows: [],
   requesterComments: TRANSACTION_SUMMARY.requesterComments,
   showConfirmationPage: false,

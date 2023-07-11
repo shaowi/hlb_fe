@@ -11,12 +11,15 @@ import {
 } from 'constants.js';
 import { convertToLocalCurrency } from 'services/helper';
 import { theme } from 'theme';
-import { useCreatePaymentStore } from './create_payment_store';
 
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, LABEL } = FORM_TYPES;
 
-export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
-  const { currSubFormData } = useCreatePaymentStore();
+export default function SubForm({
+  isEdit,
+  handleSubmit,
+  setSubFormVisible,
+  currSubFormData
+}) {
   const debitFeeLabel = `Debit Fee in ${currSubFormData.paymentCurrency}`;
   const standardFeeLabel = 'Standard Fee in SGD';
 
@@ -129,14 +132,15 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
         {
           fields: [
             {
-              type: TEXT,
+              type: SELECT_AUTOCOMPLETE,
               defaultValue: applicantAccountCurrency,
               componentProps: {
                 disabled,
                 required: true,
                 name: 'applicantAccountCurrency',
                 label: 'Account Currency',
-                'data-testid': 'applicantAccountCurrency'
+                'data-testid': 'applicantAccountCurrency',
+                options: REMITTANCE_CURRENCY
               }
             },
             {
@@ -661,7 +665,7 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
     debitMidRate,
     chargeBearer,
     commissionInLieuOfExchange,
-    commissionHandling
+    commissionHandle
   } = currSubFormData;
   const chargesFormAttributes = {
     title: {
@@ -745,21 +749,21 @@ export default function SubForm({ isEdit, handleSubmit, setSubFormVisible }) {
           },
           {
             type: TEXT,
-            defaultValue: commissionHandling,
+            defaultValue: commissionHandle,
             componentProps: {
-              name: 'commissionHandling',
+              name: 'commissionHandle',
               label: debitFeeLabel,
-              'data-testid': 'commissionHandling'
+              'data-testid': 'commissionHandle'
             }
           },
           {
             type: TEXT,
-            defaultValue: convertToLocalCurrency(commissionHandling),
+            defaultValue: convertToLocalCurrency(commissionHandle),
             componentProps: {
               disabled: true,
-              name: 'commissionHandlingStandard',
+              name: 'commissionHandleStandard',
               label: standardFeeLabel,
-              'data-testid': 'commissionHandlingStandard'
+              'data-testid': 'commissionHandleStandard'
             }
           }
         ]

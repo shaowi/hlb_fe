@@ -2,12 +2,16 @@ import { Alert, Box, Grid, Typography } from '@mui/material';
 import DataTable from 'components/datatable/index';
 import FormButton from 'components/forms_ui/buttons/FormButton';
 import { formatToCurrency } from 'services/helper';
-import { useCreatePaymentStore } from './create_payment_store';
 
 export default function ReviewPage({ ...props }) {
-  const { title, subTitle, body } = props;
-  const { transactionRows, currSubFormData, resetStore } =
-    useCreatePaymentStore();
+  const {
+    title,
+    subTitle,
+    body,
+    transactionRows,
+    currSubFormData,
+    resetStore
+  } = props;
   const totalTransactionCount = transactionRows.length;
   const totalPaymentAmount = transactionRows.reduce(
     (acc, curr) => acc + curr.remittanceAmount,
