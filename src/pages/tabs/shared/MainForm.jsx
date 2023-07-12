@@ -13,10 +13,11 @@ const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE } = FORM_TYPES;
 
 export default function MainForm({
   handleSubmit,
-  mainFileDetails,
+  currMainFormData,
   applicantDetails,
   formButtons,
-  disabled = false
+  disabled = false,
+  formikRef
 }) {
   const {
     filename,
@@ -29,7 +30,7 @@ export default function MainForm({
     businessDate,
     recipientReference,
     otherPaymentDetails
-  } = mainFileDetails;
+  } = currMainFormData;
 
   const fileFormAttributes = {
     rows: [
@@ -400,7 +401,11 @@ export default function MainForm({
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ p: 3 }}>
-        <FormBuilder onSubmit={handleSubmit} formAttributes={formAttributes} />
+        <FormBuilder
+          onSubmit={handleSubmit}
+          formAttributes={formAttributes}
+          formikRef={formikRef}
+        />
       </Box>
     </ThemeProvider>
   );

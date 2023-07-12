@@ -3,11 +3,12 @@ import DataTable from 'components/datatable';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { useMemo } from 'react';
 import {
-  createPaymentFile,
   mapToApplicantPayload,
   mapToBeneficiaryPayload,
   mapToPaymentPayload,
-  mapToForeignPaymentPayload
+  mapToForeignPaymentPayload,
+  createPaymentTransaction,
+  updatePaymentTransaction
 } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
 
@@ -16,14 +17,14 @@ const { TEXT } = FORM_TYPES;
 export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
   const {
     applicantDetails,
-    currSubFormData,
     currMainFormData,
     subFormDataList,
     requesterComments,
     setShowConfirmationPage,
+    transactionRows,
+    setErrorOnConfirm,
     setShowReviewPage,
-    setErrorInCreation,
-    transactionRows
+    isCreate
   } = props;
   const totalTransactionCount = transactionRows.length;
   const totalPaymentAmount = useMemo(() => {
@@ -57,7 +58,7 @@ export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
     }
   ];
 
-  const { processingMode, paymentCurrency } = currSubFormData;
+  const { processingMode, paymentCurrency } = subFormDataList[0];
   const summaryRow = [
     {
       processingMode,
@@ -111,17 +112,20 @@ export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
   };
 
   async function handleConfirm() {
-    const applicantPayload = mapToApplicantPayload(applicantDetails);
-    handleCreatePaymentFiles(
-      applicantPayload,
-      currMainFormData,
-      subFormDataList
-    )
+    const applicantId = isCreate ? null : applicantDetails.applicantDbId;
+    const applicantPayload = mapToApplicantPayload(
+      applicantDetails,
+      applicantId
+    );
+    savePaymentFiles(applicantPayload, currMainFormData, subFormDataList)
       .then((values) => {
-        setErrorInCreation(values.some(({ status }) => status !== 201));
+        const expectedStatusCode = isCreate ? 201 : 200;
+        setErrorOnConfirm(
+          values.some(({ status }) => status !== expectedStatusCode)
+        );
       })
       .catch(() => {
-        setErrorInCreation(true);
+        setErrorOnConfirm(true);
       })
       .finally(() => {
         setShowConfirmationPage(false);
@@ -129,14 +133,22 @@ export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
       });
   }
 
-  async function handleCreatePaymentFiles(
+  async function savePaymentFiles(
     applicantPayload,
     currMainFormData,
     subFormDataList
   ) {
     const resolvedPromisesArray = subFormDataList.map((subFormData) => {
-      const beneficiaryPayload = mapToBeneficiaryPayload(subFormData);
-      const foreignPaymentPayload = mapToForeignPaymentPayload(subFormData);
+      const beneficiaryId = isCreate ? null : subFormData.beneficiaryDbId;
+      const beneficiaryPayload = mapToBeneficiaryPayload(
+        subFormData,
+        beneficiaryId
+      );
+      const paymentId = isCreate ? null : subFormData.paymentId;
+      const foreignPaymentPayload = mapToForeignPaymentPayload(
+        subFormData,
+        paymentId
+      );
       const paymentPayload = mapToPaymentPayload(currMainFormData, subFormData);
       const payload = {
         ...applicantPayload,
@@ -145,7 +157,9 @@ export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
         ...paymentPayload,
         requesterComments
       };
-      return createPaymentFile(payload);
+      return isCreate
+        ? createPaymentTransaction(payload)
+        : updatePaymentTransaction(payload);
     });
     return Promise.all(resolvedPromisesArray);
   }

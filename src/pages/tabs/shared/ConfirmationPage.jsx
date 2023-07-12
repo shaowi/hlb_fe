@@ -1,64 +1,13 @@
 import { Box } from '@mui/material';
 import DataTable from 'components/datatable';
-import { formatToCurrency } from 'services/helper';
 import ConfirmationSummaryForm from './ConfirmationSummaryForm';
 import MainForm from './MainForm';
-
-const transactionColumns = [
-  {
-    id: 'channelTransactionReference',
-    label: 'Channel Transaction Reference',
-    minWidth: 170,
-    sortable: true
-  },
-  {
-    id: 'processingMode',
-    label: 'Processing Mode',
-    minWidth: 100,
-    sortable: true
-  },
-  {
-    id: 'beneficiaryName',
-    label: 'Beneficiary Name',
-    minWidth: 170,
-    sortable: true
-  },
-  {
-    id: 'beneficiaryAccountNo',
-    label: 'Beneficiary Account Number',
-    minWidth: 120,
-    sortable: true
-  },
-  {
-    id: 'beneficiaryBankName',
-    label: 'Beneficiary Bank Name',
-    minWidth: 170,
-    sortable: true
-  },
-  {
-    id: 'beneficiaryAccountBic',
-    label: 'Beneficiary Account Bic',
-    minWidth: 170,
-    sortable: true
-  },
-  {
-    id: 'remittanceAmount',
-    label: 'Remittance Amount',
-    minWidth: 120,
-    sortable: true,
-    format: (value) => formatToCurrency(value)
-  },
-  {
-    id: 'fxContractReferenceNo',
-    label: 'FX Contract Reference Number',
-    minWidth: 170,
-    sortable: true
-  }
-];
+import { transactionColumns } from './payment_store';
 
 export default function ConfirmationPage({ ...props }) {
-  const { currMainFormData, subFormDataList } = props;
-  const transactionRows = subFormDataList.map(mapToRow);
+  const { subFormDataList } = props;
+  const actionlessTransactionRows = subFormDataList.map(mapToRow);
+  const columns = transactionColumns.slice(1);
 
   function mapToRow({
     channelTransactionReference,
@@ -84,13 +33,16 @@ export default function ConfirmationPage({ ...props }) {
 
   return (
     <Box spacing={2} xs={{ p: 3, mb: 5 }}>
-      <MainForm mainFileDetails={currMainFormData} disabled={true} />
+      <MainForm disabled={true} {...props} />
       <DataTable
         title="Transaction Details"
-        rows={transactionRows}
-        columns={transactionColumns}
+        rows={actionlessTransactionRows}
+        columns={columns}
       />
-      <ConfirmationSummaryForm transactionRows={transactionRows} />
+      <ConfirmationSummaryForm
+        transactionRows={actionlessTransactionRows}
+        {...props}
+      />
     </Box>
   );
 }

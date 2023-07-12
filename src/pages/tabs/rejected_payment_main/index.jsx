@@ -10,7 +10,7 @@ import {
   getRejectedPaymentFiles
 } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
-import PaymentFile from './PaymentFile';
+import PaymentFile from './../shared/PaymentFile';
 import SearchBox from './SearchBox';
 
 const { all } = STATUSES;
@@ -61,24 +61,32 @@ export default function RejectedPaymentMain() {
       sortable: true
     }
   ];
+  const store = useRejectedPaymentStore();
   const {
-    currMainFormData,
     setCurrMainFormData,
     setSubFormDataList,
-    setApplicantDetails
-  } = useRejectedPaymentStore();
+    setApplicantDetails,
+    setRequesterComments
+  } = store;
   const [initFiles, setInitFiles] = useState({});
   const [files, setFiles] = useState({});
   const [rows, setRows] = useState([]);
+  const [showPaymentFile, setShowPaymentFile] = useState(false);
 
   useEffect(() => {
     async function setStoreData(id) {
       try {
-        const [currMainFormData, applicantDetails, subFormDataList] =
-          await getFileDetails(rows[id].filename);
+        const [
+          currMainFormData,
+          applicantDetails,
+          subFormDataList,
+          requesterComments
+        ] = await getFileDetails(rows[id].filename);
         setApplicantDetails(applicantDetails);
         setCurrMainFormData(currMainFormData);
         setSubFormDataList(subFormDataList);
+        setRequesterComments(requesterComments);
+        setShowPaymentFile(true);
       } catch (error) {
         console.log(error);
       }
@@ -108,7 +116,13 @@ export default function RejectedPaymentMain() {
       });
     });
     setRows(rows);
-  }, [files, setApplicantDetails, setCurrMainFormData, setSubFormDataList]);
+  }, [
+    files,
+    setApplicantDetails,
+    setCurrMainFormData,
+    setRequesterComments,
+    setSubFormDataList
+  ]);
 
   useEffect(() => {
     async function fetchFiles() {
@@ -154,8 +168,12 @@ export default function RejectedPaymentMain() {
     setFiles(filteredFiles);
   }
 
-  return currMainFormData ? (
-    <PaymentFile />
+  return showPaymentFile ? (
+    <PaymentFile
+      storeProps={store}
+      isCreate={false}
+      setShowPaymentFile={setShowPaymentFile}
+    />
   ) : (
     <>
       <SearchBox onSearch={filterTableRecords} />

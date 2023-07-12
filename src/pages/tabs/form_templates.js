@@ -2,6 +2,7 @@ import { currentDate } from 'constants.js';
 
 // TODO: Clear data later (Mock data used for testing only)
 export const APPLICANT_DETAILS = {
+  applicantDbId: -1, // id used to identify the file to be updated in database
   applicantName: 'John Doe',
   applicantAccountNo: '9000000001',
   applicantAccountType: 'Current',
@@ -27,6 +28,7 @@ export const SUB_FILE_DETAILS = {
 };
 
 export const MAIN_FILE_DETAILS = {
+  id: -1, // id used to identify the file to be updated in database
   filename: `OPFR${currentDate.replace(/-/g, '')}0000001.csv`,
   debitType: 'single',
   channelTransactionReference: '2317333701OPZ00100',
@@ -40,6 +42,7 @@ export const MAIN_FILE_DETAILS = {
 };
 
 export const BENEFICIARY_DETAILS = {
+  beneficiaryDbId: -1, // id used to identify the file to be updated in database
   beneficiaryName: 'Khanh Nguyen',
   beneficiaryAccountNo: '1234567890',
   beneficiaryIdType: 'Passport',
@@ -58,6 +61,7 @@ export const BENEFICIARY_DETAILS = {
 };
 
 export const PAYMENT_DETAILS = {
+  paymentId: -1, // id used to identify the file to be updated in database
   remittanceCurrency: { label: 'AUD', value: 'AUD' },
   remittanceAmount: 500,
   fxContractReferenceNo: 'fxContractReferenceNo',

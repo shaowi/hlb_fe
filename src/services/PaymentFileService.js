@@ -1,6 +1,7 @@
 import { COUNTRY_CODE_TO_LABEL } from 'constants';
 import {
   CREATE_ONLINE_CBFT_URL,
+  UPDATE_ONLINE_CBFT_URL,
   ONLINE_CBFT_URL,
   GET_ALL_ONLINE_CBFT_URL
 } from 'endpoints';
@@ -15,6 +16,7 @@ export async function getFileDetails(filename) {
   if (transactionList.length === 0) {
     return new Error('No transactions found');
   }
+  console.log('transactionList', transactionList);
   const mainFileData = mapToMainFileData(transactionList);
   const applicantData = mapToApplicantData(transactionList);
   const subFormDataList = mapToSubFormDataList(applicantData, transactionList);
@@ -23,11 +25,17 @@ export async function getFileDetails(filename) {
   console.log('applicantData', applicantData);
   console.log('subFormDataList', subFormDataList);
 
-  return [mainFileData, applicantData, subFormDataList];
+  return [
+    mainFileData,
+    applicantData,
+    subFormDataList,
+    transactionList[0].requesterComments
+  ];
 }
 
 function mapToMainFileData(transactionList) {
   const {
+    id,
     filename,
     debitType,
     channelTransactionReference,
@@ -40,6 +48,7 @@ function mapToMainFileData(transactionList) {
     otherPaymentDetails
   } = transactionList[0];
   return {
+    id,
     filename,
     debitType,
     channelTransactionReference,
@@ -75,6 +84,7 @@ function mapToApplicantData(transactionList) {
     addresses.split(',');
 
   return {
+    id,
     applicantName: name,
     applicantAccountNo: accountNumber,
     applicantAccountType: accountType,
@@ -183,6 +193,7 @@ function mapToBeneficiaryData(beneficiary) {
     beneficiaryBankAddress3
   ] = bankAddresses.split(',');
   return {
+    id,
     beneficiaryName: name,
     beneficiaryAccountNo: accountNumber,
     beneficiaryIdType: idType,
@@ -206,6 +217,7 @@ function mapToBeneficiaryData(beneficiary) {
 
 function mapToForeignPaymentData(form) {
   const {
+    id,
     remittanceCurrency,
     remittanceAmount,
     paymentCurrency,
@@ -217,6 +229,7 @@ function mapToForeignPaymentData(form) {
     debitFxRate
   } = form;
   return {
+    id,
     remittanceCurrency: {
       label: remittanceCurrency,
       value: remittanceCurrency
@@ -232,11 +245,15 @@ function mapToForeignPaymentData(form) {
   };
 }
 
-export function createPaymentFile(payload) {
+export function createPaymentTransaction(payload) {
   return postRequest(CREATE_ONLINE_CBFT_URL, payload);
 }
 
-export function mapToApplicantPayload(applicantDetails) {
+export function updatePaymentTransaction(payload) {
+  return postRequest(UPDATE_ONLINE_CBFT_URL, payload);
+}
+
+export function mapToApplicantPayload(applicantDetails, id = null) {
   const {
     applicantName,
     applicantAccountNo,
@@ -258,6 +275,7 @@ export function mapToApplicantPayload(applicantDetails) {
 
   return {
     applicant: {
+      id,
       idType: applicantIdType,
       name: applicantName,
       accountNumber: applicantAccountNo,
@@ -275,7 +293,7 @@ export function mapToApplicantPayload(applicantDetails) {
   };
 }
 
-export function mapToBeneficiaryPayload(subFormData) {
+export function mapToBeneficiaryPayload(subFormData, id = null) {
   const {
     beneficiaryName,
     beneficiaryAccountNo,
@@ -296,6 +314,7 @@ export function mapToBeneficiaryPayload(subFormData) {
   const bankAddresses = `${beneficiaryBankAddress1},${beneficiaryBankAddress2},${beneficiaryBankAddress3}`;
   return {
     beneficiary: {
+      id,
       idType: beneficiaryIdType,
       name: beneficiaryName,
       accountNumber: beneficiaryAccountNo,
@@ -310,7 +329,7 @@ export function mapToBeneficiaryPayload(subFormData) {
   };
 }
 
-export function mapToForeignPaymentPayload(subFormData) {
+export function mapToForeignPaymentPayload(subFormData, id = null) {
   const {
     remittanceCurrency,
     remittanceAmount,
@@ -324,6 +343,7 @@ export function mapToForeignPaymentPayload(subFormData) {
   } = subFormData;
   return {
     foreignPaymentForm: {
+      id,
       remittanceCurrency: remittanceCurrency.value,
       remittanceAmount,
       paymentCurrency,
@@ -390,4 +410,72 @@ export async function getRejectedPaymentFiles() {
     files[filename].push(transaction);
   });
   return files;
+}
+
+export function mapToApplicantDetails(curApplicantDetails, obj) {
+  const {
+    applicantName,
+    applicantAccountNo,
+    applicantAccountType,
+    applicantAccountCurrency,
+    applicantIdType,
+    applicantId,
+    applicantAccountBranchCode,
+    applicantBankBic,
+    applicantResidentCode,
+    applicantAccountCifId,
+    applicantPhone,
+    applicantPostalCode,
+    applicantAddress1,
+    applicantAddress2,
+    applicantAddress3,
+    applicantCountryCode
+  } = obj;
+  return {
+    id: curApplicantDetails.id,
+    applicantName,
+    applicantAccountNo,
+    applicantAccountType,
+    applicantAccountCurrency,
+    applicantIdType,
+    applicantId,
+    applicantAccountBranchCode,
+    applicantBankBic,
+    applicantResidentCode,
+    applicantAccountCifId,
+    applicantPhone,
+    applicantPostalCode,
+    applicantAddress1,
+    applicantAddress2,
+    applicantAddress3,
+    applicantCountryCode
+  };
+}
+
+export function mapToMainFileDetails(curMainFileDetails, obj) {
+  const {
+    filename,
+    debitType,
+    channelTransactionReference,
+    transactionType,
+    requestChannel,
+    transactionDate,
+    valueDate,
+    businessDate,
+    recipientReference,
+    otherPaymentDetails
+  } = obj;
+  return {
+    id: curMainFileDetails.id,
+    filename,
+    debitType,
+    channelTransactionReference,
+    transactionType,
+    requestChannel,
+    transactionDate,
+    valueDate,
+    businessDate,
+    recipientReference,
+    otherPaymentDetails
+  };
 }

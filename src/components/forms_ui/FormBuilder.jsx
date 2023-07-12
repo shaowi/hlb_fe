@@ -42,7 +42,12 @@ export const FORM_TYPES = {
 
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE, LABEL } = FORM_TYPES;
 
-export default function FormBuilder({ onSubmit, formAttributes, id = -1 }) {
+export default function FormBuilder({
+  onSubmit,
+  formAttributes,
+  id = -1,
+  formikRef
+}) {
   function createInitialFormState(data) {
     const initialFormState = {};
     data.sections.forEach((section) => {
@@ -103,6 +108,7 @@ export default function FormBuilder({ onSubmit, formAttributes, id = -1 }) {
       validationOnChange={false}
       validateOnBlur={false}
       onSubmit={onSubmit}
+      innerRef={formikRef}
     >
       {({ setFieldValue }) => {
         return (

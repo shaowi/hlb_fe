@@ -1,45 +1,15 @@
-import { create } from 'zustand';
-import {
-  APPLICANT_DETAILS,
-  BENEFICIARY_DETAILS,
-  CHARGES_DETAILS,
-  CORRESPONDENT_BANK_DETAILS,
-  PAYMENT_DETAILS,
-  SUB_FILE_DETAILS,
-  TRANSACTION_DETAILS
-} from '../form_templates';
+import { createPaymentStore } from '../shared/payment_store';
 
-const INITIAL_PAYMENT_SUB_FORM_STATE = {
-  ...SUB_FILE_DETAILS,
-  ...APPLICANT_DETAILS,
-  ...BENEFICIARY_DETAILS,
-  ...PAYMENT_DETAILS,
-  ...CHARGES_DETAILS,
-  ...CORRESPONDENT_BANK_DETAILS,
-  ...TRANSACTION_DETAILS
-};
-
-export const useRejectedPaymentStore = create((set) => ({
+const initialStoreData = {
   applicantDetails: null,
   currMainFormData: null,
   currSubFormData: null,
   subFormDataList: [],
+  transactionRows: [],
   requesterComments: '',
-  setApplicantDetails: (applicantDetails) =>
-    set(() => ({ applicantDetails: applicantDetails })),
-  setCurrMainFormData: (currMainFormData) =>
-    set(() => ({ currMainFormData: currMainFormData })),
-  setCurrSubFormData: (currSubFormData) =>
-    set(() => ({ currSubFormData: currSubFormData })),
-  resetCurrSubFormData: () =>
-    set(() => ({ currSubFormData: INITIAL_PAYMENT_SUB_FORM_STATE })),
-  setSubFormDataList: (subFormDataList) =>
-    set(() => ({ subFormDataList: subFormDataList })),
-  resetStore: () =>
-    set(() => ({
-      currMainFormData: null,
-      currSubFormData: null,
-      applicantDetails: null,
-      subFormDataList: []
-    }))
-}));
+  showConfirmationPage: false,
+  showReviewPage: false,
+  errorOnConfirm: false
+};
+
+export const useRejectedPaymentStore = createPaymentStore(initialStoreData);
