@@ -66,12 +66,10 @@ export default function DataTable({
   );
 
   const handleChangePage = (event, newPage) => {
-    console.log('newPage', newPage);
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    console.log('event.target.value', event.target.value);
     setRowsPerPage(+event.target.value);
     setPage(0);
   };

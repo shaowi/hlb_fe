@@ -220,8 +220,7 @@ export default function SubForm({
                 disabled,
                 name: 'applicantPhone',
                 label: 'Phone',
-                'data-testid': 'applicantPhone',
-                type: 'number'
+                'data-testid': 'applicantPhone'
               }
             },
             {
@@ -256,7 +255,6 @@ export default function SubForm({
               defaultValue: applicantAddress2,
               componentProps: {
                 disabled,
-                required: true,
                 name: 'applicantAddress2',
                 label: 'Address 2',
                 'data-testid': 'applicantAddress2',
@@ -269,7 +267,6 @@ export default function SubForm({
               defaultValue: applicantAddress3,
               componentProps: {
                 disabled,
-                required: true,
                 name: 'applicantAddress3',
                 label: 'Address 3',
                 'data-testid': 'applicantAddress3',

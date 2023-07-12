@@ -187,7 +187,7 @@ function mapToBeneficiaryData(beneficiary) {
     beneficiaryAccountNo: accountNumber,
     beneficiaryIdType: idType,
     beneficiaryId: id,
-    beneficiaryResidentCode: isResident ? 'resident' : 'non-resident',
+    beneficiaryResidentCode: isResident ? 'resident' : 'nonResident',
     beneficiaryAccountBic: { label: bankBic, value: bankBic },
     beneficiaryBankName: bankName,
     beneficiaryBankCountryCode: bankCountryCode,

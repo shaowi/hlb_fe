@@ -67,7 +67,8 @@ export default function RejectedPaymentMain() {
     setSubFormDataList,
     setApplicantDetails
   } = useRejectedPaymentStore();
-  const [files, setFiles] = useState([]);
+  const [initFiles, setInitFiles] = useState({});
+  const [files, setFiles] = useState({});
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
@@ -95,7 +96,7 @@ export default function RejectedPaymentMain() {
         ),
         transactionDate,
         businessDate,
-        status: STATUSES[status],
+        status,
         filename: key,
         action: (
           <ToolTipWrapper title={viewFileToolTipText}>
@@ -113,6 +114,7 @@ export default function RejectedPaymentMain() {
     async function fetchFiles() {
       try {
         const files = await getRejectedPaymentFiles();
+        setInitFiles(files);
         setFiles(files);
       } catch (error) {
         console.log(error);
@@ -123,30 +125,33 @@ export default function RejectedPaymentMain() {
   }, []);
 
   function filterTableRecords(values) {
-    setRows(
-      rows.filter((row) => {
-        const matchFilename =
-          values.filename === '' ||
-          row.filename.toLowerCase().includes(values.filename.toLowerCase());
-        const matchStatus =
-          values.status === all ||
-          row.status.toLowerCase().includes(values.status.toLowerCase());
-        const withinBusinessDate =
-          row.businessDate >= values.businessDateFrom &&
-          row.businessDate <= values.businessDateTo;
-        const withinTransactionDate =
-          (values.transactionDateFrom === '' &&
-            values.transactionDateTo === '') ||
-          (row.transactionDate >= values.transactionDateFrom &&
-            row.transactionDate <= values.transactionDateTo);
-        return (
-          matchFilename &&
-          matchStatus &&
-          withinBusinessDate &&
-          withinTransactionDate
-        );
-      })
-    );
+    const filteredFiles = {};
+    Object.entries(initFiles).forEach(([filename, transactions]) => {
+      const { transactionDate, businessDate, status } = transactions[0];
+      const matchFilename =
+        values.filename === '' ||
+        filename.toLowerCase().includes(values.filename.toLowerCase());
+      const matchStatus =
+        values.status.toLowerCase() === all.toLowerCase() ||
+        status.toLowerCase().includes(values.status.toLowerCase());
+      const withinBusinessDate =
+        businessDate >= values.businessDateFrom &&
+        businessDate <= values.businessDateTo;
+      const withinTransactionDate =
+        (values.transactionDateFrom === '' &&
+          values.transactionDateTo === '') ||
+        (transactionDate >= values.transactionDateFrom &&
+          transactionDate <= values.transactionDateTo);
+      if (
+        matchFilename &&
+        matchStatus &&
+        withinBusinessDate &&
+        withinTransactionDate
+      ) {
+        filteredFiles[filename] = transactions;
+      }
+    });
+    setFiles(filteredFiles);
   }
 
   return currMainFormData ? (

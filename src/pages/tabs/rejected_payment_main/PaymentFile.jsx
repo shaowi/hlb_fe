@@ -70,6 +70,7 @@ export default function PaymentFile() {
   const [transactionRows, setTransactionRows] = useState([]);
   const {
     applicantDetails,
+    currSubFormData,
     currMainFormData,
     subFormDataList,
     setSubFormDataList,
@@ -206,6 +207,7 @@ export default function PaymentFile() {
           handleSubmit={handleSubFormSubmit}
           setSubFormVisible={setSubFormVisible}
           isEdit={editRowNum !== -1}
+          currSubFormData={currSubFormData}
         />
       ) : (
         <>

@@ -155,7 +155,7 @@ export default function FormBuilder({ onSubmit, formAttributes, id = -1 }) {
                               <Autocomplete
                                 {...field.componentProps}
                                 defaultValue={
-                                  field.defaultValue.value === ''
+                                  field.defaultValue?.value === ''
                                     ? null
                                     : field.defaultValue
                                 }
