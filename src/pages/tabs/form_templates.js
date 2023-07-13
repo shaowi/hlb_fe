@@ -69,7 +69,7 @@ export const PAYMENT_DETAILS = {
   creditFxRate: 0.89234,
   debitFxRate: 0.89234,
   paymentCurrency: 'AUD',
-  paymentAmount: 500,
+  paymentAmount: 700,
   localEquivalentAmount: 530
 };
 

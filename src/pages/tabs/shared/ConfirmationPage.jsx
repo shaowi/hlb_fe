@@ -17,6 +17,7 @@ export default function ConfirmationPage({ ...props }) {
     beneficiaryBankName,
     beneficiaryAccountBic,
     remittanceAmount,
+    paymentAmount,
     fxContractReferenceNo
   }) {
     return {
@@ -27,6 +28,7 @@ export default function ConfirmationPage({ ...props }) {
       beneficiaryBankName,
       beneficiaryAccountBic: beneficiaryAccountBic?.value,
       remittanceAmount,
+      paymentAmount,
       fxContractReferenceNo
     };
   }

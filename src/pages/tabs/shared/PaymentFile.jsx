@@ -6,7 +6,7 @@ import ModalBox from 'components/ModalBox';
 import ActionButton from 'components/datatable/ActionButton';
 import DataTable from 'components/datatable/index';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import ConfirmationPage from './ConfirmationPage';
 import MainForm from './MainForm';
 import SummaryForm from './SummaryForm';
@@ -82,6 +82,7 @@ export default function PaymentFile({
       beneficiaryBankName,
       beneficiaryAccountBic,
       remittanceAmount,
+      paymentAmount,
       fxContractReferenceNo
     }
   ) {
@@ -111,6 +112,7 @@ export default function PaymentFile({
       beneficiaryBankName,
       beneficiaryAccountBic: beneficiaryAccountBic?.value,
       remittanceAmount,
+      paymentAmount,
       fxContractReferenceNo
     };
   }
@@ -301,6 +303,11 @@ export default function PaymentFile({
     buttonProps: reviewButtonProps
   };
 
+  const totalTransactionCount = transactionRows.length;
+  const totalPaymentAmount = useMemo(() => {
+    return transactionRows.reduce((acc, curr) => acc + curr.paymentAmount, 0);
+  }, [transactionRows]);
+
   const confirmationPageProps = {
     applicantDetails,
     currSubFormData,
@@ -310,8 +317,16 @@ export default function PaymentFile({
     setShowConfirmationPage,
     setShowReviewPage,
     setErrorOnConfirm,
-    transactionRows,
+    totalTransactionCount,
+    totalPaymentAmount,
     isCreate
+  };
+
+  const summaryFormProps = {
+    onSubmit: submitTransactions,
+    totalTransactionCount,
+    totalPaymentAmount,
+    requesterComments
   };
 
   return (
@@ -375,11 +390,7 @@ export default function PaymentFile({
             columns={transactionColumns}
             emptyTableMessage="No transactions added"
           />
-          <SummaryForm
-            onSubmit={submitTransactions}
-            transactionRows={transactionRows}
-            requesterComments={requesterComments}
-          />
+          <SummaryForm {...summaryFormProps} />
         </>
       )}
     </Box>

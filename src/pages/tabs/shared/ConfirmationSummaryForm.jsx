@@ -1,13 +1,12 @@
 import { Box } from '@mui/material';
 import DataTable from 'components/datatable';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
-import { useMemo } from 'react';
 import {
+  createPaymentTransaction,
   mapToApplicantPayload,
   mapToBeneficiaryPayload,
-  mapToPaymentPayload,
   mapToForeignPaymentPayload,
-  createPaymentTransaction,
+  mapToPaymentPayload,
   updatePaymentTransaction
 } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
@@ -21,18 +20,12 @@ export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
     subFormDataList,
     requesterComments,
     setShowConfirmationPage,
-    transactionRows,
+    totalTransactionCount,
+    totalPaymentAmount,
     setErrorOnConfirm,
     setShowReviewPage,
     isCreate
   } = props;
-  const totalTransactionCount = transactionRows.length;
-  const totalPaymentAmount = useMemo(() => {
-    return transactionRows.reduce(
-      (acc, curr) => acc + curr.remittanceAmount,
-      0
-    );
-  }, [transactionRows]);
 
   const summaryColumns = [
     {

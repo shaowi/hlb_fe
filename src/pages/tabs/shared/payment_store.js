@@ -67,6 +67,13 @@ export const transactionColumns = [
     format: (value) => formatToCurrency(value)
   },
   {
+    id: 'paymentAmount',
+    label: 'Payment Amount',
+    minWidth: 120,
+    sortable: true,
+    format: (value) => formatToCurrency(value)
+  },
+  {
     id: 'fxContractReferenceNo',
     label: 'FX Contract Reference Number',
     minWidth: 170,
