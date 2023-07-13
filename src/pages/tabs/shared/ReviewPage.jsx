@@ -9,8 +9,9 @@ export default function ReviewPage({ ...props }) {
     subTitle,
     body,
     transactionRows,
-    currSubFormData,
-    resetStore
+    processingMode,
+    paymentCurrency,
+    buttonProps
   } = props;
   const totalTransactionCount = transactionRows.length;
   const totalPaymentAmount = transactionRows.reduce(
@@ -42,7 +43,6 @@ export default function ReviewPage({ ...props }) {
     }
   ];
 
-  const { processingMode, paymentCurrency } = currSubFormData;
   const summaryRow = [
     {
       processingMode,
@@ -51,15 +51,6 @@ export default function ReviewPage({ ...props }) {
       totalPaymentAmount: totalPaymentAmount
     }
   ];
-
-  const buttonProps = {
-    label: 'Back to Create Outward Payment Request File',
-    type: 'button',
-    componentProps: {
-      color: 'neutral',
-      onClick: resetStore
-    }
-  };
 
   return (
     <Box sx={{ p: 3 }}>

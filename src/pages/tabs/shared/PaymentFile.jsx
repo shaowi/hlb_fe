@@ -123,7 +123,7 @@ export default function PaymentFile({
   function editTransaction(values) {
     setSubFormDataList(
       subFormDataList.map((item, index) =>
-        index === values.id ? values : item
+        index === editRowNum ? values : item
       )
     );
   }
@@ -141,7 +141,10 @@ export default function PaymentFile({
   function editTransactionRow(id) {
     setCurrSubFormData({ ...subFormDataList[id], id });
     setEditRowNum(id);
-    setSubFormVisible(true);
+    if (formikRef.current) {
+      // To update applicant details in subForm for any field changes made in mainForm
+      formikRef.current.handleSubmit();
+    }
   }
 
   function deleteTransactionRow(id) {
@@ -170,6 +173,7 @@ export default function PaymentFile({
 
   function handleFileSubmit() {
     if (formikRef.current) {
+      // To update applicant details in subForm for any field changes made in mainForm
       formikRef.current.handleSubmit();
     }
     setIsModalOpen(false);
@@ -244,6 +248,27 @@ export default function PaymentFile({
     valueDate,
     businessDate
   } = currMainFormData;
+  const { processingMode, paymentCurrency } = subFormDataList[0] || {};
+  const reviewButtonProps = isCreate
+    ? {
+        label: 'Back to Create Outward Payment Request File',
+        type: 'button',
+        componentProps: {
+          color: 'neutral',
+          onClick: resetStore
+        }
+      }
+    : {
+        label: 'Back to Rejected Outward Payment Request File',
+        type: 'button',
+        componentProps: {
+          color: 'neutral',
+          onClick: () => {
+            resetStore();
+            setShowPaymentFile(false);
+          }
+        }
+      };
   const reviewPageProps = {
     title:
       'Outward ISS 1-M CBFT Credit Transfer (MT103) Payment File Request Summary',
@@ -263,7 +288,7 @@ export default function PaymentFile({
       { label: 'Total Transaction Count', value: transactionRows.length },
       {
         label: 'Payment Currency',
-        value: currSubFormData?.paymentCurrency
+        value: paymentCurrency
       },
       { label: 'Debit Type', value: debitType },
       { label: 'Transaction Date', value: transactionDate },
@@ -271,8 +296,9 @@ export default function PaymentFile({
       { label: 'Business Date', value: businessDate }
     ],
     transactionRows,
-    currSubFormData,
-    resetStore
+    processingMode,
+    paymentCurrency,
+    buttonProps: reviewButtonProps
   };
 
   const confirmationPageProps = {
@@ -329,14 +355,13 @@ export default function PaymentFile({
                 mapToApplicantDetails(applicantDetails, values)
               );
 
-              // if modal is not open, then it is adding new transaction
+              // if modal is not open, then it is adding new transaction or editing existing transaction
               if (!isModalOpen) {
                 setCurrSubFormData({
                   ...currSubFormData,
                   ...updatedMainFormDetails,
                   ...updatedApplicantDetails
                 });
-                setEditRowNum(-1);
                 setSubFormVisible(true);
               }
             }}

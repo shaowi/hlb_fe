@@ -4,7 +4,7 @@ import {
   CREATE_PAYMENT_FILE,
   REJECTED_PAYMENT_FILE,
   UPLOAD_PAYMENT_FILE
-} from 'constants.js';
+} from 'constants';
 import UploadPaymentMain from 'pages/tabs/UploadPaymentMain';
 import CreatePaymentMain from 'pages/tabs/create_payment_main';
 import RejectedPaymentMain from 'pages/tabs/rejected_payment_main';

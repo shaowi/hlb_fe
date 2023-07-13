@@ -2,7 +2,7 @@ import FileOpenIcon from '@mui/icons-material/FileOpen';
 import ActionButton from 'components/datatable/ActionButton';
 import DataTable from 'components/datatable/index';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
-import { STATUSES } from 'constants.js';
+import { STATUSES, DEBIT_TYPE } from 'constants';
 import { useRejectedPaymentStore } from 'pages/tabs/rejected_payment_main/rejected_payment_store';
 import { useEffect, useState } from 'react';
 import {
@@ -10,7 +10,7 @@ import {
   getRejectedPaymentFiles
 } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
-import PaymentFile from './../shared/PaymentFile';
+import PaymentFile from '../shared/PaymentFile';
 import SearchBox from './SearchBox';
 
 const { all } = STATUSES;
@@ -96,7 +96,7 @@ export default function RejectedPaymentMain() {
     Object.entries(files).forEach(([key, value], index) => {
       const { debitType, transactionDate, businessDate, status } = value[0];
       rows.push({
-        debitType,
+        debitType: DEBIT_TYPE[debitType],
         transactionCount: value.length,
         totalPaymentAmount: value.reduce(
           (acc, curr) => acc + curr.foreignPaymentForm.paymentAmount,
@@ -104,7 +104,7 @@ export default function RejectedPaymentMain() {
         ),
         transactionDate,
         businessDate,
-        status,
+        status: STATUSES[status],
         filename: key,
         action: (
           <ToolTipWrapper title={viewFileToolTipText}>

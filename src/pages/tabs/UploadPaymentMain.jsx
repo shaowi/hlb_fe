@@ -1,6 +1,6 @@
 import { Box, Button, Grid } from '@mui/material';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
-import { FILENAME_FORMAT } from 'constants.js';
+import { FILENAME_FORMAT } from 'constants';
 
 export default function UploadPaymentMain() {
   return (

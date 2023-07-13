@@ -8,7 +8,7 @@ import {
   REMITTANCE_CURRENCY,
   RESIDENT_CODE,
   TRANSACTION_PURPOSE_CODE
-} from 'constants.js';
+} from 'constants';
 import { convertToLocalCurrency } from 'services/helper';
 import { theme } from 'theme';
 

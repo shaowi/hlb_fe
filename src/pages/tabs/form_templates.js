@@ -1,4 +1,4 @@
-import { currentDate } from 'constants.js';
+import { currentDate } from 'constants';
 
 // TODO: Clear data later (Mock data used for testing only)
 export const APPLICANT_DETAILS = {

@@ -84,7 +84,7 @@ function mapToApplicantData(transactionList) {
     addresses.split(',');
 
   return {
-    id,
+    applicantDbId: id,
     applicantName: name,
     applicantAccountNo: accountNumber,
     applicantAccountType: accountType,
@@ -193,7 +193,7 @@ function mapToBeneficiaryData(beneficiary) {
     beneficiaryBankAddress3
   ] = bankAddresses.split(',');
   return {
-    id,
+    beneficiaryDbId: id,
     beneficiaryName: name,
     beneficiaryAccountNo: accountNumber,
     beneficiaryIdType: idType,
@@ -229,7 +229,7 @@ function mapToForeignPaymentData(form) {
     debitFxRate
   } = form;
   return {
-    id,
+    paymentId: id,
     remittanceCurrency: {
       label: remittanceCurrency,
       value: remittanceCurrency
@@ -392,7 +392,7 @@ export function mapToPaymentPayload(mainFormData, subFormData) {
     commissionInLieuOfExchange,
     commissionHandle
   };
-  return { ...mainFormData, ...subFormPayload };
+  return { ...mainFormData, ...subFormPayload, status: 'pending' };
 }
 
 export async function getRejectedPaymentFiles() {
@@ -432,7 +432,7 @@ export function mapToApplicantDetails(curApplicantDetails, obj) {
     applicantCountryCode
   } = obj;
   return {
-    id: curApplicantDetails.id,
+    applicantDbId: curApplicantDetails.applicantDbId,
     applicantName,
     applicantAccountNo,
     applicantAccountType,
@@ -466,7 +466,7 @@ export function mapToMainFileDetails(curMainFileDetails, obj) {
     otherPaymentDetails
   } = obj;
   return {
-    id: curMainFileDetails.id,
+    id: curMainFileDetails.beneficiaryDbId,
     filename,
     debitType,
     channelTransactionReference,

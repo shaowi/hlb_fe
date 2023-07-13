@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
-import { STATUSES, currentDate, previousMonthDate } from 'constants.js';
+import { STATUSES, currentDate, previousMonthDate } from 'constants';
 
 const { TEXT, SELECT, DATE } = FORM_TYPES;
 
