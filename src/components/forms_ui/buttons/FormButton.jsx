@@ -10,20 +10,19 @@ export default function FormButton({
   isLoading,
   componentProps
 }) {
+  const buttonProps = {
+    type,
+    variant: 'contained',
+    ...componentProps
+  };
+
   return isReset ? (
     <ResetButton />
   ) : type === 'loading' ? (
-    <LoadingButton
-      type={type}
-      loading={isLoading}
-      variant="contained"
-      {...componentProps}
-    >
+    <LoadingButton loading={isLoading} {...buttonProps}>
       {label}
     </LoadingButton>
   ) : (
-    <Button type={type} variant="contained" {...componentProps}>
-      {label}
-    </Button>
+    <Button {...buttonProps}>{label}</Button>
   );
 }

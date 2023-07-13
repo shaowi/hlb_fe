@@ -22,6 +22,7 @@ export const APPLICANT_DETAILS = {
 };
 
 export const SUB_FILE_DETAILS = {
+  id: 0,
   debitType: 'single',
   transactionType: 'ISS 1-M CBFT Credit Transfer (MT103)',
   processingMode: 'processingMode'

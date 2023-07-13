@@ -393,6 +393,7 @@ interface Section {
 interface Button {
   label: string;
   isReset?: boolean;
+  isLoading?: boolean;
   type: 'button' | 'reset' | 'submit' | 'loading';
   label: string;
   componentProps: {

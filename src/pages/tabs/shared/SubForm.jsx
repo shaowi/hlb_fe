@@ -346,6 +346,12 @@ export default function SubForm({
                 label: 'Account Number',
                 'data-testid': 'beneficiaryAccountNo',
                 type: 'number'
+              },
+              validateEquality: {
+                other: 'applicantAccountNo',
+                shouldBeEqual: false,
+                errorMessage:
+                  'Beneficiary Account Number cannot be the same as Applicant Account Number'
               }
             }
           ]

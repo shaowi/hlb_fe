@@ -10,10 +10,12 @@ import {
   updatePaymentTransaction
 } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
+import { useState } from 'react';
 
 const { TEXT } = FORM_TYPES;
 
 export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     applicantDetails,
     currMainFormData,
@@ -63,7 +65,8 @@ export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
       },
       {
         label: 'Confirm',
-        type: 'button',
+        type: 'loading',
+        isLoading: isSubmitting,
         componentProps: {
           color: 'success',
           onClick: handleConfirm
@@ -73,6 +76,7 @@ export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
   };
 
   async function handleConfirm() {
+    setIsSubmitting(true);
     const applicantId = isCreate ? null : applicantDetails.applicantDbId;
     const applicantPayload = mapToApplicantPayload(
       applicantDetails,
@@ -89,6 +93,7 @@ export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
         setErrorOnConfirm(true);
       })
       .finally(() => {
+        setIsSubmitting(false);
         setShowConfirmationPage(false);
         setShowReviewPage(true);
       });

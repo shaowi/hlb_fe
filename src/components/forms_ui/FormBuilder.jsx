@@ -13,6 +13,7 @@ import DateTimePicker from './DateTimePicker';
 import SelectField from './Select';
 import TextField from './TextField';
 import ToolTipWrapper from './ToolTipWrapper';
+import { ConnectedFocusError } from 'focus-formik-error';
 
 /* FormBuilder builds a form with formik based on the given formAttributes
 
@@ -78,6 +79,16 @@ export default function FormBuilder({
       }
       return yupType;
     }
+    function setEqualityValidation(field, yupType) {
+      if (field.validateEquality) {
+        const { other, shouldBeEqual, errorMessage } = field.validateEquality;
+        const otherValues = [Yup.ref(other)];
+        return shouldBeEqual
+          ? yupType.oneOf(otherValues, errorMessage)
+          : yupType.notOneOf(otherValues, errorMessage);
+      }
+      return yupType;
+    }
     const formValidation = {};
     data.sections.forEach((section) => {
       section.rows.forEach((row) => {
@@ -89,6 +100,7 @@ export default function FormBuilder({
           let yupType = fieldType === DATE ? Yup.date() : Yup.string();
           yupType = setRequiredValidation(field, yupType);
           yupType = setDateComparisonValidation(field, yupType);
+          yupType = setEqualityValidation(field, yupType);
           formValidation[field.componentProps.name] = yupType;
         });
       });
@@ -113,6 +125,7 @@ export default function FormBuilder({
       {({ setFieldValue }) => {
         return (
           <Form>
+            <ConnectedFocusError />
             {formAttributes.sections.map((section, indexA) => (
               <Box key={indexA} sx={{ mt: 3 }}>
                 <Grid container direction="column" spacing={2}>

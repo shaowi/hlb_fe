@@ -67,8 +67,6 @@ export default function PaymentFile({
 
   // Keep the state and the table in sync
   useEffect(() => {
-    const subFormDataListLength = subFormDataList.length;
-    if (subFormDataListLength === 0) return;
     // Update the edited row in the table
     if (editRowNum !== -1) {
       const newTransactionRows = [...transactionRows];
@@ -165,13 +163,6 @@ export default function PaymentFile({
 
   function deleteTransactionRow(id) {
     setSubFormDataList(subFormDataList.filter((item) => item.id !== id));
-    setTransactionRows(
-      transactionRows
-        .filter((row) => row.id !== id)
-        .map((row, index) => {
-          return { ...row, id: index };
-        })
-    );
   }
 
   function submitTransactions(values) {
@@ -337,8 +328,8 @@ export default function PaymentFile({
     formikRef,
     currMainFormData,
     applicantDetails,
-    mainFormButtons,
-    handleSubmit: (values) => {
+    formButtons: mainFormButtons,
+    onSubmit: (values) => {
       const updatedMainFormDetails = mapToMainFileDetails(
         currMainFormData,
         values

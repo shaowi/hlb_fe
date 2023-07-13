@@ -14,6 +14,7 @@ import { formatToCurrency } from 'services/helper';
 import PaymentFile from '../shared/PaymentFile';
 import { currentDate } from './../../../constants';
 import SearchBox from './SearchBox';
+import Loader from 'pages/Loader';
 
 const { all } = STATUSES;
 
@@ -70,6 +71,7 @@ export default function RejectedPaymentMain() {
     setApplicantDetails,
     setRequesterComments
   } = store;
+  const [loadingDatatable, setLoadingDatatable] = useState(true);
   const [initFiles, setInitFiles] = useState({});
   const [files, setFiles] = useState({});
   const [rows, setRows] = useState([]);
@@ -80,6 +82,7 @@ export default function RejectedPaymentMain() {
       try {
         const files = await getRejectedPaymentFiles();
         setInitFiles(files);
+        setLoadingDatatable(false);
       } catch (error) {
         console.log(error);
       }
@@ -172,6 +175,7 @@ export default function RejectedPaymentMain() {
       }
     });
     setFiles(filteredFiles);
+    return new Promise((resolve) => resolve(filteredFiles));
   }
 
   const paymentFileProps = {
@@ -205,7 +209,7 @@ export default function RejectedPaymentMain() {
   ) : (
     <>
       <SearchBox {...searchBoxProps} />
-      <DataTable {...dataTableProps} />
+      {loadingDatatable ? <Loader /> : <DataTable {...dataTableProps} />}
     </>
   );
 }
