@@ -24,42 +24,10 @@ export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
     totalPaymentAmount,
     setErrorOnConfirm,
     setShowReviewPage,
+    processingMode,
+    paymentCurrency,
     isCreate
   } = props;
-
-  const summaryColumns = [
-    {
-      id: 'processingMode',
-      label: 'Processing Mode',
-      minWidth: 200
-    },
-    {
-      id: 'transactionCount',
-      label: 'Transaction Count',
-      minWidth: 200
-    },
-    {
-      id: 'paymentCurrency',
-      label: 'Payment Currency',
-      minWidth: 200
-    },
-    {
-      id: 'totalPaymentAmount',
-      label: 'Total Payment Amount',
-      minWidth: 200,
-      format: (value) => formatToCurrency(value)
-    }
-  ];
-
-  const { processingMode, paymentCurrency } = subFormDataList[0];
-  const summaryRow = [
-    {
-      processingMode,
-      transactionCount: totalTransactionCount,
-      paymentCurrency,
-      totalPaymentAmount: totalPaymentAmount
-    }
-  ];
 
   const formAttributes = {
     sections: [
@@ -157,15 +125,54 @@ export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
     return Promise.all(resolvedPromisesArray);
   }
 
+  const columns = [
+    {
+      id: 'processingMode',
+      label: 'Processing Mode',
+      minWidth: 200
+    },
+    {
+      id: 'transactionCount',
+      label: 'Transaction Count',
+      minWidth: 200
+    },
+    {
+      id: 'paymentCurrency',
+      label: 'Payment Currency',
+      minWidth: 200
+    },
+    {
+      id: 'totalPaymentAmount',
+      label: 'Total Payment Amount',
+      minWidth: 200,
+      format: (value) => formatToCurrency(value)
+    }
+  ];
+  const rows = [
+    {
+      processingMode,
+      transactionCount: totalTransactionCount,
+      paymentCurrency,
+      totalPaymentAmount: totalPaymentAmount
+    }
+  ];
+
+  const dataTableProps = {
+    title: 'Summary',
+    columns,
+    rows,
+    showPagination: false
+  };
+
+  const formBuilderProps = {
+    onSubmit,
+    formAttributes
+  };
+
   return (
     <Box sx={{ mt: 3 }}>
-      <DataTable
-        title="Summary"
-        columns={summaryColumns}
-        rows={summaryRow}
-        showPagination={false}
-      />
-      <FormBuilder onSubmit={onSubmit} formAttributes={formAttributes} />
+      <DataTable {...dataTableProps} />
+      <FormBuilder {...formBuilderProps} />
     </Box>
   );
 }

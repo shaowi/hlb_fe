@@ -50,6 +50,20 @@ export default function PaymentFile({
     setErrorOnConfirm,
     resetStore
   } = storeProps;
+  const { processingMode, paymentCurrency } = subFormDataList[0] || {};
+  const totalTransactionCount = transactionRows.length;
+  const totalPaymentAmount = useMemo(() => {
+    return transactionRows.reduce((acc, curr) => acc + curr.paymentAmount, 0);
+  }, [transactionRows]);
+  const {
+    filename,
+    debitType,
+    channelTransactionReference,
+    transactionType,
+    transactionDate,
+    valueDate,
+    businessDate
+  } = currMainFormData;
 
   // Keep the state and the table in sync
   useEffect(() => {
@@ -202,29 +216,10 @@ export default function PaymentFile({
           onClick: () => setIsModalOpen(false)
         }
       }
-    ]
+    ],
+    isOpen: isModalOpen,
+    handleClose: () => setIsModalOpen(false)
   };
-
-  const formButtons = [
-    isCreate
-      ? {
-          label: 'Add Transaction',
-          componentProps: {
-            color: 'success'
-          }
-        }
-      : {
-          label: 'Back',
-          type: 'button',
-          componentProps: {
-            color: 'neutral',
-            onClick: () => {
-              setShowPaymentFile(false);
-              resetStore();
-            }
-          }
-        }
-  ];
 
   const alertDialogProps = {
     title: 'Error in submitting',
@@ -238,19 +233,34 @@ export default function PaymentFile({
           onClick: closeAlert
         }
       }
-    ]
+    ],
+    open: openAlert,
+    handleClose: closeAlert
   };
 
-  const {
-    filename,
-    debitType,
-    channelTransactionReference,
-    transactionType,
-    transactionDate,
-    valueDate,
-    businessDate
-  } = currMainFormData;
-  const { processingMode, paymentCurrency } = subFormDataList[0] || {};
+  const subFormProps = {
+    onSubmit: handleSubFormSubmit,
+    setSubFormVisible,
+    isEdit: editRowNum !== -1,
+    currSubFormData
+  };
+
+  const confirmationPageProps = {
+    applicantDetails,
+    currSubFormData,
+    currMainFormData,
+    subFormDataList,
+    requesterComments,
+    setShowConfirmationPage,
+    setShowReviewPage,
+    setErrorOnConfirm,
+    totalTransactionCount,
+    totalPaymentAmount,
+    processingMode,
+    paymentCurrency,
+    isCreate
+  };
+
   const reviewButtonProps = isCreate
     ? {
         label: 'Back to Create Outward Payment Request File',
@@ -303,23 +313,60 @@ export default function PaymentFile({
     buttonProps: reviewButtonProps
   };
 
-  const totalTransactionCount = transactionRows.length;
-  const totalPaymentAmount = useMemo(() => {
-    return transactionRows.reduce((acc, curr) => acc + curr.paymentAmount, 0);
-  }, [transactionRows]);
-
-  const confirmationPageProps = {
-    applicantDetails,
-    currSubFormData,
-    currMainFormData,
-    subFormDataList,
-    requesterComments,
-    setShowConfirmationPage,
-    setShowReviewPage,
-    setErrorOnConfirm,
-    totalTransactionCount,
-    totalPaymentAmount,
+  const mainFormButtons = [
     isCreate
+      ? {
+          label: 'Add Transaction',
+          componentProps: {
+            color: 'success'
+          }
+        }
+      : {
+          label: 'Back',
+          type: 'button',
+          componentProps: {
+            color: 'neutral',
+            onClick: () => {
+              setShowPaymentFile(false);
+              resetStore();
+            }
+          }
+        }
+  ];
+  const mainFormProps = {
+    formikRef,
+    currMainFormData,
+    applicantDetails,
+    mainFormButtons,
+    handleSubmit: (values) => {
+      const updatedMainFormDetails = mapToMainFileDetails(
+        currMainFormData,
+        values
+      );
+      setCurrMainFormData(updatedMainFormDetails);
+      const updatedApplicantDetails = mapToApplicantDetails(
+        applicantDetails,
+        values
+      );
+      setApplicantDetails(mapToApplicantDetails(applicantDetails, values));
+
+      // if modal is not open, then it is adding new transaction or editing existing transaction
+      if (!isModalOpen) {
+        setCurrSubFormData({
+          ...currSubFormData,
+          ...updatedMainFormDetails,
+          ...updatedApplicantDetails
+        });
+        setSubFormVisible(true);
+      }
+    }
+  };
+
+  const dataTableProps = {
+    title: 'Transaction Details',
+    rows: transactionRows,
+    columns: transactionColumns,
+    emptyTableMessage: 'No transactions added'
   };
 
   const summaryFormProps = {
@@ -331,65 +378,18 @@ export default function PaymentFile({
 
   return (
     <Box spacing={2} xs={{ p: 3, mb: 5 }}>
-      <ModalBox
-        isOpen={isModalOpen}
-        handleClose={() => setIsModalOpen(false)}
-        {...modalProps}
-      />
-      <AlertDialog
-        open={openAlert}
-        handleClose={closeAlert}
-        {...alertDialogProps}
-      />
+      <ModalBox {...modalProps} />
+      <AlertDialog {...alertDialogProps} />
       {subFormVisible ? (
-        <SubForm
-          handleSubmit={handleSubFormSubmit}
-          setSubFormVisible={setSubFormVisible}
-          isEdit={editRowNum !== -1}
-          currSubFormData={currSubFormData}
-        />
+        <SubForm {...subFormProps} />
       ) : showConfirmationPage ? (
         <ConfirmationPage {...confirmationPageProps} />
       ) : showReviewPage ? (
         <ReviewPage {...reviewPageProps} />
       ) : (
         <>
-          <MainForm
-            formikRef={formikRef}
-            handleSubmit={(values) => {
-              const updatedMainFormDetails = mapToMainFileDetails(
-                currMainFormData,
-                values
-              );
-              setCurrMainFormData(updatedMainFormDetails);
-              const updatedApplicantDetails = mapToApplicantDetails(
-                applicantDetails,
-                values
-              );
-              setApplicantDetails(
-                mapToApplicantDetails(applicantDetails, values)
-              );
-
-              // if modal is not open, then it is adding new transaction or editing existing transaction
-              if (!isModalOpen) {
-                setCurrSubFormData({
-                  ...currSubFormData,
-                  ...updatedMainFormDetails,
-                  ...updatedApplicantDetails
-                });
-                setSubFormVisible(true);
-              }
-            }}
-            currMainFormData={currMainFormData}
-            applicantDetails={applicantDetails}
-            formButtons={formButtons}
-          />
-          <DataTable
-            title="Transaction Details"
-            rows={transactionRows}
-            columns={transactionColumns}
-            emptyTableMessage="No transactions added"
-          />
+          <MainForm {...mainFormProps} />
+          <DataTable {...dataTableProps} />
           <SummaryForm {...summaryFormProps} />
         </>
       )}

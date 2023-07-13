@@ -131,9 +131,14 @@ export default function SearchBox({ onSearch, initialFormValues }) {
     ]
   };
 
+  const formBuilderProps = {
+    onSubmit: onSearch,
+    formAttributes
+  };
+
   return (
     <Box sx={{ p: 3 }}>
-      <FormBuilder onSubmit={onSearch} formAttributes={formAttributes} />
+      <FormBuilder {...formBuilderProps} />
     </Box>
   );
 }

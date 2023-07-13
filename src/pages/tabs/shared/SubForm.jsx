@@ -16,7 +16,7 @@ const { TEXT, SELECT, SELECT_AUTOCOMPLETE, LABEL } = FORM_TYPES;
 
 export default function SubForm({
   isEdit,
-  handleSubmit,
+  onSubmit,
   setSubFormVisible,
   currSubFormData
 }) {
@@ -957,14 +957,16 @@ export default function SubForm({
     ]
   };
 
+  const formBuilderProps = {
+    onSubmit,
+    formAttributes,
+    id: currSubFormData.id
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ p: 3 }}>
-        <FormBuilder
-          onSubmit={handleSubmit}
-          formAttributes={formAttributes}
-          id={currSubFormData.id}
-        />
+        <FormBuilder {...formBuilderProps} />
       </Box>
     </ThemeProvider>
   );

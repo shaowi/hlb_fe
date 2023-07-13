@@ -12,7 +12,7 @@ import { theme } from 'theme';
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE } = FORM_TYPES;
 
 export default function MainForm({
-  handleSubmit,
+  onSubmit,
   currMainFormData,
   applicantDetails,
   formButtons,
@@ -398,14 +398,16 @@ export default function MainForm({
     buttons: formButtons
   };
 
+  const formBuilderProps = {
+    onSubmit,
+    formAttributes,
+    formikRef
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ p: 3 }}>
-        <FormBuilder
-          onSubmit={handleSubmit}
-          formAttributes={formAttributes}
-          formikRef={formikRef}
-        />
+        <FormBuilder {...formBuilderProps} />
       </Box>
     </ThemeProvider>
   );

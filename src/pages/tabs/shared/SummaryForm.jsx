@@ -72,9 +72,14 @@ export default function SummaryForm({
     ]
   };
 
+  const formBuilderProps = {
+    onSubmit,
+    formAttributes
+  };
+
   return (
     <Box sx={{ p: 3 }}>
-      <FormBuilder onSubmit={onSubmit} formAttributes={formAttributes} />
+      <FormBuilder {...formBuilderProps} />
     </Box>
   );
 }

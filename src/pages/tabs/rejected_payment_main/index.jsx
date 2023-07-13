@@ -174,6 +174,12 @@ export default function RejectedPaymentMain() {
     setFiles(filteredFiles);
   }
 
+  const paymentFileProps = {
+    storeProps: store,
+    isCreate: false,
+    setShowPaymentFile
+  };
+
   const initialFormValues = {
     filename: '',
     status: 'all',
@@ -195,11 +201,7 @@ export default function RejectedPaymentMain() {
   };
 
   return showPaymentFile ? (
-    <PaymentFile
-      storeProps={store}
-      isCreate={false}
-      setShowPaymentFile={setShowPaymentFile}
-    />
+    <PaymentFile {...paymentFileProps} />
   ) : (
     <>
       <SearchBox {...searchBoxProps} />

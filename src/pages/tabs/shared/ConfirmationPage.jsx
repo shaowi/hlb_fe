@@ -33,18 +33,27 @@ export default function ConfirmationPage({ ...props }) {
     };
   }
 
+  const mainFormProps = {
+    ...props,
+    disabled: true
+  };
+
+  const dataTableProps = {
+    title: 'Transaction Details',
+    rows: actionlessTransactionRows,
+    columns
+  };
+
+  const confirmationSummaryFormProps = {
+    transactionRows: actionlessTransactionRows,
+    ...props
+  };
+
   return (
     <Box spacing={2} xs={{ p: 3, mb: 5 }}>
-      <MainForm disabled={true} {...props} />
-      <DataTable
-        title="Transaction Details"
-        rows={actionlessTransactionRows}
-        columns={columns}
-      />
-      <ConfirmationSummaryForm
-        transactionRows={actionlessTransactionRows}
-        {...props}
-      />
+      <MainForm {...mainFormProps} />
+      <DataTable {...dataTableProps} />
+      <ConfirmationSummaryForm {...confirmationSummaryFormProps} />
     </Box>
   );
 }
