@@ -2,7 +2,8 @@ import FileOpenIcon from '@mui/icons-material/FileOpen';
 import ActionButton from 'components/datatable/ActionButton';
 import DataTable from 'components/datatable/index';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
-import { STATUSES, DEBIT_TYPE } from 'constants';
+import { DEBIT_TYPE, STATUSES } from 'constants';
+import { previousMonthDate } from 'constants.js';
 import { useRejectedPaymentStore } from 'pages/tabs/rejected_payment_main/rejected_payment_store';
 import { useEffect, useState } from 'react';
 import {
@@ -11,6 +12,7 @@ import {
 } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
 import PaymentFile from '../shared/PaymentFile';
+import { currentDate } from './../../../constants';
 import SearchBox from './SearchBox';
 
 const { all } = STATUSES;
@@ -74,6 +76,24 @@ export default function RejectedPaymentMain() {
   const [showPaymentFile, setShowPaymentFile] = useState(false);
 
   useEffect(() => {
+    async function fetchFiles() {
+      try {
+        const files = await getRejectedPaymentFiles();
+        setInitFiles(files);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchFiles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    filterTableRecords(initialFormValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initFiles]);
+
+  useEffect(() => {
     async function setStoreData(id) {
       try {
         const [
@@ -124,20 +144,6 @@ export default function RejectedPaymentMain() {
     setSubFormDataList
   ]);
 
-  useEffect(() => {
-    async function fetchFiles() {
-      try {
-        const files = await getRejectedPaymentFiles();
-        setInitFiles(files);
-        setFiles(files);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchFiles();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   function filterTableRecords(values) {
     const filteredFiles = {};
     Object.entries(initFiles).forEach(([filename, transactions]) => {
@@ -168,6 +174,26 @@ export default function RejectedPaymentMain() {
     setFiles(filteredFiles);
   }
 
+  const initialFormValues = {
+    filename: '',
+    status: 'all',
+    businessDateFrom: previousMonthDate,
+    businessDateTo: currentDate,
+    transactionDateFrom: '',
+    transactionDateTo: ''
+  };
+
+  const searchBoxProps = {
+    onSearch: filterTableRecords,
+    initialFormValues
+  };
+
+  const dataTableProps = {
+    title: 'Pending Action',
+    columns,
+    rows
+  };
+
   return showPaymentFile ? (
     <PaymentFile
       storeProps={store}
@@ -176,8 +202,8 @@ export default function RejectedPaymentMain() {
     />
   ) : (
     <>
-      <SearchBox onSearch={filterTableRecords} />
-      <DataTable title="Pending Action" columns={columns} rows={rows} />
+      <SearchBox {...searchBoxProps} />
+      <DataTable {...dataTableProps} />
     </>
   );
 }
