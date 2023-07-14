@@ -52,6 +52,13 @@ const NavBarItem = ({ item }) => (
   </MDBNavbarItem>
 );
 
+/**
+ * The ModuleNavBar component is a React component that renders a navigation bar using the MDBNavbar component from the
+ * Material Design for Bootstrap library.
+ * @returns a JSX element, specifically an MDBNavbar component from the MDBReact library. The component is wrapped in a
+ * container and contains a navbar navigation component (MDBNavbarNav). The navigation component is populated with items
+ * based on the "menu" prop passed to the function. Each item is rendered using the NavBarItem component.
+ */
 export default function ModuleNavBar({ menu }) {
   return (
     <MDBNavbar

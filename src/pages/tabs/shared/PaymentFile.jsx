@@ -18,11 +18,13 @@ import {
   mapToMainFileDetails
 } from 'services/PaymentFileService';
 
-export default function PaymentFile({
-  storeProps,
-  isCreate,
-  setShowPaymentFile
-}) {
+/**
+ * The `PaymentFile` function is a React component that renders a form for creating or editing payment files, including
+ * transaction details, and provides functionality for adding, editing, and deleting transactions.
+ * @returns a JSX element.
+ */
+export default function PaymentFile(props) {
+  const { storeProps, isCreate, setShowPaymentFile } = props;
   const formikRef = useRef();
   const [editRowNum, setEditRowNum] = useState(-1);
   const [subFormVisible, setSubFormVisible] = useState(false);

@@ -40,6 +40,7 @@ function a11yProps(index) {
   };
 }
 
+/** A React functional component called `PageTabs`. It takes a prop called `tabsContent`, which is an array of objects representing the content of each tab. */
 export default function PageTabs({ tabsContent }) {
   const [value, setValue] = useState(0);
   const [isFooterFixed, setIsFooterFixed] = useState(false); // Can be removed if content can cover the whole page

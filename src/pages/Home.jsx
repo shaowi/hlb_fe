@@ -111,6 +111,9 @@ export default function Home({ children }) {
   ];
 
   useEffect(() => {
+    /**
+     * The function fetches the current user and sets the username if the user exists.
+     */
     async function fetchAndSetUser() {
       const user = await getCurrentUser();
       setUsername(user?.name);

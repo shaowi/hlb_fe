@@ -3,12 +3,19 @@ import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 
 const { TEXT } = FORM_TYPES;
 
-export default function SummaryForm({
-  onSubmit,
-  totalTransactionCount,
-  totalPaymentAmount,
-  requesterComments
-}) {
+/**
+ * The SummaryForm component is a form that displays transaction summary information and allows the user to submit
+ * requester comments.
+ * @returns The SummaryForm component is being returned. It renders a form with transaction summary information and a
+ * textarea for requester comments. The form has a submit button.
+ */
+export default function SummaryForm(props) {
+  const {
+    onSubmit,
+    totalTransactionCount,
+    totalPaymentAmount,
+    requesterComments
+  } = props;
   const formAttributes = {
     sections: [
       {

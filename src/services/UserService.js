@@ -1,6 +1,14 @@
 import { LOGIN_USER_URL, LOGOUT_USER_URL } from 'endpoints';
 import { postRequest } from './HttpRequests';
 
+/**
+ * The logInUser function logs in a user by sending a POST request with the username and encrypted password, and stores
+ * the user data in the local storage.
+ * @param username - The username parameter is the username entered by the user for logging in.
+ * @param password - The password parameter is the user's password that they entered during the login process.
+ * @returns the status code of the response if the login is successful, or the status code of the error request if there
+ * is an error.
+ */
 export async function logInUser(username, password) {
   try {
     const response = await postRequest(LOGIN_USER_URL, {

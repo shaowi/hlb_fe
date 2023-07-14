@@ -30,12 +30,9 @@ const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE, LABEL } = FORM_TYPES;
  * validation, and renders a form using Formik and various form fields.
  * @returns The function `FormBuilder` is returning a JSX element.
  */
-export default function FormBuilder({
-  onSubmit,
-  formAttributes,
-  id = -1,
-  formikRef = null
-}) {
+export default function FormBuilder(props) {
+  const { onSubmit, formAttributes, id = -1, formikRef = null } = props;
+
   function createInitialFormState(data) {
     const initialFormState = {};
     data.sections.forEach((section) => {

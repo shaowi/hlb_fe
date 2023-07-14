@@ -8,26 +8,31 @@ import {
   Typography
 } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
+import { cloneDeep } from 'lodash';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logInUser } from 'services/UserService';
 import { theme } from 'theme';
-import { cloneDeep } from 'lodash';
 
 const themeCopy = cloneDeep(theme);
 themeCopy.typography.h4.color = '#BBB';
 
 const { TEXT } = FORM_TYPES;
 
-export default function Login({
-  imageSrc,
-  imageAlt,
-  centerText,
-  version,
-  footerText,
-  formHeaderText,
-  formFieldLabels
-}) {
+/**
+ * The Login function is a React component that renders a login form with customizable fields and handles form submission and error handling.
+ * @returns The Login component is returning a JSX element that represents the login page.
+ */
+export default function Login(props) {
+  const {
+    imageSrc,
+    imageAlt,
+    centerText,
+    version,
+    footerText,
+    formHeaderText,
+    formFieldLabels
+  } = props;
   // map labels to camelCase
   const formFieldNames = formFieldLabels.map((label) =>
     label
@@ -99,6 +104,11 @@ export default function Login({
     ]
   };
 
+  /**
+   * The function handles form submission, logs in the user, and handles different response codes and errors.
+   * @returns If the login is successful and the response code is 200, the function will navigate to the '/home' page and
+   * return nothing. If there is a network error and the response code is 0, the function will set the appropriate error messages and shows the error.
+   */
   async function handleSubmit(values) {
     setIsSubmitting(true);
     setHasError(false);

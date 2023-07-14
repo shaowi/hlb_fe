@@ -4,6 +4,11 @@ import { STATUSES } from 'constants';
 
 const { TEXT, SELECT, DATE } = FORM_TYPES;
 
+/**
+ * The SearchBox component is a form that allows users to input search criteria and submit a search.
+ * @returns a JSX element. It is rendering a `<Box>` component from the Material-UI library, with a padding of 3. Inside
+ * the `<Box>` component, it is rendering a `<FormBuilder>` component with the `formBuilderProps` passed as props.
+ */
 export default function SearchBox({ onSearch, initialFormValues }) {
   const {
     filename,

@@ -11,14 +11,20 @@ import { theme } from 'theme';
 
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE } = FORM_TYPES;
 
-export default function MainForm({
-  onSubmit,
-  currMainFormData,
-  applicantDetails,
-  formButtons,
-  disabled = false,
-  formikRef
-}) {
+/**
+ * The `MainForm` component is a React component that renders a form with multiple sections and fields, including file form
+ * attributes and applicant form attributes.
+ * @returns a JSX element.
+ */
+export default function MainForm(props) {
+  const {
+    onSubmit,
+    currMainFormData,
+    applicantDetails,
+    formButtons,
+    disabled = false,
+    formikRef
+  } = props;
   const {
     filename,
     debitType,

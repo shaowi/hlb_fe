@@ -14,9 +14,15 @@ import { useState } from 'react';
 
 const { TEXT } = FORM_TYPES;
 
-export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
+/**
+ * The `ConfirmationSummaryForm` component is a React component that displays a summary of payment details and a form for
+ * confirming the payment.
+ * @returns a React component.
+ */
+export default function ConfirmationSummaryForm(props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
+    onSubmit,
     applicantDetails,
     currMainFormData,
     subFormDataList,
@@ -75,6 +81,10 @@ export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
     ]
   };
 
+  /**
+   * The function `handleConfirm` is an asynchronous function that handles the confirmation process for an applicant,
+   * including saving payment files, checking for errors, and updating the state of the application.
+   */
   async function handleConfirm() {
     setIsSubmitting(true);
     const applicantId = isCreate ? null : applicantDetails.applicantDbId;
@@ -99,6 +109,11 @@ export default function ConfirmationSummaryForm({ onSubmit, ...props }) {
       });
   }
 
+  /**
+   * The function `savePaymentFiles` takes in applicant data, main form data, and a list of sub form data, and returns a
+   * promise that resolves when all the payment transactions are created or updated.
+   * @returns a promise that resolves to an array of results from the resolved promises in the `resolvedPromisesArray`.
+   */
   async function savePaymentFiles(
     applicantPayload,
     currMainFormData,

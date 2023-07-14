@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Typography from '@mui/material/Typography';
 import { visuallyHidden } from '@mui/utils';
-import * as React from 'react';
+import { useState, useMemo } from 'react';
 
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -40,23 +40,27 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export default function DataTable({
-  title,
-  rows,
-  columns,
-  showPagination = true,
-  emptyTableMessage = 'No records found'
-}) {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('filename');
+/** A React component called `DataTable` that displays tabular data in a styled table. It takes several
+props including `title`, `rows`, `columns`, `showPagination`, and `emptyTableMessage`. */
+export default function DataTable(props) {
+  const {
+    title,
+    rows,
+    columns,
+    showPagination = true,
+    emptyTableMessage = 'No records found'
+  } = props;
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('filename');
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const visibleRows = React.useMemo(
+  const visibleRows = useMemo(
     () =>
       stableSort(rows, getComparator(order, orderBy)).slice(
         page * rowsPerPage,

@@ -20,6 +20,12 @@ const { all } = STATUSES;
 
 const viewFileToolTipText = 'View File';
 
+/**
+ * The RejectedPaymentMain component is a React component that displays a datatable of rejected payment files and allows
+ * users to filter and view individual payment files.
+ * @returns The function `RejectedPaymentMain` returns either the `PaymentFile` component or a combination of the
+ * `SearchBox` component and the `DataTable` component.
+ */
 export default function RejectedPaymentMain() {
   const columns = [
     { id: 'action', label: 'Action', minWidth: 100, sortable: false },
@@ -78,6 +84,10 @@ export default function RejectedPaymentMain() {
   const [showPaymentFile, setShowPaymentFile] = useState(false);
 
   useEffect(() => {
+    /**
+     * The function fetchFiles is an asynchronous function that fetches rejected payment files, sets the initial files, and
+     * updates the loading state of the datatable.
+     */
     async function fetchFiles() {
       try {
         const files = await getRejectedPaymentFiles();
@@ -97,6 +107,10 @@ export default function RejectedPaymentMain() {
   }, [initFiles]);
 
   useEffect(() => {
+    /**
+     * The function `setStoreData` is an asynchronous function that retrieves file details and sets various state variables
+     * based on the retrieved data.
+     */
     async function setStoreData(id) {
       try {
         const [
@@ -147,6 +161,10 @@ export default function RejectedPaymentMain() {
     setSubFormDataList
   ]);
 
+  /**
+   * The function `filterTableRecords` filters a table of records based on various criteria and updates the state with the
+   * filtered results.
+   */
   function filterTableRecords(values) {
     const filteredFiles = {};
     Object.entries(initFiles).forEach(([filename, transactions]) => {
@@ -175,7 +193,6 @@ export default function RejectedPaymentMain() {
       }
     });
     setFiles(filteredFiles);
-    return new Promise((resolve) => resolve(filteredFiles));
   }
 
   const paymentFileProps = {

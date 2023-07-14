@@ -4,7 +4,12 @@ import ConfirmationSummaryForm from './ConfirmationSummaryForm';
 import MainForm from './MainForm';
 import { transactionColumns } from './payment_store';
 
-export default function ConfirmationPage({ ...props }) {
+/**
+ * The ConfirmationPage function is a React component that renders a confirmation page with transaction details and a
+ * summary form.
+ * @returns a JSX element.
+ */
+export default function ConfirmationPage(props) {
   const { subFormDataList } = props;
   const actionlessTransactionRows = subFormDataList.map(mapToRow);
   const columns = transactionColumns.slice(1);

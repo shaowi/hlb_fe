@@ -4,13 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { logOutUser } from 'services/UserService';
 import ModalBox from '../ModalBox';
 
-export default function UserNavBar({
-  imageSrc,
-  imageAlt,
-  centerText,
-  username,
-  logoutText
-}) {
+/**
+ * The `UserNavBar` function is a React component that renders a navigation bar with user information and a logout button.
+ * @returns The UserNavBar component is returning a JSX element.
+ */
+export default function UserNavBar(props) {
+  const { imageSrc, imageAlt, centerText, username, logoutText } = props;
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 

@@ -14,12 +14,13 @@ import { theme } from 'theme';
 
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, LABEL } = FORM_TYPES;
 
-export default function SubForm({
-  isEdit,
-  onSubmit,
-  setSubFormVisible,
-  currSubFormData
-}) {
+/**
+ * The `SubForm` component is a React component that renders a form with multiple sections and fields, including file form
+ * attributes and applicant, beneficiary, payment, charges, correspondent bank and transaction form attributes.
+ * @returns a JSX element.
+ */
+export default function SubForm(props) {
+  const { isEdit, onSubmit, setSubFormVisible, currSubFormData } = props;
   const debitFeeLabel = `Debit Fee in ${currSubFormData.paymentCurrency}`;
   const standardFeeLabel = 'Standard Fee in SGD';
 

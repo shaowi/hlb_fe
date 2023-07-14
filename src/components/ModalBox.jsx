@@ -18,13 +18,10 @@ const style = {
   p: 4
 };
 
-export default function ModalBox({
-  isOpen,
-  handleClose,
-  title,
-  description,
-  buttons
-}) {
+/** A React functional component called `ModalBox`. It takes in several props: `isOpen`, `handleClose`,
+`title`, `description`, and `buttons`. */
+export default function ModalBox(props) {
+  const { isOpen, handleClose, title, description, buttons } = props;
   return (
     <Modal
       aria-labelledby="transition-modal-title"

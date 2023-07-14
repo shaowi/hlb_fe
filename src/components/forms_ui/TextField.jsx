@@ -3,8 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { useField } from 'formik';
 import { usePropagateRef } from './usePropagateRef';
 
+/**
+ * This is a React component that wraps a TextField component and handles performance optimizations for heavy views.
+ * @returns a TextField component with the props configured based on the input props and the performanceProps.
+ */
 export default function TextfieldWrapper(props) {
-  const [field, meta] = useField(props.name);
+  const { name, type, disablePerformance, loading, ...otherProps } = props;
+  const [field, meta] = useField(name);
 
   /**
    * Extracted and modified from: https://github.com/superjose/increase-formik-performance-react.git
@@ -15,11 +20,11 @@ export default function TextfieldWrapper(props) {
    * onFocus.
    */
   const [fieldValue, setFieldValue] = useState(field.value);
-  const { disablePerformance, loading, ...otherProps } = props;
+  const { value } = field;
   usePropagateRef({
     setFieldValue,
-    name: props.name,
-    value: field.value
+    name,
+    value
   });
 
   /**
@@ -31,11 +36,11 @@ export default function TextfieldWrapper(props) {
       return;
     }
 
-    if (field.value !== fieldValue) {
-      setFieldValue(field.value);
+    if (value !== fieldValue) {
+      setFieldValue(value);
     }
     // eslint-disable-next-line
-  }, [field.value]);
+  }, [value]);
 
   const onChange = (evt) => {
     setFieldValue(evt.target.value);
@@ -45,8 +50,8 @@ export default function TextfieldWrapper(props) {
     window.setTimeout(() => {
       field.onChange({
         target: {
-          name: props.name,
-          value: props.type === 'number' ? parseInt(val, 10) : val
+          name: name,
+          value: type === 'number' ? parseInt(val, 10) : val
         }
       });
     }, 0);

@@ -1,19 +1,21 @@
 import { ThemeProvider } from '@mui/material';
+import {
+  CREATE_PAYMENT_FILE,
+  REJECTED_PAYMENT_FILE,
+  UPLOAD_PAYMENT_FILE
+} from 'constants';
+import UploadPaymentMain from 'pages/tabs/UploadPaymentMain';
+import CreatePaymentMain from 'pages/tabs/create_payment_main';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { theme } from 'theme';
 import Footer from './components/Footer';
 import PageTabs from './components/PageTabs';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
-import { REJECTED_PAYMENT_FILE } from 'constants';
-import { UPLOAD_PAYMENT_FILE } from 'constants';
-import { CREATE_PAYMENT_FILE } from 'constants';
 import RejectedPaymentMain from './pages/tabs/rejected_payment_main';
-import CreatePaymentMain from 'pages/tabs/create_payment_main';
-import UploadPaymentMain from 'pages/tabs/UploadPaymentMain';
-import { theme } from 'theme';
 
-function App() {
+export default function App() {
   const loginProps = {
     imageSrc: '/images/logo.png',
     imageAlt: 'hlb',
@@ -80,5 +82,3 @@ function App() {
     </ThemeProvider>
   );
 }
-
-export default App;
