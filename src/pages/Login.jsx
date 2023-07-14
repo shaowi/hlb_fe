@@ -42,7 +42,6 @@ export default function Login(props) {
       .join('')
   );
   const navigate = useNavigate();
-
   const [topFieldLabel, bottomFieldLabel] = formFieldLabels;
   const [topFieldName, bottomFieldName] = formFieldNames;
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -110,6 +109,7 @@ export default function Login(props) {
    * return nothing. If there is a network error and the response code is 0, the function will set the appropriate error messages and shows the error.
    */
   async function handleSubmit(values) {
+    console.log(values);
     setIsSubmitting(true);
     setHasError(false);
 
@@ -130,6 +130,11 @@ export default function Login(props) {
     setIsSubmitting(false);
     setHasError(true);
   }
+
+  const formBuilderProps = {
+    onSubmit: handleSubmit,
+    formAttributes
+  };
 
   return (
     <ThemeProvider theme={themeCopy}>
@@ -165,10 +170,7 @@ export default function Login(props) {
               </Grid>
               <Grid item container direction="column" md={6} spacing={2}>
                 <Grid item>
-                  <FormBuilder
-                    onSubmit={handleSubmit}
-                    formAttributes={formAttributes}
-                  />
+                  <FormBuilder {...formBuilderProps} />
                 </Grid>
                 {hasError && (
                   <Grid item>

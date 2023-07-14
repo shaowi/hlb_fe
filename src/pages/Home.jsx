@@ -121,11 +121,9 @@ export default function Home({ children }) {
     fetchAndSetUser().then(() => setIsLoading(false));
   }, []);
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <>
       <UserNavBar {...userNavBarProps} />
       <ModuleNavBar menu={moduleNavBarMenu} />

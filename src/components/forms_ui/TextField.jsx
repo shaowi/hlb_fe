@@ -8,7 +8,7 @@ import { usePropagateRef } from './usePropagateRef';
  * @returns a TextField component with the props configured based on the input props and the performanceProps.
  */
 export default function TextfieldWrapper(props) {
-  const { name, type, disablePerformance, loading, ...otherProps } = props;
+  const { name, type } = props;
   const [field, meta] = useField(name);
 
   /**
@@ -19,8 +19,9 @@ export default function TextfieldWrapper(props) {
    * (otherwise you wouldn't be able to type) and then propagate the change to Formik onBlur and
    * onFocus.
    */
-  const [fieldValue, setFieldValue] = useState(field.value);
   const { value } = field;
+  const [fieldValue, setFieldValue] = useState(value);
+  const { disablePerformance, loading, ...otherProps } = props;
   usePropagateRef({
     setFieldValue,
     name,
@@ -36,7 +37,7 @@ export default function TextfieldWrapper(props) {
       return;
     }
 
-    if (value !== fieldValue) {
+    if (field.value !== fieldValue) {
       setFieldValue(value);
     }
     // eslint-disable-next-line
@@ -47,10 +48,10 @@ export default function TextfieldWrapper(props) {
   };
   const onBlur = (evt) => {
     const val = evt.target.value || '';
-    window.setTimeout(() => {
+    setTimeout(() => {
       field.onChange({
         target: {
-          name: name,
+          name,
           value: type === 'number' ? parseInt(val, 10) : val
         }
       });
