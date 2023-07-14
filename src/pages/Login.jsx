@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { cloneDeep } from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logInUser } from 'services/UserService';
 import { theme } from 'theme';
@@ -63,10 +63,11 @@ export default function Login(props) {
                 icon: <Person />,
                 defaultValue: '',
                 componentProps: {
+                  autoFocus: true,
                   required: true,
+                  disablePerformance: true,
                   label: topFieldLabel,
                   name: topFieldName,
-                  autoFocus: true,
                   'data-testid': topFieldName
                 }
               }
@@ -80,6 +81,7 @@ export default function Login(props) {
                 defaultValue: '',
                 componentProps: {
                   required: true,
+                  disablePerformance: true,
                   type: 'password',
                   label: bottomFieldLabel,
                   name: bottomFieldName,
@@ -103,13 +105,28 @@ export default function Login(props) {
     ]
   };
 
+  useEffect(() => {
+    const isAutofilled =
+      window
+        .getComputedStyle(
+          document.querySelector("input[name='password']"),
+          ':-webkit-autofill'
+        )
+        .getPropertyValue('background-color') !== 'rgb(255, 255, 255)';
+    console.log(isAutofilled);
+    setTimeout(() => {
+      if (isAutofilled) {
+        document.getElementById('root').click();
+      }
+    }, 2000);
+  }, []);
+
   /**
    * The function handles form submission, logs in the user, and handles different response codes and errors.
    * @returns If the login is successful and the response code is 200, the function will navigate to the '/home' page and
    * return nothing. If there is a network error and the response code is 0, the function will set the appropriate error messages and shows the error.
    */
   async function handleSubmit(values) {
-    console.log(values);
     setIsSubmitting(true);
     setHasError(false);
 
