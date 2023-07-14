@@ -7,32 +7,14 @@ import {
   Typography
 } from '@mui/material';
 import FormButton from 'components/forms_ui/buttons/FormButton';
+import { ConnectedFocusError } from 'focus-formik-error';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import DateTimePicker from './DateTimePicker';
 import SelectField from './Select';
 import TextField from './TextField';
 import ToolTipWrapper from './ToolTipWrapper';
-import { ConnectedFocusError } from 'focus-formik-error';
 
-/* FormBuilder builds a form with formik based on the given formAttributes
-
-formAttributes is an object with 2 required properties: sections and buttons. In section property, it has 1 required and 1 optional property which are rows and title respectively.
-  - sections is an array of objects with a rows and optional title property
-  - rows is an array of objects with a fields property
-  - each field has a type, defaultValue and a componentProps property
-    - type: text, select, select-autocomplete, date, label
-    - defaultValue: string, number, date
-    - componentProps: props to be passed to the component
-    - toolTipProps: props to be passed to the ToolTipWrapper component
-
-handleSubmit is a function that takes the form values as an argument which is called when the form is submitted
-
-Notes:
-  - Max fields per row = 4
-  - isReset property can be given to any button to make it a reset button
-  - id is a hidden field
-*/
 export const FORM_TYPES = {
   TEXT: 'text',
   SELECT: 'select',
@@ -43,11 +25,16 @@ export const FORM_TYPES = {
 
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE, LABEL } = FORM_TYPES;
 
+/**
+ * The `FormBuilder` component is a form builder which builds a form with formik. It takes in form attributes, creates initial form state and form
+ * validation, and renders a form using Formik and various form fields.
+ * @returns The function `FormBuilder` is returning a JSX element.
+ */
 export default function FormBuilder({
   onSubmit,
   formAttributes,
   id = -1,
-  formikRef
+  formikRef = null
 }) {
   function createInitialFormState(data) {
     const initialFormState = {};

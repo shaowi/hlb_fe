@@ -184,7 +184,7 @@ E.g:
 ```ts
 interface FooterProps {
   isFixed: boolean; // Fixed footer at bottom of screen if true
-  bankName: string;
+  bankName?: string; // Default value: 'HL Bank'
 }
 ```
 
@@ -414,7 +414,9 @@ interface FormAttributes {
 
 interface FormBuilderProps {
   formAttributes: FormAttributes;
-  onSubmit: Function
+  onSubmit: () => void;
+  id?: number;
+  formikRef?: React.MutableRefObject;
 }
 ```
 
@@ -547,10 +549,12 @@ const formAttributesProp = {
         label: 'Reset',
         isReset: true
       }
-    ]
+    ],
   };
 
-<FormBuilder onSubmit={() => console.log('submit')} formAttributes={formAttributesProp} />
+const props = {formAttributesProp, onSubmit: () => console.log('submitting')}
+
+<FormBuilder {...props} />
 ```
 
 [NotFound](../src/pages/NotFound.jsx)

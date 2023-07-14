@@ -2,7 +2,7 @@ import { Link, Paper, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logOutUser } from 'services/UserService';
-import ModalBox from './../ModalBox';
+import ModalBox from '../ModalBox';
 
 export default function UserNavBar({
   imageSrc,
@@ -34,7 +34,9 @@ export default function UserNavBar({
           onClick: () => setIsModalOpen(false)
         }
       }
-    ]
+    ],
+    isOpen: isModalOpen,
+    handleClose: () => setIsModalOpen(false)
   };
 
   function handleLogout() {
@@ -44,11 +46,7 @@ export default function UserNavBar({
 
   return (
     <>
-      <ModalBox
-        isOpen={isModalOpen}
-        handleClose={() => setIsModalOpen(false)}
-        {...modalProps}
-      />
+      <ModalBox {...modalProps} />
       <Paper
         elevation={8}
         sx={{
