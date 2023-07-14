@@ -26,7 +26,10 @@ export default function PaymentFile({
   const formikRef = useRef();
   const [editRowNum, setEditRowNum] = useState(-1);
   const [subFormVisible, setSubFormVisible] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitPaymentModalOpen, setIsSubmitPaymentModalOpen] =
+    useState(false);
+  const [isDeleteTransactionModalOpen, setIsDeleteTransactionModalOpen] =
+    useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const {
     applicantDetails,
@@ -110,7 +113,10 @@ export default function PaymentFile({
           <ToolTipWrapper title="Delete">
             <ActionButton
               color="error"
-              onClick={() => deleteTransactionRow(id)}
+              onClick={() => {
+                setEditRowNum(id);
+                setIsDeleteTransactionModalOpen(true);
+              }}
             >
               <DeleteIcon />
             </ActionButton>
@@ -163,6 +169,8 @@ export default function PaymentFile({
 
   function deleteTransactionRow(id) {
     setSubFormDataList(subFormDataList.filter((item) => item.id !== id));
+    setEditRowNum(-1);
+    setIsDeleteTransactionModalOpen(false);
   }
 
   function submitTransactions(values) {
@@ -171,7 +179,7 @@ export default function PaymentFile({
       return;
     }
     setRequesterComments(values.requesterComments);
-    setIsModalOpen(true);
+    setIsSubmitPaymentModalOpen(true);
   }
 
   function closeAlert() {
@@ -183,13 +191,38 @@ export default function PaymentFile({
       // To update applicant details in subForm for any field changes made in mainForm
       formikRef.current.handleSubmit();
     }
-    setIsModalOpen(false);
+    setIsSubmitPaymentModalOpen(false);
     setShowConfirmationPage(true);
   }
 
-  const modalProps = {
+  const deleteTransactionModalProps = {
+    title: 'Delete Transaction',
+    description: `Are you sure you want to delete transaction ${transactionRows[editRowNum]?.channelTransactionReference}?`,
+    buttons: [
+      {
+        type: 'button',
+        label: 'Yes',
+        componentProps: {
+          color: 'success',
+          onClick: () => deleteTransactionRow(editRowNum)
+        }
+      },
+      {
+        type: 'button',
+        label: 'No',
+        componentProps: {
+          color: 'error',
+          onClick: () => setIsDeleteTransactionModalOpen(false)
+        }
+      }
+    ],
+    isOpen: isDeleteTransactionModalOpen,
+    handleClose: () => setIsDeleteTransactionModalOpen(false)
+  };
+
+  const submitPaymentModalProps = {
     title: 'Confirm',
-    description: `Are you sure you want to submit the Payment File: ${currMainFormData.filename}?`,
+    description: `Are you sure you want to submit the Payment File: ${filename}?`,
     buttons: [
       {
         type: 'button',
@@ -204,12 +237,12 @@ export default function PaymentFile({
         label: 'No',
         componentProps: {
           color: 'error',
-          onClick: () => setIsModalOpen(false)
+          onClick: () => setIsSubmitPaymentModalOpen(false)
         }
       }
     ],
-    isOpen: isModalOpen,
-    handleClose: () => setIsModalOpen(false)
+    isOpen: isSubmitPaymentModalOpen,
+    handleClose: () => setIsSubmitPaymentModalOpen(false)
   };
 
   const alertDialogProps = {
@@ -342,7 +375,7 @@ export default function PaymentFile({
       setApplicantDetails(mapToApplicantDetails(applicantDetails, values));
 
       // if modal is not open, then it is adding new transaction or editing existing transaction
-      if (!isModalOpen) {
+      if (!isSubmitPaymentModalOpen) {
         setCurrSubFormData({
           ...currSubFormData,
           ...updatedMainFormDetails,
@@ -369,7 +402,8 @@ export default function PaymentFile({
 
   return (
     <Box spacing={2} xs={{ p: 3, mb: 5 }}>
-      <ModalBox {...modalProps} />
+      <ModalBox {...submitPaymentModalProps} />
+      <ModalBox {...deleteTransactionModalProps} />
       <AlertDialog {...alertDialogProps} />
       {subFormVisible ? (
         <SubForm {...subFormProps} />
