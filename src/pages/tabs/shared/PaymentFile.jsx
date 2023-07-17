@@ -33,6 +33,7 @@ export default function PaymentFile(props) {
   const [isDeleteTransactionModalOpen, setIsDeleteTransactionModalOpen] =
     useState(false);
   const [openAlert, setOpenAlert] = useState(false);
+  const [isDeclinedSubmission, setIsDeclinedSubmission] = useState(false);
   const {
     applicantDetails,
     currSubFormData,
@@ -169,8 +170,8 @@ export default function PaymentFile(props) {
     }
   }
 
-  function deleteTransactionRow(id) {
-    setSubFormDataList(subFormDataList.filter((item) => item.id !== id));
+  function deleteTransactionRow(rowNum) {
+    setSubFormDataList(subFormDataList.filter((_, index) => rowNum !== index));
     setEditRowNum(-1);
     setIsDeleteTransactionModalOpen(false);
   }
@@ -224,7 +225,9 @@ export default function PaymentFile(props) {
 
   const submitPaymentModalProps = {
     title: 'Confirm',
-    description: `Are you sure you want to submit the Payment File: ${filename}?`,
+    description: `Are you sure you want to ${
+      isDeclinedSubmission ? 'decline' : 'submit'
+    } the Payment File: ${filename}?`,
     buttons: [
       {
         type: 'button',
@@ -284,7 +287,8 @@ export default function PaymentFile(props) {
     totalPaymentAmount,
     processingMode,
     paymentCurrency,
-    isCreate
+    isCreate,
+    isDeclinedSubmission
   };
 
   const reviewButtonProps = isCreate
@@ -399,7 +403,9 @@ export default function PaymentFile(props) {
     onSubmit: submitTransactions,
     totalTransactionCount,
     totalPaymentAmount,
-    requesterComments
+    requesterComments,
+    isCreate,
+    setIsDeclinedSubmission
   };
 
   return (

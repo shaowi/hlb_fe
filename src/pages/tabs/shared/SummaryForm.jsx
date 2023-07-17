@@ -14,8 +14,30 @@ export default function SummaryForm(props) {
     onSubmit,
     totalTransactionCount,
     totalPaymentAmount,
-    requesterComments
+    requesterComments,
+    isCreate,
+    setIsDeclinedSubmission
   } = props;
+
+  const buttons = [
+    {
+      label: 'Submit',
+      componentProps: {
+        color: 'success'
+      }
+    }
+  ];
+
+  if (!isCreate) {
+    buttons.push({
+      label: 'Decline',
+      componentProps: {
+        color: 'error',
+        onClick: () => setIsDeclinedSubmission(true)
+      }
+    });
+  }
+
   const formAttributes = {
     sections: [
       {
@@ -69,14 +91,7 @@ export default function SummaryForm(props) {
         ]
       }
     ],
-    buttons: [
-      {
-        label: 'Submit',
-        componentProps: {
-          color: 'success'
-        }
-      }
-    ]
+    buttons
   };
 
   const formBuilderProps = {

@@ -22,14 +22,13 @@ export const APPLICANT_DETAILS = {
 };
 
 export const SUB_FILE_DETAILS = {
-  id: 0,
+  id: -1, // id used to identify the file to be updated in database
   debitType: 'single',
   transactionType: 'ISS 1-M CBFT Credit Transfer (MT103)',
   processingMode: 'processingMode'
 };
 
 export const MAIN_FILE_DETAILS = {
-  id: -1, // id used to identify the file to be updated in database
   filename: `OPFR${currentDate.replace(/-/g, '')}0000001.csv`,
   debitType: 'single',
   channelTransactionReference: '2317333701OPZ00100',

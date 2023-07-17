@@ -34,7 +34,8 @@ export default function ConfirmationSummaryForm(props) {
     setShowReviewPage,
     processingMode,
     paymentCurrency,
-    isCreate
+    isCreate,
+    isDeclinedSubmission
   } = props;
 
   const formAttributes = {
@@ -130,7 +131,13 @@ export default function ConfirmationSummaryForm(props) {
         subFormData,
         paymentId
       );
-      const paymentPayload = mapToPaymentPayload(currMainFormData, subFormData);
+      const newStatus =
+        isCreate || !isDeclinedSubmission ? 'pending' : 'declined';
+      const paymentPayload = mapToPaymentPayload(
+        currMainFormData,
+        subFormData,
+        newStatus
+      );
       const payload = {
         ...applicantPayload,
         ...beneficiaryPayload,

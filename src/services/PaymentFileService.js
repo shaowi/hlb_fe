@@ -49,7 +49,6 @@ export async function getFileDetails(filename) {
  */
 function mapToMainFileData(transactionList) {
   const {
-    id,
     filename,
     debitType,
     channelTransactionReference,
@@ -62,7 +61,6 @@ function mapToMainFileData(transactionList) {
     otherPaymentDetails
   } = transactionList[0];
   return {
-    id,
     filename,
     debitType,
     channelTransactionReference,
@@ -146,6 +144,7 @@ function mapToApplicantData(transactionList) {
 function mapToSubFormDataList(applicantDetails, transactionList) {
   return transactionList.map((transaction) => {
     const {
+      id,
       beneficiary,
       processingMode,
       transactionType,
@@ -167,7 +166,7 @@ function mapToSubFormDataList(applicantDetails, transactionList) {
       commissionInLieuOfExchange,
       commissionHandle
     } = transaction;
-    const subFileDetails = { debitType, transactionType, processingMode };
+    const subFileDetails = { id, debitType, transactionType, processingMode };
     const beneficiaryDetails = mapToBeneficiaryData(beneficiary);
     const foreignPaymentDetails = mapToForeignPaymentData(foreignPaymentForm);
     const chargesDetail = {
@@ -444,15 +443,15 @@ export function mapToForeignPaymentPayload(subFormData, id = null) {
 
 /**
  * The function `mapToPaymentPayload` takes in two objects, `mainFormData` and `subFormData`, and returns a new object that
- * combines the properties of both objects along with an additional `status` property set to 'pending'.
+ * combines the properties of both objects.
  * @param mainFormData - An object containing data from the main form. It includes the channelTransactionReference, which
  * is a unique identifier for the transaction.
  * @param subFormData - An object containing the payment transaction details properties.
- * @returns an object that combines the properties of `mainFormData`, `subFormPayload`, and a new property `status` with
- * the value 'pending'.
+ * @returns an object that combines the properties of `mainFormData`, `subFormPayload`, and a new property `status`.
  */
-export function mapToPaymentPayload(mainFormData, subFormData) {
+export function mapToPaymentPayload(mainFormData, subFormData, status) {
   const {
+    id,
     processingMode,
     sendersCorrespondent,
     receiversCorrespondent,
@@ -470,6 +469,7 @@ export function mapToPaymentPayload(mainFormData, subFormData) {
   } = subFormData;
   const { channelTransactionReference } = mainFormData;
   const subFormPayload = {
+    id,
     processingMode,
     sendersCorrespondent,
     receiversCorrespondent,
@@ -486,7 +486,7 @@ export function mapToPaymentPayload(mainFormData, subFormData) {
     commissionInLieuOfExchange,
     commissionHandle
   };
-  return { ...mainFormData, ...subFormPayload, status: 'pending' };
+  return { ...mainFormData, ...subFormPayload, status };
 }
 
 /**
