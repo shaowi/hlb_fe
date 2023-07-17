@@ -31,7 +31,8 @@ export default function Login(props) {
     version,
     footerText,
     formHeaderText,
-    formFieldLabels
+    formFieldLabels,
+    setUsername
   } = props;
   // map labels to camelCase
   const formFieldNames = formFieldLabels.map((label) =>
@@ -119,6 +120,7 @@ export default function Login(props) {
     const isSuccess = responseCode === 200;
     const hasNetworkError = responseCode === 0;
     if (isSuccess) {
+      setUsername(username);
       navigate('/home');
       return;
     }

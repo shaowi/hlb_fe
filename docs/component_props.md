@@ -13,6 +13,7 @@ interface LoginProps {
   footerText: string;
   formHeaderText: string;
   formFieldLabels: string[];
+  setUsername: () => {};
 }
 ```
 
@@ -21,6 +22,7 @@ E.g:
 ![login_component](./images/loginComponent.png)
 
 ```js
+const [username, setUsername] = React.useState('');
 const props = {
     imageSrc: '/images/logo.png',
     imageAlt: 'hlb',
@@ -28,7 +30,8 @@ const props = {
     version: 'v0.1',
     footerText: `Copyright © ${new Date().getFullYear()} HL Bank. All Rights Reserved.`,
     formHeaderText: 'Log in',
-    formFieldLabels: ['Username', 'Password']
+    formFieldLabels: ['Username', 'Password'],
+    setUsername
 }
 
 <Login {...props} />

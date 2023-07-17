@@ -39,7 +39,8 @@ export default function App() {
     version: 'v0.1',
     footerText: `Copyright © ${new Date().getFullYear()} HL Bank. All Rights Reserved.`,
     formHeaderText: 'Log in',
-    formFieldLabels: ['Username', 'Password']
+    formFieldLabels: ['Username', 'Password'],
+    setUsername
   };
 
   const paymentFileTabsProps = [
