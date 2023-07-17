@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import UserNavBar from 'components/navigation/UserNavBar';
 import ModuleNavBar from 'components/navigation/ModuleNavBar';
-import { getCurrentUser } from 'services/UserService';
+import UserNavBar from 'components/navigation/UserNavBar';
 import Loader from 'pages/Loader';
 
-export default function Home({ children }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [username, setUsername] = useState('');
+export default function Home(props) {
+  const { children, username, isLoading } = props;
   const userNavBarProps = {
     imageSrc: '/images/logo.png',
     imageAlt: 'hlb',
     centerText: 'Payment Gateway Biz Ops Portal',
-    username: username,
+    username,
     logoutText: 'Logout'
   };
 
@@ -109,17 +106,6 @@ export default function Home({ children }) {
       ]
     }
   ];
-
-  useEffect(() => {
-    /**
-     * The function fetches the current user and sets the username if the user exists.
-     */
-    async function fetchAndSetUser() {
-      const user = await getCurrentUser();
-      setUsername(user?.name);
-    }
-    fetchAndSetUser().then(() => setIsLoading(false));
-  }, []);
 
   return isLoading ? (
     <Loader />

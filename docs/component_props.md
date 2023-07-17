@@ -561,6 +561,7 @@ const props = {formAttributesProp, onSubmit: () => console.log('submitting')}
 
 ```ts
 interface NotFoundProps {
+  code: number;
   centerText: string;
   subText: string;
   buttonText: string;
@@ -574,6 +575,7 @@ E.g:
 
 ```js
 const props = {
+  code: 404,
   centerText: 'Oops! Page not found.',
   subText: 'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.',
   buttonText: 'Go to Home',

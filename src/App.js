@@ -14,8 +14,24 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import RejectedPaymentMain from './pages/tabs/rejected_payment_main';
+import { useState, useEffect } from 'react';
+import { getCurrentUser } from 'services/UserService';
 
 export default function App() {
+  const [username, setUsername] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    /**
+     * The function fetches the current user and sets the username if the user exists.
+     */
+    async function fetchAndSetUser() {
+      const user = await getCurrentUser();
+      setUsername(user?.name);
+    }
+    fetchAndSetUser().then(() => setIsLoading(false));
+  }, []);
+
   const loginProps = {
     imageSrc: '/images/logo.png',
     imageAlt: 'hlb',
@@ -47,11 +63,26 @@ export default function App() {
   ];
 
   const notFoundProps = {
+    code: 404,
     centerText: 'Oops! Page not found.',
     subText:
       'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.',
     buttonText: 'Go to Home',
-    buttonLink: '/'
+    buttonLink: '/home'
+  };
+
+  const restrictedProps = {
+    code: 403,
+    centerText: 'Oops! Restricted access.',
+    subText:
+      'You do not have permission to access this page. Please login and try again.',
+    buttonText: 'Go to Login',
+    buttonLink: '/login'
+  };
+
+  const homeProps = {
+    username,
+    isLoading
   };
 
   return (
@@ -63,17 +94,25 @@ export default function App() {
           <Route
             path="/home"
             element={
-              <Home>
-                <Footer isFixed={true} />
-              </Home>
+              username ? (
+                <Home {...homeProps}>
+                  <Footer isFixed={true} />
+                </Home>
+              ) : (
+                <NotFound {...restrictedProps} />
+              )
             }
           />
           <Route
             path="/outward-iss-cbft-credit-transfer"
             element={
-              <Home>
-                <PageTabs tabsContent={paymentFileTabsProps} />
-              </Home>
+              username ? (
+                <Home {...homeProps}>
+                  <PageTabs tabsContent={paymentFileTabsProps} />
+                </Home>
+              ) : (
+                <NotFound {...restrictedProps} />
+              )
             }
           />
           <Route path="*" element={<NotFound {...notFoundProps} />} />

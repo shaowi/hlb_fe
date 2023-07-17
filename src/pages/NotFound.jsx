@@ -5,7 +5,15 @@ import { Link } from 'react-router-dom';
 /* A React functional component called `NotFound`. It is exported as the default export, which means
 it can be imported and used in other files without specifying its name. */
 export default function NotFound(props) {
-  const { centerText, subText, buttonText, buttonLink } = props;
+  const { code, centerText, subText, buttonText, buttonLink } = props;
+  const buttonProps = {
+    componentProps: {
+      component: Link,
+      to: buttonLink,
+      color: 'primary'
+    },
+    label: buttonText
+  };
   return (
     <div
       style={{
@@ -20,7 +28,7 @@ export default function NotFound(props) {
           <Grid container direction="column" spacing={3} alignItems="center">
             <Grid item>
               <Typography variant="h1" color="primary">
-                404
+                {code}
               </Typography>
             </Grid>
             <Grid item>
@@ -30,12 +38,7 @@ export default function NotFound(props) {
               <Typography variant="body1">{subText}</Typography>
             </Grid>
             <Grid item>
-              <FormButton
-                component={Link}
-                to={buttonLink}
-                label={buttonText}
-                color="primary"
-              />
+              <FormButton {...buttonProps} />
             </Grid>
           </Grid>
         </Paper>
