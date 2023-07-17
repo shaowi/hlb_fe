@@ -1,32 +1,34 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, ButtonGroup } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Box } from '@mui/material';
 import AlertDialog from 'components/AlertDialog';
 import ModalBox from 'components/ModalBox';
-import ActionButton from 'components/datatable/ActionButton';
+import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
 import DataTable from 'components/datatable/index';
-import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
-import { useEffect, useState, useRef, useMemo } from 'react';
-import ConfirmationPage from './ConfirmationPage';
-import MainForm from './MainForm';
-import SummaryForm from './SummaryForm';
-import ReviewPage from './ReviewPage';
-import SubForm from './SubForm';
-import { transactionColumns } from '../shared/payment_store';
+import { STATUSES } from 'constants';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   mapToApplicantDetails,
   mapToMainFileDetails
 } from 'services/PaymentFileService';
+import { transactionColumns } from '../shared/payment_store';
+import ConfirmationPage from './ConfirmationPage';
+import MainForm from './MainForm';
+import ReviewPage from './ReviewPage';
+import SubForm from './SubForm';
+import SummaryForm from './SummaryForm';
 
 /**
  * The `PaymentFile` function is a React component that renders a form for creating or editing payment files, including
  * transaction details, and provides functionality for adding, editing, and deleting transactions.
  * @returns a JSX element.
  */
+const { rejected } = STATUSES;
 export default function PaymentFile(props) {
   const { storeProps, isCreate, setShowPaymentFile } = props;
   const formikRef = useRef();
-  const [editRowNum, setEditRowNum] = useState(-1);
+  const [selectedRowNum, setSelectedRowNum] = useState(-1);
   const [subFormVisible, setSubFormVisible] = useState(false);
   const [isSubmitPaymentModalOpen, setIsSubmitPaymentModalOpen] =
     useState(false);
@@ -62,6 +64,7 @@ export default function PaymentFile(props) {
     return transactionRows.reduce((acc, curr) => acc + curr.paymentAmount, 0);
   }, [transactionRows]);
   const {
+    status,
     filename,
     debitType,
     channelTransactionReference,
@@ -70,18 +73,20 @@ export default function PaymentFile(props) {
     valueDate,
     businessDate
   } = currMainFormData;
+  const isRejectedFile = STATUSES[status] === rejected;
+  const isFormEditable = isRejectedFile || isCreate;
 
   // Keep the state and the table in sync
   useEffect(() => {
     // Update the edited row in the table
-    if (editRowNum !== -1) {
+    if (selectedRowNum !== -1) {
       const newTransactionRows = [...transactionRows];
-      newTransactionRows[editRowNum] = mapToRow(
-        editRowNum,
-        subFormDataList[editRowNum]
+      newTransactionRows[selectedRowNum] = mapToRow(
+        selectedRowNum,
+        subFormDataList[selectedRowNum]
       );
       setTransactionRows(newTransactionRows);
-      setEditRowNum(-1);
+      setSelectedRowNum(-1);
       return;
     }
     setTransactionRows(
@@ -104,28 +109,45 @@ export default function PaymentFile(props) {
       fxContractReferenceNo
     }
   ) {
+    const actionButtonProps = isFormEditable
+      ? {
+          buttons: [
+            {
+              toolTipText: 'Edit Transaction',
+              componentProps: {
+                onClick: () => editTransactionRow(id)
+              },
+              icon: <EditIcon />
+            },
+            {
+              toolTipText: 'Delete Transaction',
+              componentProps: {
+                color: 'error',
+                onClick: () => {
+                  setSelectedRowNum(id);
+                  setIsDeleteTransactionModalOpen(true);
+                }
+              },
+              icon: <DeleteIcon />
+            }
+          ]
+        }
+      : {
+          buttons: [
+            {
+              toolTipText: 'View Transaction',
+              componentProps: {
+                onClick: () => viewTransactionRow(id)
+              },
+              icon: <VisibilityIcon />
+            }
+          ]
+        };
+    const action = <ActionButtonGroup {...actionButtonProps} />;
+
     return {
       id,
-      action: (
-        <ButtonGroup variant="text" size="small">
-          <ToolTipWrapper title="Edit">
-            <ActionButton onClick={() => editTransactionRow(id)}>
-              <EditIcon />
-            </ActionButton>
-          </ToolTipWrapper>
-          <ToolTipWrapper title="Delete">
-            <ActionButton
-              color="error"
-              onClick={() => {
-                setEditRowNum(id);
-                setIsDeleteTransactionModalOpen(true);
-              }}
-            >
-              <DeleteIcon />
-            </ActionButton>
-          </ToolTipWrapper>
-        </ButtonGroup>
-      ),
+      action,
       channelTransactionReference,
       processingMode,
       beneficiaryName,
@@ -146,13 +168,13 @@ export default function PaymentFile(props) {
   function editTransaction(values) {
     setSubFormDataList(
       subFormDataList.map((item, index) =>
-        index === editRowNum ? values : item
+        index === selectedRowNum ? values : item
       )
     );
   }
 
   function handleSubFormSubmit(values) {
-    if (editRowNum !== -1) {
+    if (selectedRowNum !== -1) {
       editTransaction(values);
     } else {
       addTransaction(values);
@@ -163,7 +185,7 @@ export default function PaymentFile(props) {
 
   function editTransactionRow(id) {
     setCurrSubFormData({ ...subFormDataList[id], id });
-    setEditRowNum(id);
+    setSelectedRowNum(id);
     if (formikRef.current) {
       // To update applicant details in subForm for any field changes made in mainForm
       formikRef.current.handleSubmit();
@@ -172,8 +194,14 @@ export default function PaymentFile(props) {
 
   function deleteTransactionRow(rowNum) {
     setSubFormDataList(subFormDataList.filter((_, index) => rowNum !== index));
-    setEditRowNum(-1);
+    setSelectedRowNum(-1);
     setIsDeleteTransactionModalOpen(false);
+  }
+
+  function viewTransactionRow(id) {
+    setCurrSubFormData({ ...subFormDataList[id], id });
+    setSelectedRowNum(id);
+    setSubFormVisible(true);
   }
 
   function submitTransactions(values) {
@@ -201,14 +229,14 @@ export default function PaymentFile(props) {
 
   const deleteTransactionModalProps = {
     title: 'Delete Transaction',
-    description: `Are you sure you want to delete transaction ${transactionRows[editRowNum]?.channelTransactionReference}?`,
+    description: `Are you sure you want to delete transaction ${transactionRows[selectedRowNum]?.channelTransactionReference}?`,
     buttons: [
       {
         type: 'button',
         label: 'Yes',
         componentProps: {
           color: 'success',
-          onClick: () => deleteTransactionRow(editRowNum)
+          onClick: () => deleteTransactionRow(selectedRowNum)
         }
       },
       {
@@ -271,7 +299,9 @@ export default function PaymentFile(props) {
   const subFormProps = {
     onSubmit: handleSubFormSubmit,
     setSubFormVisible,
-    isEdit: editRowNum !== -1,
+    isEdit: selectedRowNum !== -1,
+    disabled: !isRejectedFile,
+    isFormEditable,
     currSubFormData
   };
 
@@ -345,30 +375,19 @@ export default function PaymentFile(props) {
   };
 
   const mainFormButtons = [
-    isCreate
-      ? {
-          label: 'Add Transaction',
-          componentProps: {
-            color: 'success'
-          }
-        }
-      : {
-          label: 'Back',
-          type: 'button',
-          componentProps: {
-            color: 'neutral',
-            onClick: () => {
-              setShowPaymentFile(false);
-              resetStore();
-            }
-          }
-        }
+    {
+      label: 'Add Transaction',
+      componentProps: {
+        color: 'success'
+      }
+    }
   ];
   const mainFormProps = {
     formikRef,
     currMainFormData,
     applicantDetails,
-    formButtons: mainFormButtons,
+    formButtons: isCreate && mainFormButtons,
+    disabled: !isRejectedFile,
     onSubmit: (values) => {
       const updatedMainFormDetails = mapToMainFileDetails(
         currMainFormData,
@@ -405,6 +424,9 @@ export default function PaymentFile(props) {
     totalTransactionCount,
     totalPaymentAmount,
     transactionSummaryData,
+    setShowPaymentFile,
+    resetStore,
+    isRejectedFile,
     isCreate,
     setIsDeclinedSubmission
   };

@@ -1,6 +1,7 @@
 import ModuleNavBar from 'components/navigation/ModuleNavBar';
 import UserNavBar from 'components/navigation/UserNavBar';
 import Loader from 'pages/Loader';
+import NotFound from './NotFound';
 
 export default function Home(props) {
   const { children, username, isLoading } = props;
@@ -107,13 +108,24 @@ export default function Home(props) {
     }
   ];
 
+  const restrictedProps = {
+    code: 403,
+    centerText: 'Oops! Restricted access.',
+    subText:
+      'You do not have permission to access this page. Please login and try again.',
+    buttonText: 'Go to Login',
+    buttonLink: '/login'
+  };
+
   return isLoading ? (
     <Loader />
-  ) : (
+  ) : username ? (
     <>
       <UserNavBar {...userNavBarProps} />
       <ModuleNavBar menu={moduleNavBarMenu} />
       {children}
     </>
+  ) : (
+    <NotFound {...restrictedProps} />
   );
 }

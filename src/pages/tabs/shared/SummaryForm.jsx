@@ -15,8 +15,12 @@ export default function SummaryForm(props) {
     totalTransactionCount,
     totalPaymentAmount,
     transactionSummaryData: { requesterComments, reviewerComments },
+    setShowPaymentFile,
+    resetStore,
+    isRejectedFile,
     isCreate,
-    setIsDeclinedSubmission
+    setIsDeclinedSubmission,
+    isMaker = true
   } = props;
 
   const secondRow = [
@@ -24,7 +28,8 @@ export default function SummaryForm(props) {
       type: TEXT,
       defaultValue: requesterComments,
       componentProps: {
-        required: true,
+        required: isMaker,
+        disabled: !isRejectedFile,
         name: 'requesterComments',
         label: 'Requester Comments',
         'data-testid': 'requesterComments',
@@ -36,31 +41,57 @@ export default function SummaryForm(props) {
 
   const buttons = [
     {
-      label: 'Submit',
+      label: 'Back',
+      type: 'button',
       componentProps: {
-        color: 'success'
+        color: 'neutral',
+        onClick: () => {
+          setShowPaymentFile(false);
+          resetStore();
+        }
       }
     }
   ];
 
-  if (!isCreate) {
+  if (isRejectedFile) {
+    buttons.push.apply(buttons, [
+      {
+        label: 'Submit',
+        componentProps: {
+          color: 'success'
+        }
+      },
+      {
+        label: 'Decline',
+        componentProps: {
+          color: 'error',
+          onClick: () => setIsDeclinedSubmission(true)
+        }
+      }
+    ]);
+  }
+
+  if (isCreate) {
+    // Replace back button with submit
+    buttons.splice(0, 1, {
+      label: 'Submit',
+      componentProps: {
+        color: 'success'
+      }
+    });
+  } else {
+    // Insert reviewerComments field at index 0
     secondRow.splice(0, 0, {
       type: TEXT,
       defaultValue: reviewerComments,
       componentProps: {
-        required: true,
+        required: !isMaker,
+        disabled: isMaker,
         name: 'reviewerComments',
         label: 'Reviewer Comments',
         'data-testid': 'reviewerComments',
         multiline: true,
         rows: 3
-      }
-    });
-    buttons.push({
-      label: 'Decline',
-      componentProps: {
-        color: 'error',
-        onClick: () => setIsDeclinedSubmission(true)
       }
     });
   }

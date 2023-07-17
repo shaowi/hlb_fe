@@ -6,7 +6,9 @@ import {
 } from 'constants';
 import UploadPaymentMain from 'pages/tabs/UploadPaymentMain';
 import CreatePaymentMain from 'pages/tabs/create_payment_main';
+import { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { getCurrentUser } from 'services/UserService';
 import { theme } from 'theme';
 import Footer from './components/Footer';
 import PageTabs from './components/PageTabs';
@@ -14,8 +16,6 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import RejectedPaymentMain from './pages/tabs/rejected_payment_main';
-import { useState, useEffect } from 'react';
-import { getCurrentUser } from 'services/UserService';
 
 export default function App() {
   const [username, setUsername] = useState('');
@@ -72,15 +72,6 @@ export default function App() {
     buttonLink: '/home'
   };
 
-  const restrictedProps = {
-    code: 403,
-    centerText: 'Oops! Restricted access.',
-    subText:
-      'You do not have permission to access this page. Please login and try again.',
-    buttonText: 'Go to Login',
-    buttonLink: '/login'
-  };
-
   const homeProps = {
     username,
     isLoading
@@ -95,25 +86,17 @@ export default function App() {
           <Route
             path="/home"
             element={
-              username ? (
-                <Home {...homeProps}>
-                  <Footer isFixed={true} />
-                </Home>
-              ) : (
-                <NotFound {...restrictedProps} />
-              )
+              <Home {...homeProps}>
+                <Footer isFixed={true} />
+              </Home>
             }
           />
           <Route
             path="/outward-iss-cbft-credit-transfer"
             element={
-              username ? (
-                <Home {...homeProps}>
-                  <PageTabs tabsContent={paymentFileTabsProps} />
-                </Home>
-              ) : (
-                <NotFound {...restrictedProps} />
-              )
+              <Home {...homeProps}>
+                <PageTabs tabsContent={paymentFileTabsProps} />
+              </Home>
             }
           />
           <Route path="*" element={<NotFound {...notFoundProps} />} />

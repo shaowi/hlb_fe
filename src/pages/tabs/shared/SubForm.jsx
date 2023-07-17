@@ -20,7 +20,14 @@ const { TEXT, SELECT, SELECT_AUTOCOMPLETE, LABEL } = FORM_TYPES;
  * @returns a JSX element.
  */
 export default function SubForm(props) {
-  const { isEdit, onSubmit, setSubFormVisible, currSubFormData } = props;
+  const {
+    onSubmit,
+    setSubFormVisible,
+    isEdit,
+    disabled = false,
+    isFormEditable,
+    currSubFormData
+  } = props;
   const debitFeeLabel = `Debit Fee in ${currSubFormData.paymentCurrency}`;
   const standardFeeLabel = 'Standard Fee in SGD';
 
@@ -34,6 +41,7 @@ export default function SubForm(props) {
             defaultValue: debitType,
             componentProps: {
               required: true,
+              disabled,
               name: 'debitType',
               label: 'Debit Type',
               'data-testid': 'debitType',
@@ -557,6 +565,7 @@ export default function SubForm(props) {
             defaultValue: remittanceCurrency,
             componentProps: {
               required: true,
+              disabled,
               name: 'remittanceCurrency',
               label: 'Remittance Currency',
               'data-testid': 'remittanceCurrency',
@@ -567,6 +576,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: remittanceAmount,
             componentProps: {
+              disabled,
               name: 'remittanceAmount',
               label: 'Remittance Amount',
               'data-testid': 'remittanceAmount',
@@ -704,6 +714,7 @@ export default function SubForm(props) {
             defaultValue: chargeBearer,
             componentProps: {
               required: true,
+              disabled,
               name: 'chargeBearer',
               label: 'Charge Bearer',
               'data-testid': 'chargeBearer',
@@ -725,6 +736,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: commissionInLieuOfExchange,
             componentProps: {
+              disabled,
               name: 'commissionInLieuOfExchange',
               label: debitFeeLabel,
               'data-testid': 'debitMidRate'
@@ -755,6 +767,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: commissionHandle,
             componentProps: {
+              disabled,
               name: 'commissionHandle',
               label: debitFeeLabel,
               'data-testid': 'commissionHandle'
@@ -833,6 +846,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: channelTransactionReference,
             componentProps: {
+              disabled,
               name: 'channelTransactionReference',
               label: 'Channel Transaction Reference',
               'data-testid': 'channelTransactionReference'
@@ -842,6 +856,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: recipientReference,
             componentProps: {
+              disabled,
               name: 'recipientReference',
               label: 'Recipient Reference',
               'data-testid': 'recipientReference'
@@ -851,6 +866,7 @@ export default function SubForm(props) {
             type: SELECT,
             defaultValue: purposeCode,
             componentProps: {
+              disabled,
               name: 'purposeCode',
               label: 'Purpose Code',
               'data-testid': 'purposeCode',
@@ -865,6 +881,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: remittanceInfo,
             componentProps: {
+              disabled,
               name: 'remittanceInfo',
               label: 'Remittance Information',
               'data-testid': 'remittanceInfo'
@@ -874,6 +891,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: additionalRemittanceInfo,
             componentProps: {
+              disabled,
               name: 'additionalRemittanceInfo',
               label: 'Additional Remittance Information',
               'data-testid': 'additionalRemittanceInfo'
@@ -887,6 +905,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: senderToReceiverInfo,
             componentProps: {
+              disabled,
               name: 'senderToReceiverInfo',
               label: 'Sender to Receiver Information',
               'data-testid': 'senderToReceiverInfo'
@@ -896,6 +915,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: additionalSenderToReceiverInfo,
             componentProps: {
+              disabled,
               name: 'additionalSenderToReceiverInfo',
               label: 'Additional Sender to Receiver Information',
               'data-testid': 'additionalSenderToReceiverInfo'
@@ -909,6 +929,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: otherPaymentDetails,
             componentProps: {
+              disabled,
               name: 'otherPaymentDetails',
               label: 'Other Payment Details',
               'data-testid': 'otherPaymentDetails',
@@ -920,6 +941,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: additionalRemarks,
             componentProps: {
+              disabled,
               name: 'additionalRemarks',
               label: 'Additional Remarks',
               'data-testid': 'additionalRemarks',
@@ -932,25 +954,19 @@ export default function SubForm(props) {
     ]
   };
 
-  const formAttributes = {
-    sections: [
-      fileFormAttributes,
-      applicantFormAttributes(true),
-      beneficiaryFormAttributes(false),
-      paymentFormAttributes,
-      chargesFormAttributes,
-      correspondentBankDetailsAttributes,
-      transactionDetailsAttributes
-    ],
-    buttons: [
-      {
-        label: 'Back',
-        type: 'button',
-        componentProps: {
-          color: 'neutral',
-          onClick: () => setSubFormVisible(false)
-        }
-      },
+  const buttons = [
+    {
+      label: 'Back',
+      type: 'button',
+      componentProps: {
+        color: 'neutral',
+        onClick: () => setSubFormVisible(false)
+      }
+    }
+  ];
+
+  if (isFormEditable) {
+    buttons.push.apply(buttons, [
       {
         label: 'Reset',
         isReset: true
@@ -961,7 +977,19 @@ export default function SubForm(props) {
           color: 'success'
         }
       }
-    ]
+    ]);
+  }
+  const formAttributes = {
+    sections: [
+      fileFormAttributes,
+      applicantFormAttributes(true),
+      beneficiaryFormAttributes(disabled),
+      paymentFormAttributes,
+      chargesFormAttributes,
+      correspondentBankDetailsAttributes,
+      transactionDetailsAttributes
+    ],
+    buttons
   };
 
   const formBuilderProps = {

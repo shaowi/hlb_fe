@@ -45,6 +45,7 @@ export async function getFileDetails(filename) {
  */
 function mapToMainFileData(transactionList) {
   const {
+    status,
     filename,
     debitType,
     channelTransactionReference,
@@ -57,6 +58,7 @@ function mapToMainFileData(transactionList) {
     otherPaymentDetails
   } = transactionList[0];
   return {
+    status,
     filename,
     debitType,
     channelTransactionReference,
@@ -296,7 +298,7 @@ function mapToTransactionSummaryData(transactionList) {
   const { requesterComments, reviewerComments } = transactionList[0];
   return {
     requesterComments,
-    reviewerComments
+    reviewerComments: reviewerComments || ''
   };
 }
 
