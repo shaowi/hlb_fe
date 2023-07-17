@@ -99,7 +99,6 @@ export const TRANSACTION_DETAILS = {
 };
 
 export const TRANSACTION_SUMMARY = {
-  totalTransactionCount: 0,
-  totalPaymentAmount: 0,
-  requesterComments: 'requesterComments'
+  requesterComments: 'requesterComments',
+  reviewerComments: ''
 };

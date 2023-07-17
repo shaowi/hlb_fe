@@ -75,7 +75,7 @@ export default function RejectedPaymentMain() {
     setCurrMainFormData,
     setSubFormDataList,
     setApplicantDetails,
-    setRequesterComments
+    setTransactionSummaryData
   } = store;
   const [loadingDatatable, setLoadingDatatable] = useState(true);
   const [initFiles, setInitFiles] = useState({});
@@ -117,12 +117,12 @@ export default function RejectedPaymentMain() {
           currMainFormData,
           applicantDetails,
           subFormDataList,
-          requesterComments
+          transactionSummaryData
         ] = await getFileDetails(rows[id].filename);
         setApplicantDetails(applicantDetails);
         setCurrMainFormData(currMainFormData);
         setSubFormDataList(subFormDataList);
-        setRequesterComments(requesterComments);
+        setTransactionSummaryData(transactionSummaryData);
         setShowPaymentFile(true);
       } catch (error) {
         console.log(error);
@@ -157,7 +157,7 @@ export default function RejectedPaymentMain() {
     files,
     setApplicantDetails,
     setCurrMainFormData,
-    setRequesterComments,
+    setTransactionSummaryData,
     setSubFormDataList
   ]);
 

@@ -14,10 +14,25 @@ export default function SummaryForm(props) {
     onSubmit,
     totalTransactionCount,
     totalPaymentAmount,
-    requesterComments,
+    transactionSummaryData: { requesterComments, reviewerComments },
     isCreate,
     setIsDeclinedSubmission
   } = props;
+
+  const secondRow = [
+    {
+      type: TEXT,
+      defaultValue: requesterComments,
+      componentProps: {
+        required: true,
+        name: 'requesterComments',
+        label: 'Requester Comments',
+        'data-testid': 'requesterComments',
+        multiline: true,
+        rows: 3
+      }
+    }
+  ];
 
   const buttons = [
     {
@@ -29,6 +44,18 @@ export default function SummaryForm(props) {
   ];
 
   if (!isCreate) {
+    secondRow.splice(0, 0, {
+      type: TEXT,
+      defaultValue: reviewerComments,
+      componentProps: {
+        required: true,
+        name: 'reviewerComments',
+        label: 'Reviewer Comments',
+        'data-testid': 'reviewerComments',
+        multiline: true,
+        rows: 3
+      }
+    });
     buttons.push({
       label: 'Decline',
       componentProps: {
@@ -73,20 +100,7 @@ export default function SummaryForm(props) {
             ]
           },
           {
-            fields: [
-              {
-                type: TEXT,
-                defaultValue: requesterComments,
-                componentProps: {
-                  required: true,
-                  name: 'requesterComments',
-                  label: 'Requester Comments',
-                  'data-testid': 'requesterComments',
-                  multiline: true,
-                  rows: 3
-                }
-              }
-            ]
+            fields: secondRow
           }
         ]
       }

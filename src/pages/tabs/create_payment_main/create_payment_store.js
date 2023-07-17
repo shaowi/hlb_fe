@@ -27,7 +27,7 @@ const initialStoreData = {
   currSubFormData: INITIAL_PAYMENT_SUB_FORM_STATE,
   subFormDataList: [INITIAL_PAYMENT_SUB_FORM_STATE],
   transactionRows: [],
-  requesterComments: TRANSACTION_SUMMARY.requesterComments,
+  transactionSummaryData: TRANSACTION_SUMMARY,
   showConfirmationPage: false,
   showReviewPage: false,
   errorOnConfirm: false

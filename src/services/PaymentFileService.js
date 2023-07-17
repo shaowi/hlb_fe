@@ -15,7 +15,7 @@ import { getRequest, postRequest } from './HttpRequests';
  * 1. mainFileData: The main file data mapped from the transaction list.
  * 2. applicantData: The applicant data mapped from the transaction list.
  * 3. subFormDataList: A list of sub-form data mapped from the applicant data and transaction list.
- * 4. requesterComments: The requester comments from the first transaction in the transaction list.
+ * 4. transactionSummaryData : An object with requester and reviewer comments from the first transaction in the transaction list.
  */
 export async function getFileDetails(filename) {
   const response = await getRequest(ONLINE_CBFT_URL, { filename });
@@ -29,13 +29,9 @@ export async function getFileDetails(filename) {
   const mainFileData = mapToMainFileData(transactionList);
   const applicantData = mapToApplicantData(transactionList);
   const subFormDataList = mapToSubFormDataList(applicantData, transactionList);
+  const transactionSummaryData = mapToTransactionSummaryData(transactionList);
 
-  return [
-    mainFileData,
-    applicantData,
-    subFormDataList,
-    transactionList[0].requesterComments
-  ];
+  return [mainFileData, applicantData, subFormDataList, transactionSummaryData];
 }
 
 /**
@@ -290,6 +286,21 @@ function mapToForeignPaymentData(form) {
 }
 
 /**
+ * The function `mapToTransactionSummaryData` returns the requester and reviewer comments from the first transaction in a
+ * given list.
+ * @param transactionList - An array of transaction objects. Each transaction object has properties such as
+ * requesterComments and reviewerComments.
+ * @returns an object with the properties "requesterComments" and "reviewerComments".
+ */
+function mapToTransactionSummaryData(transactionList) {
+  const { requesterComments, reviewerComments } = transactionList[0];
+  return {
+    requesterComments,
+    reviewerComments
+  };
+}
+
+/**
  * The function creates a payment transaction by making a POST request to a specified URL with a payload.
  * @param payload - The payload parameter is an object that contains the necessary data for creating a payment transaction.
  * It could include information such as the amount to be paid, the recipient's account details, and any additional metadata
@@ -461,6 +472,7 @@ export function mapToPaymentPayload(mainFormData, subFormData, status) {
     senderToReceiverInfo,
     additionalSenderToReceiverInfo,
     requesterComments,
+    reviewerComments,
     creditMidRate,
     debitMidRate,
     chargeBearer,
@@ -480,6 +492,7 @@ export function mapToPaymentPayload(mainFormData, subFormData, status) {
     senderToReceiverInfo,
     additionalSenderToReceiverInfo,
     requesterComments,
+    reviewerComments,
     creditMidRate,
     debitMidRate,
     chargeBearer,

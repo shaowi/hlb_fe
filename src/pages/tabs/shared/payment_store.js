@@ -8,7 +8,8 @@ import {
   MAIN_FILE_DETAILS,
   PAYMENT_DETAILS,
   SUB_FILE_DETAILS,
-  TRANSACTION_DETAILS
+  TRANSACTION_DETAILS,
+  TRANSACTION_SUMMARY
 } from '../form_templates';
 
 export const INITIAL_PAYMENT_SUB_FORM_STATE = {
@@ -96,8 +97,8 @@ export const createPaymentStore = (initialStoreData) =>
       set(() => ({ subFormDataList: subFormDataList })),
     setTransactionRows: (transactionRows) =>
       set(() => ({ transactionRows: transactionRows })),
-    setRequesterComments: (requesterComments) =>
-      set(() => ({ requesterComments: requesterComments })),
+    setTransactionSummaryData: (transactionSummaryData) =>
+      set(() => ({ transactionSummaryData: transactionSummaryData })),
     setShowConfirmationPage: (showConfirmationPage) =>
       set(() => ({ showConfirmationPage: showConfirmationPage })),
     setShowReviewPage: (showReviewPage) =>
@@ -111,7 +112,7 @@ export const createPaymentStore = (initialStoreData) =>
         currSubFormData: INITIAL_PAYMENT_SUB_FORM_STATE,
         subFormDataList: [],
         transactionRows: [],
-        requesterComments: '',
+        transactionSummaryData: TRANSACTION_SUMMARY,
         showConfirmationPage: false,
         showReviewPage: false
       }))

@@ -40,18 +40,18 @@ export default function PaymentFile(props) {
     currMainFormData,
     setCurrMainFormData,
     subFormDataList,
+    transactionSummaryData,
     transactionRows,
     setTransactionRows,
     setSubFormDataList,
     setCurrSubFormData,
     resetCurrSubFormData,
     setApplicantDetails,
-    setRequesterComments,
+    setTransactionSummaryData,
     showConfirmationPage,
     setShowConfirmationPage,
     showReviewPage,
     setShowReviewPage,
-    requesterComments,
     errorOnConfirm,
     setErrorOnConfirm,
     resetStore
@@ -181,7 +181,8 @@ export default function PaymentFile(props) {
       setOpenAlert(true);
       return;
     }
-    setRequesterComments(values.requesterComments);
+    const { requesterComments, reviewerComments } = values;
+    setTransactionSummaryData({ requesterComments, reviewerComments });
     setIsSubmitPaymentModalOpen(true);
   }
 
@@ -279,7 +280,7 @@ export default function PaymentFile(props) {
     currSubFormData,
     currMainFormData,
     subFormDataList,
-    requesterComments,
+    transactionSummaryData,
     setShowConfirmationPage,
     setShowReviewPage,
     setErrorOnConfirm,
@@ -403,7 +404,7 @@ export default function PaymentFile(props) {
     onSubmit: submitTransactions,
     totalTransactionCount,
     totalPaymentAmount,
-    requesterComments,
+    transactionSummaryData,
     isCreate,
     setIsDeclinedSubmission
   };

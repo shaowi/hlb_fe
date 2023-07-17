@@ -26,7 +26,7 @@ export default function ConfirmationSummaryForm(props) {
     applicantDetails,
     currMainFormData,
     subFormDataList,
-    requesterComments,
+    transactionSummaryData,
     setShowConfirmationPage,
     totalTransactionCount,
     totalPaymentAmount,
@@ -46,7 +46,7 @@ export default function ConfirmationSummaryForm(props) {
             fields: [
               {
                 type: TEXT,
-                defaultValue: requesterComments,
+                defaultValue: transactionSummaryData?.requesterComments,
                 componentProps: {
                   disabled: true,
                   name: 'requesterComments',
@@ -143,7 +143,7 @@ export default function ConfirmationSummaryForm(props) {
         ...beneficiaryPayload,
         ...foreignPaymentPayload,
         ...paymentPayload,
-        requesterComments
+        ...transactionSummaryData
       };
       return isCreate
         ? createPaymentTransaction(payload)

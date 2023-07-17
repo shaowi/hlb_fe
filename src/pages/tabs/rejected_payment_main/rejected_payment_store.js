@@ -6,7 +6,7 @@ const initialStoreData = {
   currSubFormData: null,
   subFormDataList: [],
   transactionRows: [],
-  requesterComments: '',
+  transactionSummaryData: null,
   showConfirmationPage: false,
   showReviewPage: false,
   errorOnConfirm: false
