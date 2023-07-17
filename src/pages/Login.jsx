@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { cloneDeep } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logInUser } from 'services/UserService';
 import { theme } from 'theme';
@@ -104,22 +104,6 @@ export default function Login(props) {
       }
     ]
   };
-
-  useEffect(() => {
-    const isAutofilled =
-      window
-        .getComputedStyle(
-          document.querySelector("input[name='password']"),
-          ':-webkit-autofill'
-        )
-        .getPropertyValue('background-color') !== 'rgb(255, 255, 255)';
-    console.log(isAutofilled);
-    setTimeout(() => {
-      if (isAutofilled) {
-        document.getElementById('root').click();
-      }
-    }, 2000);
-  }, []);
 
   /**
    * The function handles form submission, logs in the user, and handles different response codes and errors.
