@@ -1,9 +1,9 @@
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import ActionButton from 'components/datatable/ActionButton';
+import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
 import DataTable from 'components/datatable/index';
-import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
 import { DEBIT_TYPE, STATUSES } from 'constants';
 import { previousMonthDate } from 'constants.js';
+import Loader from 'pages/Loader';
 import { useRejectedPaymentStore } from 'pages/tabs/rejected_payment_main/rejected_payment_store';
 import { useEffect, useState } from 'react';
 import {
@@ -14,7 +14,6 @@ import { formatToCurrency } from 'services/helper';
 import PaymentFile from '../shared/PaymentFile';
 import { currentDate } from './../../../constants';
 import SearchBox from './SearchBox';
-import Loader from 'pages/Loader';
 
 const { all } = STATUSES;
 
@@ -132,6 +131,18 @@ export default function RejectedPaymentMain() {
     const rows = [];
     Object.entries(files).forEach(([key, value], index) => {
       const { debitType, transactionDate, businessDate, status } = value[0];
+      const actionButtonProps = {
+        buttons: [
+          {
+            toolTipText: viewFileToolTipText,
+            componentProps: {
+              onClick: () => setStoreData(index)
+            },
+            icon: <FileOpenIcon />
+          }
+        ]
+      };
+      const action = <ActionButtonGroup {...actionButtonProps} />;
       rows.push({
         debitType: DEBIT_TYPE[debitType],
         transactionCount: value.length,
@@ -143,13 +154,7 @@ export default function RejectedPaymentMain() {
         businessDate,
         status: STATUSES[status],
         filename: key,
-        action: (
-          <ToolTipWrapper title={viewFileToolTipText}>
-            <ActionButton onClick={() => setStoreData(index)}>
-              <FileOpenIcon />
-            </ActionButton>
-          </ToolTipWrapper>
-        )
+        action
       });
     });
     setRows(rows);
