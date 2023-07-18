@@ -19,6 +19,31 @@ export default function SearchBox({ onSearch, initialFormValues }) {
     transactionDateTo
   } = initialFormValues;
 
+  const rowOne = [
+    {
+      type: TEXT,
+      defaultValue: filename,
+      componentProps: {
+        name: 'filename',
+        label: 'Filename',
+        'data-testid': 'filename'
+      }
+    }
+  ];
+  if (status) {
+    rowOne.push({
+      type: SELECT,
+      defaultValue: status,
+      componentProps: {
+        required: true,
+        name: 'status',
+        label: 'Status',
+        'data-testid': 'status',
+        options: STATUSES
+      }
+    });
+  }
+
   const formAttributes = {
     sections: [
       {
@@ -28,28 +53,7 @@ export default function SearchBox({ onSearch, initialFormValues }) {
         },
         rows: [
           {
-            fields: [
-              {
-                type: TEXT,
-                defaultValue: filename,
-                componentProps: {
-                  name: 'filename',
-                  label: 'Filename',
-                  'data-testid': 'filename'
-                }
-              },
-              {
-                type: SELECT,
-                defaultValue: status,
-                componentProps: {
-                  required: true,
-                  name: 'status',
-                  label: 'Status',
-                  'data-testid': 'status',
-                  options: STATUSES
-                }
-              }
-            ]
+            fields: rowOne
           },
           {
             fields: [

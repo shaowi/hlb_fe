@@ -37,8 +37,10 @@ export default function ConfirmationSummaryForm(props) {
     processingMode,
     paymentCurrency,
     isCreate,
-    submitType
+    submitType,
+    isMaker
   } = props;
+  const { requesterComments, reviewerComments } = transactionSummaryData;
 
   const formAttributes = {
     sections: [
@@ -46,18 +48,31 @@ export default function ConfirmationSummaryForm(props) {
         rows: [
           {
             fields: [
-              {
-                type: TEXT,
-                defaultValue: transactionSummaryData?.requesterComments,
-                componentProps: {
-                  disabled: true,
-                  name: 'requesterComments',
-                  label: 'Requester Comments',
-                  'data-testid': 'requesterComments',
-                  multiline: true,
-                  rows: 3
-                }
-              }
+              isMaker
+                ? {
+                    type: TEXT,
+                    defaultValue: requesterComments,
+                    componentProps: {
+                      disabled: true,
+                      name: 'requesterComments',
+                      label: 'Requester Comments',
+                      'data-testid': 'requesterComments',
+                      multiline: true,
+                      rows: 3
+                    }
+                  }
+                : {
+                    type: TEXT,
+                    defaultValue: reviewerComments,
+                    componentProps: {
+                      disabled: true,
+                      name: 'reviewerComments',
+                      label: 'Reviewer Comments',
+                      'data-testid': 'reviewerComments',
+                      multiline: true,
+                      rows: 3
+                    }
+                  }
             ]
           }
         ]

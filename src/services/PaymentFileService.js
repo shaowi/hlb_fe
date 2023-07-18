@@ -510,7 +510,7 @@ export function mapToPaymentPayload(mainFormData, subFormData, status) {
  * @returns an object that contains the rejected payment files. Each file is represented by a key in the object, and the
  * value is an array of transactions associated with that file.
  */
-export async function getRejectedPaymentFiles() {
+export async function getPaymentFiles() {
   const response = await getRequest(GET_ALL_ONLINE_CBFT_URL);
   if (response.status !== 200) {
     return new Error('Error in fetching rejected payments');

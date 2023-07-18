@@ -9,7 +9,6 @@ import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
 import DataTable from 'components/datatable/index';
 import { STATUSES, SUBMIT_TYPES } from 'constants';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   mapToApplicantDetails,
   mapToMainFileDetails
@@ -27,7 +26,6 @@ import SummaryForm from './SummaryForm';
  * @returns a JSX element.
  */
 export default function PaymentFile(props) {
-  const navigate = useNavigate();
   const { isMaker } = useAppStore();
   const { storeProps, isCreate, setShowPaymentFile } = props;
   const formikRef = useRef();
@@ -320,7 +318,8 @@ export default function PaymentFile(props) {
     processingMode,
     paymentCurrency,
     isCreate,
-    submitType
+    submitType,
+    isMaker
   };
 
   const reviewButtonProps = isCreate
@@ -339,7 +338,7 @@ export default function PaymentFile(props) {
         type: 'button',
         componentProps: {
           color: 'neutral',
-          onClick: () => navigate('/outward-iss-cbft-credit-transfer')
+          onClick: () => window.location.reload()
         }
       };
   const reviewPageProps = {

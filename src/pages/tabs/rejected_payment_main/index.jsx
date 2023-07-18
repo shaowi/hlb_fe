@@ -10,13 +10,11 @@ import {
 import Loader from 'pages/Loader';
 import { useRejectedPaymentStore } from 'pages/tabs/rejected_payment_main/rejected_payment_store';
 import { useEffect, useState } from 'react';
-import {
-  getFileDetails,
-  getRejectedPaymentFiles
-} from 'services/PaymentFileService';
+import { getFileDetails, getPaymentFiles } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
 import PaymentFile from '../shared/PaymentFile';
 import SearchBox from './SearchBox';
+import { useAppStore } from 'app_store';
 
 const { all } = STATUSES;
 
@@ -72,6 +70,7 @@ export default function RejectedPaymentMain() {
       sortable: true
     }
   ];
+  const { isMaker } = useAppStore();
   const store = useRejectedPaymentStore();
   const {
     setCurrMainFormData,
@@ -87,13 +86,26 @@ export default function RejectedPaymentMain() {
 
   useEffect(() => {
     /**
-     * The function fetchFiles is an asynchronous function that fetches rejected payment files, sets the initial files, and
+     * The function fetchFiles is an asynchronous function that fetches payment files, sets the initial files, and
      * updates the loading state of the datatable.
      */
     async function fetchFiles() {
+      function setInitFilesBasedOnAccountRole(files) {
+        if (isMaker) {
+          setInitFiles(files);
+          return;
+        }
+        const pendingFiles = {};
+        Object.entries(files).forEach(([key, value]) => {
+          if (value[0].status === 'pending') {
+            pendingFiles[key] = value;
+          }
+        });
+        setInitFiles(pendingFiles);
+      }
       try {
-        const files = await getRejectedPaymentFiles();
-        setInitFiles(files);
+        const files = await getPaymentFiles();
+        setInitFilesBasedOnAccountRole(files);
         setLoadingDatatable(false);
       } catch (error) {
         console.log(error);
@@ -181,6 +193,7 @@ export default function RejectedPaymentMain() {
         values.filename === '' ||
         filename.toLowerCase().includes(values.filename.toLowerCase());
       const matchStatus =
+        !('status' in values) ||
         values.status.toLowerCase() === all.toLowerCase() ||
         status.toLowerCase().includes(values.status.toLowerCase());
       const withinBusinessDate =
@@ -211,7 +224,7 @@ export default function RejectedPaymentMain() {
 
   const initialFormValues = {
     filename: '',
-    status: 'all',
+    status: isMaker ? 'all' : '',
     businessDateFrom: previousMonthDate,
     businessDateTo: currentDate,
     transactionDateFrom: '',
