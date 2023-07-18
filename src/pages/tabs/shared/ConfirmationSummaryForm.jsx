@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
 import DataTable from 'components/datatable';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
+import { SUBMIT_TYPES } from 'constants';
+import { useState } from 'react';
 import {
   createPaymentTransaction,
   mapToApplicantPayload,
@@ -10,8 +12,6 @@ import {
   updatePaymentTransaction
 } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
-import { useState } from 'react';
-import { SUBMIT_TYPES } from 'constants';
 
 const { TEXT } = FORM_TYPES;
 const { reject, approve, decline } = SUBMIT_TYPES;

@@ -8,8 +8,8 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import Footer from './Footer';
 import { theme } from 'theme';
+import Footer from './Footer';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

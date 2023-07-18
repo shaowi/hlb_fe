@@ -1,8 +1,12 @@
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
 import DataTable from 'components/datatable/index';
-import { DEBIT_TYPE, STATUSES } from 'constants';
-import { previousMonthDate } from 'constants.js';
+import {
+  DEBIT_TYPE,
+  STATUSES,
+  currentDate,
+  previousMonthDate
+} from 'constants';
 import Loader from 'pages/Loader';
 import { useRejectedPaymentStore } from 'pages/tabs/rejected_payment_main/rejected_payment_store';
 import { useEffect, useState } from 'react';
@@ -12,7 +16,6 @@ import {
 } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
 import PaymentFile from '../shared/PaymentFile';
-import { currentDate } from './../../../constants';
 import SearchBox from './SearchBox';
 
 const { all } = STATUSES;

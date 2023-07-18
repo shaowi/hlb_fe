@@ -2,12 +2,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box } from '@mui/material';
+import { useAppStore } from 'app_store';
 import AlertDialog from 'components/AlertDialog';
 import ModalBox from 'components/ModalBox';
 import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
 import DataTable from 'components/datatable/index';
-import { STATUSES } from 'constants';
+import { STATUSES, SUBMIT_TYPES } from 'constants';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   mapToApplicantDetails,
   mapToMainFileDetails
@@ -18,9 +20,6 @@ import MainForm from './MainForm';
 import ReviewPage from './ReviewPage';
 import SubForm from './SubForm';
 import SummaryForm from './SummaryForm';
-import { useAppStore } from 'app_store';
-import { useNavigate } from 'react-router-dom';
-import { SUBMIT_TYPES } from 'constants';
 
 /**
  * The `PaymentFile` function is a React component that renders a form for creating or editing payment files, including

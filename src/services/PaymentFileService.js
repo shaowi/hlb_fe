@@ -1,9 +1,9 @@
 import { COUNTRY_CODE_TO_LABEL } from 'constants';
 import {
   CREATE_ONLINE_CBFT_URL,
-  UPDATE_ONLINE_CBFT_URL,
+  GET_ALL_ONLINE_CBFT_URL,
   ONLINE_CBFT_URL,
-  GET_ALL_ONLINE_CBFT_URL
+  UPDATE_ONLINE_CBFT_URL
 } from 'endpoints';
 import { getRequest, postRequest } from './HttpRequests';
 
