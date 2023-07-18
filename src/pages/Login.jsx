@@ -9,9 +9,16 @@ import {
 } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
 import { cloneDeep } from 'lodash';
-import { useState } from 'react';
+import { useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logInUser } from 'services/UserService';
+import {
+  INITIAL_STATE,
+  LOGIN_FAILURE,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  loginReducer
+} from 'services/reducers/loginReducer';
 import { theme } from 'theme';
 
 const themeCopy = cloneDeep(theme);
@@ -45,9 +52,10 @@ export default function Login(props) {
   const navigate = useNavigate();
   const [topFieldLabel, bottomFieldLabel] = formFieldLabels;
   const [topFieldName, bottomFieldName] = formFieldNames;
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [{ isSubmitting, hasError, errorMessage }, dispatch] = useReducer(
+    loginReducer,
+    INITIAL_STATE
+  );
 
   const formAttributes = {
     sections: [
@@ -112,26 +120,22 @@ export default function Login(props) {
    * return nothing. If there is a network error and the response code is 0, the function will set the appropriate error messages and shows the error.
    */
   async function handleSubmit(values) {
-    setIsSubmitting(true);
-    setHasError(false);
+    dispatch({ type: LOGIN_REQUEST });
 
     const { [topFieldName]: username, [bottomFieldName]: password } = values;
     const responseCode = await logInUser(username, password);
     const isSuccess = responseCode === 200;
     const hasNetworkError = responseCode === 0;
     if (isSuccess) {
+      dispatch({ type: LOGIN_SUCCESS });
       setUsername(username);
       navigate('/home');
       return;
     }
-    if (hasNetworkError) {
-      setErrorMessage('Network error occurred in the server.');
-    } else {
-      setErrorMessage(`Invalid ${topFieldName} or ${bottomFieldName}.`);
-    }
-
-    setIsSubmitting(false);
-    setHasError(true);
+    const errorMessage = hasNetworkError
+      ? 'Network error occurred in the server.'
+      : `Invalid ${topFieldName} or ${bottomFieldName}.`;
+    dispatch({ type: LOGIN_FAILURE, payload: errorMessage });
   }
 
   const formBuilderProps = {

@@ -212,6 +212,10 @@ export default function PaymentFile(props) {
     const { requesterComments, reviewerComments } = values;
     setTransactionSummaryData({ requesterComments, reviewerComments });
     setIsSubmitPaymentModalOpen(true);
+    if (formikRef.current) {
+      // To update applicant details in subForm for any field changes made in mainForm
+      formikRef.current.handleSubmit();
+    }
   }
 
   function closeAlert() {
@@ -219,10 +223,6 @@ export default function PaymentFile(props) {
   }
 
   function handleFileSubmit() {
-    if (formikRef.current) {
-      // To update applicant details in subForm for any field changes made in mainForm
-      formikRef.current.handleSubmit();
-    }
     setIsSubmitPaymentModalOpen(false);
     setShowConfirmationPage(true);
   }
@@ -300,7 +300,7 @@ export default function PaymentFile(props) {
     onSubmit: handleSubFormSubmit,
     setSubFormVisible,
     isEdit: selectedRowNum !== -1,
-    disabled: !isRejectedFile,
+    disabled: !isFormEditable,
     isFormEditable,
     currSubFormData
   };
@@ -387,7 +387,7 @@ export default function PaymentFile(props) {
     currMainFormData,
     applicantDetails,
     formButtons: isCreate && mainFormButtons,
-    disabled: !isRejectedFile,
+    disabled: !isFormEditable,
     onSubmit: (values) => {
       const updatedMainFormDetails = mapToMainFileDetails(
         currMainFormData,
