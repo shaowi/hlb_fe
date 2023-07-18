@@ -17,9 +17,9 @@ export async function logInUser(username, password) {
     });
 
     localStorage.setItem('user', JSON.stringify(response.data));
-    return response.status;
+    return response;
   } catch (error) {
-    return error.request.status;
+    return error.request;
   }
 }
 

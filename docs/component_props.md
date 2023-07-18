@@ -14,6 +14,8 @@ interface LoginProps {
   formHeaderText: string;
   formFieldLabels: string[];
   setUsername: () => {};
+  setIsFetchingUser: () => {};
+  setIsMaker: () => {};
 }
 ```
 
@@ -23,6 +25,8 @@ E.g:
 
 ```js
 const [username, setUsername] = React.useState('');
+const [isFetchingUser, setIsFetchingUser] = React.useState(true);
+const [isMaker, setIsMaker] = React.useState(false);
 const props = {
     imageSrc: '/images/logo.png',
     imageAlt: 'hlb',
@@ -31,7 +35,9 @@ const props = {
     footerText: `Copyright © ${new Date().getFullYear()} HL Bank. All Rights Reserved.`,
     formHeaderText: 'Log in',
     formFieldLabels: ['Username', 'Password'],
-    setUsername
+    setUsername,
+    setIsFetchingUser,
+    setIsMaker
 }
 
 <Login {...props} />

@@ -55,16 +55,15 @@ export default function PageTabs({ tabsContent }) {
       <Paper
         elevation={12}
         sx={{
-          p: 4,
+          p: 2,
           flexGrow: 1,
-          padding: 2,
           paddingLeft: 4,
           paddingRight: 4,
           width: '92%',
           margin: 'auto'
         }}
       >
-        <Box sx={{ pt: 1, pb: 1 }}>
+        <Box sx={{ pt: 1 }}>
           <Typography variant="h4">{tabsContent[value].title}</Typography>
         </Box>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

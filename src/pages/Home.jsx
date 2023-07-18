@@ -2,9 +2,10 @@ import ModuleNavBar from 'components/navigation/ModuleNavBar';
 import UserNavBar from 'components/navigation/UserNavBar';
 import Loader from 'pages/Loader';
 import NotFound from './NotFound';
+import { useAppStore } from 'app_store';
 
-export default function Home(props) {
-  const { children, username, isLoading } = props;
+export default function Home({ children }) {
+  const { username, isLoading } = useAppStore();
   const userNavBarProps = {
     imageSrc: '/images/logo.png',
     imageAlt: 'hlb',

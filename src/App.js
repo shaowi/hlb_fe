@@ -1,15 +1,18 @@
 import { ThemeProvider } from '@mui/material';
+import ContentWrapper from 'components/ContentWrapper';
 import {
   CREATE_PAYMENT_FILE,
+  MAKER,
   REJECTED_PAYMENT_FILE,
   UPLOAD_PAYMENT_FILE
 } from 'constants';
 import UploadPaymentMain from 'pages/tabs/UploadPaymentMain';
 import CreatePaymentMain from 'pages/tabs/create_payment_main';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { getCurrentUser } from 'services/UserService';
 import { theme } from 'theme';
+import { useAppStore } from './app_store';
 import Footer from './components/Footer';
 import PageTabs from './components/PageTabs';
 import Home from './pages/Home';
@@ -18,8 +21,7 @@ import NotFound from './pages/NotFound';
 import RejectedPaymentMain from './pages/tabs/rejected_payment_main';
 
 export default function App() {
-  const [username, setUsername] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const { isMaker, setUsername, setIsLoading, setIsMaker } = useAppStore();
 
   useEffect(() => {
     /**
@@ -28,8 +30,11 @@ export default function App() {
     async function fetchAndSetUser() {
       const user = await getCurrentUser();
       setUsername(user?.name);
+      setIsMaker(user?.role === MAKER);
+      setIsLoading(false);
     }
-    fetchAndSetUser().then(() => setIsLoading(false));
+    fetchAndSetUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loginProps = {
@@ -40,7 +45,9 @@ export default function App() {
     footerText: `Copyright © ${new Date().getFullYear()} HL Bank. All Rights Reserved.`,
     formHeaderText: 'Log in',
     formFieldLabels: ['Username', 'Password'],
-    setUsername
+    setUsername,
+    setIsFetchingUser: setIsLoading,
+    setIsMaker
   };
 
   const paymentFileTabsProps = [
@@ -72,11 +79,6 @@ export default function App() {
     buttonLink: '/home'
   };
 
-  const homeProps = {
-    username,
-    isLoading
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <Router>
@@ -86,7 +88,7 @@ export default function App() {
           <Route
             path="/home"
             element={
-              <Home {...homeProps}>
+              <Home>
                 <Footer isFixed={true} />
               </Home>
             }
@@ -94,8 +96,14 @@ export default function App() {
           <Route
             path="/outward-iss-cbft-credit-transfer"
             element={
-              <Home {...homeProps}>
-                <PageTabs tabsContent={paymentFileTabsProps} />
+              <Home>
+                {isMaker ? (
+                  <PageTabs tabsContent={paymentFileTabsProps} />
+                ) : (
+                  <ContentWrapper title="Review of Outward ISS CBFT Credit Transfer (MT103) Payment File Request">
+                    <RejectedPaymentMain />
+                  </ContentWrapper>
+                )}
               </Home>
             }
           />

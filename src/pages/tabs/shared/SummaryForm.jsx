@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
+import { useAppStore } from 'app_store';
 
 const { TEXT } = FORM_TYPES;
 
@@ -10,6 +11,8 @@ const { TEXT } = FORM_TYPES;
  * textarea for requester comments. The form has a submit button.
  */
 export default function SummaryForm(props) {
+  const { isMaker } = useAppStore();
+
   const {
     onSubmit,
     totalTransactionCount,
@@ -19,17 +22,17 @@ export default function SummaryForm(props) {
     resetStore,
     isRejectedFile,
     isCreate,
-    setIsDeclinedSubmission,
-    isMaker = true
+    isFormEditable,
+    setSubmitType
   } = props;
 
-  const secondRow = [
+  let secondRow = [
     {
       type: TEXT,
       defaultValue: requesterComments,
       componentProps: {
         required: isMaker,
-        disabled: !isRejectedFile,
+        disabled: !isFormEditable,
         name: 'requesterComments',
         label: 'Requester Comments',
         'data-testid': 'requesterComments',
@@ -38,8 +41,7 @@ export default function SummaryForm(props) {
       }
     }
   ];
-
-  const buttons = [
+  let buttons = [
     {
       label: 'Back',
       type: 'button',
@@ -52,48 +54,70 @@ export default function SummaryForm(props) {
       }
     }
   ];
+  const reviewerCommentsProps = {
+    type: TEXT,
+    defaultValue: reviewerComments,
+    componentProps: {
+      required: !isMaker,
+      disabled: isMaker,
+      name: 'reviewerComments',
+      label: 'Reviewer Comments',
+      'data-testid': 'reviewerComments',
+      multiline: true,
+      rows: 3
+    }
+  };
 
-  if (isRejectedFile) {
-    buttons.push.apply(buttons, [
-      {
+  if (isMaker) {
+    if (isRejectedFile) {
+      buttons.push.apply(buttons, [
+        {
+          label: 'Submit',
+          componentProps: {
+            color: 'success'
+          }
+        },
+        {
+          label: 'Decline',
+          componentProps: {
+            color: 'error',
+            onClick: () => setSubmitType('decline')
+          }
+        }
+      ]);
+    }
+
+    if (isCreate) {
+      // Replace back button with submit
+      buttons.splice(0, 1, {
         label: 'Submit',
         componentProps: {
           color: 'success'
         }
+      });
+    } else {
+      // Insert reviewerComments field at index 0
+      secondRow.splice(0, 0, reviewerCommentsProps);
+    }
+  } else {
+    // Push reviewerComments field to the end of the row
+    secondRow.push(reviewerCommentsProps);
+    buttons.push.apply(buttons, [
+      {
+        label: 'Approve',
+        componentProps: {
+          color: 'success',
+          onClick: () => setSubmitType('approve')
+        }
       },
       {
-        label: 'Decline',
+        label: 'Reject',
         componentProps: {
           color: 'error',
-          onClick: () => setIsDeclinedSubmission(true)
+          onClick: () => setSubmitType('reject')
         }
       }
     ]);
-  }
-
-  if (isCreate) {
-    // Replace back button with submit
-    buttons.splice(0, 1, {
-      label: 'Submit',
-      componentProps: {
-        color: 'success'
-      }
-    });
-  } else {
-    // Insert reviewerComments field at index 0
-    secondRow.splice(0, 0, {
-      type: TEXT,
-      defaultValue: reviewerComments,
-      componentProps: {
-        required: !isMaker,
-        disabled: isMaker,
-        name: 'reviewerComments',
-        label: 'Reviewer Comments',
-        'data-testid': 'reviewerComments',
-        multiline: true,
-        rows: 3
-      }
-    });
   }
 
   const formAttributes = {

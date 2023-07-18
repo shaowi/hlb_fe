@@ -9,6 +9,7 @@ export const previousMonthDate = new Date(
 export const STATUSES = {
   all: 'ALL',
   rejected: 'REJECTED',
+  approved: 'APPROVED',
   failed: 'FAILED',
   declined: 'DECLINED',
   pending: 'PENDING REVIEW'
@@ -77,3 +78,5 @@ export const FILENAME_FORMAT =
 export const REJECTED_PAYMENT_FILE = 'Rejected Payment File';
 export const UPLOAD_PAYMENT_FILE = 'Upload Payment File';
 export const CREATE_PAYMENT_FILE = 'Create Payment File';
+
+export const MAKER = 'MAKER';

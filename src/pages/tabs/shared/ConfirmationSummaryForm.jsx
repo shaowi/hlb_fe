@@ -35,7 +35,7 @@ export default function ConfirmationSummaryForm(props) {
     processingMode,
     paymentCurrency,
     isCreate,
-    isDeclinedSubmission
+    submitType
   } = props;
 
   const formAttributes = {
@@ -132,7 +132,13 @@ export default function ConfirmationSummaryForm(props) {
         paymentId
       );
       const newStatus =
-        isCreate || !isDeclinedSubmission ? 'pending' : 'declined';
+        submitType === 'reject'
+          ? 'rejected'
+          : submitType === 'decline'
+          ? 'declined'
+          : submitType === 'approve'
+          ? 'approved'
+          : 'pending';
       const paymentPayload = mapToPaymentPayload(
         currMainFormData,
         subFormData,

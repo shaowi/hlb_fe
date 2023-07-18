@@ -20,6 +20,7 @@ import {
   loginReducer
 } from 'services/reducers/loginReducer';
 import { theme } from 'theme';
+import { MAKER } from 'constants';
 
 const themeCopy = cloneDeep(theme);
 themeCopy.typography.h4.color = '#BBB';
@@ -39,7 +40,9 @@ export default function Login(props) {
     footerText,
     formHeaderText,
     formFieldLabels,
-    setUsername
+    setUsername,
+    setIsFetchingUser,
+    setIsMaker
   } = props;
   // map labels to camelCase
   const formFieldNames = formFieldLabels.map((label) =>
@@ -123,12 +126,14 @@ export default function Login(props) {
     dispatch({ type: LOGIN_REQUEST });
 
     const { [topFieldName]: username, [bottomFieldName]: password } = values;
-    const responseCode = await logInUser(username, password);
-    const isSuccess = responseCode === 200;
-    const hasNetworkError = responseCode === 0;
+    const { status, data } = await logInUser(username, password);
+    const isSuccess = status === 200;
+    const hasNetworkError = status === 0;
+    setIsFetchingUser(false);
     if (isSuccess) {
       dispatch({ type: LOGIN_SUCCESS });
       setUsername(username);
+      setIsMaker(data?.role === MAKER);
       navigate('/home');
       return;
     }

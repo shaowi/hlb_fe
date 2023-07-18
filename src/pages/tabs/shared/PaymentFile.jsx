@@ -18,6 +18,8 @@ import MainForm from './MainForm';
 import ReviewPage from './ReviewPage';
 import SubForm from './SubForm';
 import SummaryForm from './SummaryForm';
+import { useAppStore } from 'app_store';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * The `PaymentFile` function is a React component that renders a form for creating or editing payment files, including
@@ -26,6 +28,8 @@ import SummaryForm from './SummaryForm';
  */
 const { rejected } = STATUSES;
 export default function PaymentFile(props) {
+  const navigate = useNavigate();
+  const { isMaker } = useAppStore();
   const { storeProps, isCreate, setShowPaymentFile } = props;
   const formikRef = useRef();
   const [selectedRowNum, setSelectedRowNum] = useState(-1);
@@ -35,7 +39,7 @@ export default function PaymentFile(props) {
   const [isDeleteTransactionModalOpen, setIsDeleteTransactionModalOpen] =
     useState(false);
   const [openAlert, setOpenAlert] = useState(false);
-  const [isDeclinedSubmission, setIsDeclinedSubmission] = useState(false);
+  const [submitType, setSubmitType] = useState('submit');
   const {
     applicantDetails,
     currSubFormData,
@@ -74,7 +78,7 @@ export default function PaymentFile(props) {
     businessDate
   } = currMainFormData;
   const isRejectedFile = STATUSES[status] === rejected;
-  const isFormEditable = isRejectedFile || isCreate;
+  const isFormEditable = isMaker && (isRejectedFile || isCreate);
 
   // Keep the state and the table in sync
   useEffect(() => {
@@ -254,9 +258,7 @@ export default function PaymentFile(props) {
 
   const submitPaymentModalProps = {
     title: 'Confirm',
-    description: `Are you sure you want to ${
-      isDeclinedSubmission ? 'decline' : 'submit'
-    } the Payment File: ${filename}?`,
+    description: `Are you sure you want to ${submitType} the Payment File: ${filename}?`,
     buttons: [
       {
         type: 'button',
@@ -319,7 +321,7 @@ export default function PaymentFile(props) {
     processingMode,
     paymentCurrency,
     isCreate,
-    isDeclinedSubmission
+    submitType
   };
 
   const reviewButtonProps = isCreate
@@ -332,14 +334,13 @@ export default function PaymentFile(props) {
         }
       }
     : {
-        label: 'Back to Rejected Outward Payment Request File',
+        label: `Back to ${
+          isMaker ? 'Rejected' : 'Review'
+        } Outward Payment Request File`,
         type: 'button',
         componentProps: {
           color: 'neutral',
-          onClick: () => {
-            resetStore();
-            setShowPaymentFile(false);
-          }
+          onClick: () => navigate('/outward-iss-cbft-credit-transfer')
         }
       };
   const reviewPageProps = {
@@ -428,7 +429,8 @@ export default function PaymentFile(props) {
     resetStore,
     isRejectedFile,
     isCreate,
-    setIsDeclinedSubmission
+    isFormEditable,
+    setSubmitType
   };
 
   return (

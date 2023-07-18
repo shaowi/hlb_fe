@@ -3,7 +3,7 @@ import DataTable from 'components/datatable/index';
 import FormButton from 'components/forms_ui/buttons/FormButton';
 import { formatToCurrency } from 'services/helper';
 
-/* A React functional component called `ReviewPage`. It takes in a single object parameter `props`
+/** A React functional component called `ReviewPage`. It takes in a single object parameter `props`
 using object destructuring. The `props` object contains the following properties: `title`, `subTitle`, `body`,
 `transactionRows`, `processingMode`, `paymentCurrency`, and `buttonProps`. */
 export default function ReviewPage(props) {
