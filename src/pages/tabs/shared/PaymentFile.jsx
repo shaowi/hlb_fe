@@ -20,13 +20,13 @@ import SubForm from './SubForm';
 import SummaryForm from './SummaryForm';
 import { useAppStore } from 'app_store';
 import { useNavigate } from 'react-router-dom';
+import { SUBMIT_TYPES } from 'constants';
 
 /**
  * The `PaymentFile` function is a React component that renders a form for creating or editing payment files, including
  * transaction details, and provides functionality for adding, editing, and deleting transactions.
  * @returns a JSX element.
  */
-const { rejected } = STATUSES;
 export default function PaymentFile(props) {
   const navigate = useNavigate();
   const { isMaker } = useAppStore();
@@ -39,7 +39,7 @@ export default function PaymentFile(props) {
   const [isDeleteTransactionModalOpen, setIsDeleteTransactionModalOpen] =
     useState(false);
   const [openAlert, setOpenAlert] = useState(false);
-  const [submitType, setSubmitType] = useState('submit');
+  const [submitType, setSubmitType] = useState(SUBMIT_TYPES.submit);
   const {
     applicantDetails,
     currSubFormData,
@@ -77,7 +77,7 @@ export default function PaymentFile(props) {
     valueDate,
     businessDate
   } = currMainFormData;
-  const isRejectedFile = STATUSES[status] === rejected;
+  const isRejectedFile = STATUSES[status] === STATUSES.rejected;
   const isFormEditable = isMaker && (isRejectedFile || isCreate);
 
   // Keep the state and the table in sync

@@ -11,8 +11,10 @@ import {
 } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
 import { useState } from 'react';
+import { SUBMIT_TYPES } from 'constants';
 
 const { TEXT } = FORM_TYPES;
+const { reject, approve, decline } = SUBMIT_TYPES;
 
 /**
  * The `ConfirmationSummaryForm` component is a React component that displays a summary of payment details and a form for
@@ -132,11 +134,11 @@ export default function ConfirmationSummaryForm(props) {
         paymentId
       );
       const newStatus =
-        submitType === 'reject'
+        submitType === reject
           ? 'rejected'
-          : submitType === 'decline'
+          : submitType === decline
           ? 'declined'
-          : submitType === 'approve'
+          : submitType === approve
           ? 'approved'
           : 'pending';
       const paymentPayload = mapToPaymentPayload(

@@ -80,3 +80,10 @@ export const UPLOAD_PAYMENT_FILE = 'Upload Payment File';
 export const CREATE_PAYMENT_FILE = 'Create Payment File';
 
 export const MAKER = 'MAKER';
+
+export const SUBMIT_TYPES = {
+  submit: 'submit',
+  decline: 'decline',
+  approve: 'approve',
+  reject: 'reject'
+};
