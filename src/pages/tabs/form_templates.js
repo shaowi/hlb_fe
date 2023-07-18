@@ -29,6 +29,7 @@ export const SUB_FILE_DETAILS = {
 };
 
 export const MAIN_FILE_DETAILS = {
+  status: '',
   filename: `OPFR${currentDate.replace(/-/g, '')}0000001.csv`,
   debitType: 'single',
   channelTransactionReference: '2317333701OPZ00100',

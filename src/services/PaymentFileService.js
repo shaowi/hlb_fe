@@ -595,8 +595,9 @@ export function mapToMainFileDetails(curMainFileDetails, obj) {
     recipientReference,
     otherPaymentDetails
   } = obj;
+  const { status } = curMainFileDetails;
   return {
-    id: curMainFileDetails.beneficiaryDbId,
+    status,
     filename,
     debitType,
     channelTransactionReference,
