@@ -4,7 +4,7 @@ import { currentDate } from 'constants';
 export const APPLICANT_DETAILS = {
   applicantDbId: -1, // id used to identify the file to be updated in database
   applicantName: 'John Doe',
-  applicantAccountNo: '9000000001',
+  applicantAccountNumber: '9000000001',
   applicantAccountType: 'Current',
   applicantAccountCurrency: { label: 'SGD', value: 'SGD' },
   applicantIdType: 'New IC',
@@ -45,7 +45,7 @@ export const MAIN_FILE_DETAILS = {
 export const BENEFICIARY_DETAILS = {
   beneficiaryDbId: -1, // id used to identify the file to be updated in database
   beneficiaryName: 'Khanh Nguyen',
-  beneficiaryAccountNo: '1234567890',
+  beneficiaryAccountNumber: '1234567890',
   beneficiaryIdType: 'Passport',
   beneficiaryId: '72843',
   beneficiaryResidentCode: 'resident',

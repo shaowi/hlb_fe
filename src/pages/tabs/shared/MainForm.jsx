@@ -170,7 +170,7 @@ export default function MainForm(props) {
 
   const {
     applicantName,
-    applicantAccountNo,
+    applicantAccountNumber,
     applicantAccountType,
     applicantAccountCurrency,
     applicantIdType,
@@ -208,13 +208,13 @@ export default function MainForm(props) {
           },
           {
             type: TEXT,
-            defaultValue: applicantAccountNo,
+            defaultValue: applicantAccountNumber,
             componentProps: {
               disabled,
               required: true,
-              name: 'applicantAccountNo',
+              name: 'applicantAccountNumber',
               label: 'Account Number',
-              'data-testid': 'applicantAccountNo',
+              'data-testid': 'applicantAccountNumber',
               type: 'number'
             }
           },

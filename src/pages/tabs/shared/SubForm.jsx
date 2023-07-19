@@ -76,7 +76,7 @@ export default function SubForm(props) {
 
   const {
     applicantName,
-    applicantAccountNo,
+    applicantAccountNumber,
     applicantAccountType,
     applicantAccountCurrency,
     applicantIdType,
@@ -115,13 +115,13 @@ export default function SubForm(props) {
             },
             {
               type: TEXT,
-              defaultValue: applicantAccountNo,
+              defaultValue: applicantAccountNumber,
               componentProps: {
                 disabled,
                 required: true,
-                name: 'applicantAccountNo',
+                name: 'applicantAccountNumber',
                 label: 'Account Number',
-                'data-testid': 'applicantAccountNo',
+                'data-testid': 'applicantAccountNumber',
                 type: 'number'
               }
             },
@@ -309,7 +309,7 @@ export default function SubForm(props) {
 
   const {
     beneficiaryName,
-    beneficiaryAccountNo,
+    beneficiaryAccountNumber,
     beneficiaryIdType,
     beneficiaryId,
     beneficiaryResidentCode,
@@ -347,17 +347,17 @@ export default function SubForm(props) {
             },
             {
               type: TEXT,
-              defaultValue: beneficiaryAccountNo,
+              defaultValue: beneficiaryAccountNumber,
               componentProps: {
                 disabled,
                 required: true,
-                name: 'beneficiaryAccountNo',
+                name: 'beneficiaryAccountNumber',
                 label: 'Account Number',
-                'data-testid': 'beneficiaryAccountNo',
+                'data-testid': 'beneficiaryAccountNumber',
                 type: 'number'
               },
               validateEquality: {
-                other: 'applicantAccountNo',
+                other: 'applicantAccountNumber',
                 shouldBeEqual: false,
                 errorMessage:
                   'Beneficiary Account Number cannot be the same as Applicant Account Number'

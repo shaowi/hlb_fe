@@ -61,14 +61,16 @@ export const COUNTRY_CODE_TO_LABEL = {
 export const REMITTANCE_CURRENCY = [
   { label: 'AUD', value: 'AUD' },
   { label: 'USD', value: 'USD' },
-  { label: 'SGD', value: 'SGD' }
+  { label: 'SGD', value: 'SGD' },
+  { label: 'MYR', value: 'MYR' }
 ];
 
 export const ACCOUNT_BIC = [
   { label: 'ANZBAU3M', value: 'ANZBAU3M' },
   { label: 'ANZBAU3MXXX', value: 'ANZBAU3MXXX' },
   { label: 'BNZBAU3MXXX', value: 'BNZBAU3MXXX' },
-  { label: 'CATHHKH0XXX', value: 'CATHHKH0XXX' }
+  { label: 'CATHHKH0XXX', value: 'CATHHKH0XXX' },
+  { label: 'HKVISI20XXX', value: 'HKVISI20XXX' }
 ];
 // ----
 

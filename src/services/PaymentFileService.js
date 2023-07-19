@@ -1,4 +1,4 @@
-import { COUNTRY_CODE_TO_LABEL } from 'constants';
+import { currentDate, COUNTRY_CODE_TO_LABEL } from 'constants';
 import {
   CREATE_ONLINE_CBFT_URL,
   GET_ALL_ONLINE_CBFT_URL,
@@ -6,6 +6,8 @@ import {
   UPDATE_ONLINE_CBFT_URL
 } from 'endpoints';
 import { getRequest, postRequest } from './HttpRequests';
+import { convertToLocalCurrency } from './helper';
+import { TRANSACTION_SUMMARY } from 'pages/tabs/form_templates';
 
 /**
  * The function `getFileDetails` fetches file details from an online source, maps the data to different categories, and
@@ -32,6 +34,14 @@ export async function getFileDetails(filename) {
   const transactionSummaryData = mapToTransactionSummaryData(transactionList);
 
   return [mainFileData, applicantData, subFormDataList, transactionSummaryData];
+}
+
+export function parseCsvFileData(data, filename) {
+  const mainFileData = mapToMainFileDataFromCsv(data, filename);
+  const applicantData = mapToApplicantDataFromCsv(data);
+  const subFormDataList = mapToSubFormDataListFromCsv(applicantData, data);
+
+  return [mainFileData, applicantData, subFormDataList, TRANSACTION_SUMMARY];
 }
 
 /**
@@ -72,6 +82,35 @@ function mapToMainFileData(transactionList) {
   };
 }
 
+function mapToMainFileDataFromCsv(data, filename) {
+  const {
+    debitType,
+    transactionType,
+    valueDate,
+    recipientReference,
+    otherPaymentDetails
+  } = data[0];
+  const debitTypeLower = debitType.toLowerCase();
+  return {
+    status: '',
+    filename,
+    debitType:
+      debitTypeLower === 's'
+        ? 'single'
+        : debitTypeLower === 'm'
+        ? 'multiple'
+        : '',
+    channelTransactionReference: '',
+    transactionType,
+    requestChannel: '',
+    transactionDate: currentDate,
+    valueDate,
+    businessDate: currentDate,
+    recipientReference,
+    otherPaymentDetails
+  };
+}
+
 /**
  * The function `mapToApplicantData` takes a transaction list and extracts relevant information about the applicant,
  * returning it in a formatted object.
@@ -103,7 +142,7 @@ function mapToApplicantData(transactionList) {
   return {
     applicantDbId: id,
     applicantName: name,
-    applicantAccountNo: accountNumber,
+    applicantAccountNumber: accountNumber,
     applicantAccountType: accountType,
     applicantAccountCurrency: {
       label: accountCurrency,
@@ -123,6 +162,53 @@ function mapToApplicantData(transactionList) {
     applicantCountryCode: {
       label: COUNTRY_CODE_TO_LABEL[countryCode],
       value: countryCode
+    }
+  };
+}
+
+function mapToApplicantDataFromCsv(data) {
+  const {
+    applicantName,
+    applicantAccountNumber,
+    applicantAccountType,
+    applicantAccountCurrency,
+    applicantIdType,
+    applicantId,
+    applicantAccountBranchCode,
+    applicantResidentCode,
+    accountCIFID,
+    applicantContact,
+    applicantPostalCode,
+    applicantAddress1,
+    applicantAddress2,
+    applicantAddress3,
+    applicantCountryCode
+  } = data;
+
+  return {
+    applicantDbId: -1,
+    applicantName,
+    applicantAccountNumber,
+    applicantAccountType,
+    applicantAccountCurrency: {
+      label: applicantAccountCurrency,
+      value: applicantAccountCurrency
+    },
+    applicantIdType,
+    applicantId,
+    applicantAccountBranchCode,
+    applicantBankBic: '',
+    applicantResidentCode:
+      applicantResidentCode === 0 ? 'resident' : 'nonResident',
+    applicantAccountCifId: accountCIFID,
+    applicantPhone: applicantContact,
+    applicantPostalCode,
+    applicantAddress1,
+    applicantAddress2,
+    applicantAddress3,
+    applicantCountryCode: {
+      label: COUNTRY_CODE_TO_LABEL[applicantCountryCode],
+      value: applicantCountryCode
     }
   };
 }
@@ -164,7 +250,12 @@ function mapToSubFormDataList(applicantDetails, transactionList) {
       commissionInLieuOfExchange,
       commissionHandle
     } = transaction;
-    const subFileDetails = { id, debitType, transactionType, processingMode };
+    const subFileDetails = {
+      id,
+      debitType: debitType.toLowerCase() === 's' ? 'single' : 'multiple',
+      transactionType,
+      processingMode
+    };
     const beneficiaryDetails = mapToBeneficiaryData(beneficiary);
     const foreignPaymentDetails = mapToForeignPaymentData(foreignPaymentForm);
     const chargesDetail = {
@@ -188,6 +279,66 @@ function mapToSubFormDataList(applicantDetails, transactionList) {
       additionalSenderToReceiverInfo,
       otherPaymentDetails,
       additionalRemarks: ''
+    };
+    return {
+      ...subFileDetails,
+      ...applicantDetails,
+      ...beneficiaryDetails,
+      ...foreignPaymentDetails,
+      ...chargesDetail,
+      ...correspondentBankDetails,
+      ...transactionDetails
+    };
+  });
+}
+
+function mapToSubFormDataListFromCsv(applicantDetails, transactionList) {
+  return transactionList.map((transaction) => {
+    const {
+      processingMode,
+      transactionType,
+      recipientReference,
+      purposeCode,
+      remittanceInfo,
+      additionalRemittanceInfo,
+      senderToReceiverInfo,
+      additionalSenderToReceiverInfo,
+      otherPaymentDetails,
+      additionalRemarks,
+      debitType,
+      chargeBearer,
+      commissionInLieu,
+      handlingCommission
+    } = transaction;
+    const subFileDetails = {
+      id: -1,
+      debitType,
+      transactionType,
+      processingMode
+    };
+    const beneficiaryDetails = mapToBeneficiaryDataFromCsv(transaction);
+    const foreignPaymentDetails = mapToForeignPaymentDataFromCsv(transaction);
+    const chargesDetail = {
+      creditMidRate: 0.23,
+      debitMidRate: 1.2,
+      chargeBearer,
+      commissionInLieuOfExchange: commissionInLieu,
+      commissionHandle: handlingCommission
+    };
+    const correspondentBankDetails = {
+      sendersCorrespondent: 'senderCorrespondent',
+      receiversCorrespondent: 'receiverCorrespondent'
+    };
+    const transactionDetails = {
+      channelTransactionReference: '',
+      recipientReference,
+      purposeCode,
+      remittanceInfo,
+      additionalRemittanceInfo,
+      senderToReceiverInfo,
+      additionalSenderToReceiverInfo,
+      otherPaymentDetails,
+      additionalRemarks
     };
     return {
       ...subFileDetails,
@@ -231,7 +382,7 @@ function mapToBeneficiaryData(beneficiary) {
   return {
     beneficiaryDbId: id,
     beneficiaryName: name,
-    beneficiaryAccountNo: accountNumber,
+    beneficiaryAccountNumber: accountNumber,
     beneficiaryIdType: idType,
     beneficiaryId: id,
     beneficiaryResidentCode: isResident ? 'resident' : 'nonResident',
@@ -247,6 +398,52 @@ function mapToBeneficiaryData(beneficiary) {
     beneficiaryCountryCode: {
       label: COUNTRY_CODE_TO_LABEL[countryCode],
       value: countryCode
+    }
+  };
+}
+
+function mapToBeneficiaryDataFromCsv(obj) {
+  const {
+    beneficiaryAccountName,
+    beneficiaryAccountNumber,
+    beneficiaryIdType,
+    beneficiaryID,
+    beneficiaryResidentCode,
+    beneficiaryAccountBIC,
+    bankName,
+    bankCountryCode,
+    beneficiaryBankAddress1,
+    beneficiaryBankAddress2,
+    beneficiaryBankAddress3,
+    beneficiaryAddress1,
+    beneficiaryAddress2,
+    beneficiaryAddress3,
+    beneficiaryCountryCode
+  } = obj;
+
+  return {
+    beneficiaryDbId: -1,
+    beneficiaryName: beneficiaryAccountName,
+    beneficiaryAccountNumber,
+    beneficiaryIdType,
+    beneficiaryId: beneficiaryID,
+    beneficiaryResidentCode:
+      beneficiaryResidentCode === 0 ? 'resident' : 'nonResident',
+    beneficiaryAccountBic: {
+      label: beneficiaryAccountBIC,
+      value: beneficiaryAccountBIC
+    },
+    beneficiaryBankName: bankName,
+    beneficiaryBankCountryCode: bankCountryCode,
+    beneficiaryBankAddress1,
+    beneficiaryBankAddress2,
+    beneficiaryBankAddress3,
+    beneficiaryAddress1,
+    beneficiaryAddress2,
+    beneficiaryAddress3,
+    beneficiaryCountryCode: {
+      label: COUNTRY_CODE_TO_LABEL[beneficiaryCountryCode],
+      value: beneficiaryCountryCode
     }
   };
 }
@@ -284,6 +481,29 @@ function mapToForeignPaymentData(form) {
     paymentCurrency,
     paymentAmount,
     localEquivalentAmount
+  };
+}
+
+function mapToForeignPaymentDataFromCsv(obj) {
+  const {
+    beneficiaryAccountCurrency,
+    beneficiaryAmount,
+    fXContractReferenceNumber
+  } = obj;
+  return {
+    paymentId: -1,
+    remittanceCurrency: {
+      label: beneficiaryAccountCurrency,
+      value: beneficiaryAccountCurrency
+    },
+    remittanceAmount: beneficiaryAmount,
+    fxContractReferenceNo: fXContractReferenceNumber,
+    exchangeRate: 1.564,
+    creditFxRate: 0.89234,
+    debitFxRate: 0.89234,
+    paymentCurrency: beneficiaryAccountCurrency,
+    paymentAmount: beneficiaryAmount,
+    localEquivalentAmount: convertToLocalCurrency(beneficiaryAmount)
   };
 }
 
@@ -337,7 +557,7 @@ export function updatePaymentTransaction(payload) {
 export function mapToApplicantPayload(applicantDetails, id = null) {
   const {
     applicantName,
-    applicantAccountNo,
+    applicantAccountNumber,
     applicantAccountType,
     applicantAccountCurrency,
     applicantIdType,
@@ -359,7 +579,7 @@ export function mapToApplicantPayload(applicantDetails, id = null) {
       id,
       idType: applicantIdType,
       name: applicantName,
-      accountNumber: applicantAccountNo,
+      accountNumber: applicantAccountNumber,
       isResident: applicantResidentCode === 'resident',
       bankBic: applicantBankBic,
       addresses,
@@ -384,7 +604,7 @@ export function mapToApplicantPayload(applicantDetails, id = null) {
 export function mapToBeneficiaryPayload(subFormData, id = null) {
   const {
     beneficiaryName,
-    beneficiaryAccountNo,
+    beneficiaryAccountNumber,
     beneficiaryIdType,
     beneficiaryResidentCode,
     beneficiaryAccountBic,
@@ -405,7 +625,7 @@ export function mapToBeneficiaryPayload(subFormData, id = null) {
       id,
       idType: beneficiaryIdType,
       name: beneficiaryName,
-      accountNumber: beneficiaryAccountNo,
+      accountNumber: beneficiaryAccountNumber,
       isResident: beneficiaryResidentCode === 'resident',
       bankBic: beneficiaryAccountBic.value,
       addresses,
@@ -537,7 +757,7 @@ export async function getPaymentFiles() {
 export function mapToApplicantDetails(curApplicantDetails, obj) {
   const {
     applicantName,
-    applicantAccountNo,
+    applicantAccountNumber,
     applicantAccountType,
     applicantAccountCurrency,
     applicantIdType,
@@ -556,7 +776,7 @@ export function mapToApplicantDetails(curApplicantDetails, obj) {
   return {
     applicantDbId: curApplicantDetails.applicantDbId,
     applicantName,
-    applicantAccountNo,
+    applicantAccountNumber,
     applicantAccountType,
     applicantAccountCurrency,
     applicantIdType,
