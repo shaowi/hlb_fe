@@ -22,11 +22,13 @@ const { TEXT, SELECT, SELECT_AUTOCOMPLETE, LABEL } = FORM_TYPES;
 export default function SubForm(props) {
   const {
     onSubmit,
+    resetCurrSubFormData,
     setSubFormVisible,
     isEdit,
     disabled = false,
     isFormEditable,
-    currSubFormData
+    currSubFormData,
+    isSingleDebit
   } = props;
   const debitFeeLabel = `Debit Fee in ${currSubFormData.paymentCurrency}`;
   const standardFeeLabel = 'Standard Fee in SGD';
@@ -41,7 +43,7 @@ export default function SubForm(props) {
             defaultValue: debitType,
             componentProps: {
               required: true,
-              disabled,
+              disabled: true,
               name: 'debitType',
               label: 'Debit Type',
               'data-testid': 'debitType',
@@ -960,7 +962,10 @@ export default function SubForm(props) {
       type: 'button',
       componentProps: {
         color: 'neutral',
-        onClick: () => setSubFormVisible(false)
+        onClick: () => {
+          resetCurrSubFormData();
+          setSubFormVisible(false);
+        }
       }
     }
   ];
@@ -982,7 +987,7 @@ export default function SubForm(props) {
   const formAttributes = {
     sections: [
       fileFormAttributes,
-      applicantFormAttributes(true),
+      applicantFormAttributes(isSingleDebit),
       beneficiaryFormAttributes(disabled),
       paymentFormAttributes,
       chargesFormAttributes,

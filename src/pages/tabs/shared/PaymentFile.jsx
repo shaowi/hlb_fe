@@ -27,7 +27,13 @@ import SummaryForm from './SummaryForm';
  */
 export default function PaymentFile(props) {
   const { isMaker } = useAppStore();
-  const { storeProps, isCreate, setShowPaymentFile } = props;
+  const {
+    storeProps,
+    isCreate,
+    setShowPaymentFile,
+    isSingleDebit,
+    setIsSingleDebit
+  } = props;
   const formikRef = useRef();
   const [selectedRowNum, setSelectedRowNum] = useState(-1);
   const [subFormVisible, setSubFormVisible] = useState(false);
@@ -301,7 +307,9 @@ export default function PaymentFile(props) {
     isEdit: selectedRowNum !== -1,
     disabled: !isFormEditable,
     isFormEditable,
-    currSubFormData
+    currSubFormData,
+    resetCurrSubFormData,
+    isSingleDebit
   };
 
   const confirmationPageProps = {
@@ -373,31 +381,28 @@ export default function PaymentFile(props) {
     buttonProps: reviewButtonProps
   };
 
-  const mainFormButtons = [
-    {
-      label: 'Add Transaction',
-      componentProps: {
-        color: 'success'
-      }
-    }
-  ];
   const mainFormProps = {
     formikRef,
     currMainFormData,
     applicantDetails,
-    formButtons: isCreate && mainFormButtons,
     disabled: !isFormEditable,
+    isCreate,
+    isSingleDebit,
+    setIsSingleDebit,
     onSubmit: (values) => {
       const updatedMainFormDetails = mapToMainFileDetails(
         currMainFormData,
         values
       );
       setCurrMainFormData(updatedMainFormDetails);
-      const updatedApplicantDetails = mapToApplicantDetails(
-        applicantDetails,
-        values
-      );
-      setApplicantDetails(mapToApplicantDetails(applicantDetails, values));
+      let updatedApplicantDetails = {};
+      if (isSingleDebit) {
+        updatedApplicantDetails = mapToApplicantDetails(
+          applicantDetails,
+          values
+        );
+        setApplicantDetails(mapToApplicantDetails(applicantDetails, values));
+      }
 
       // if modal is not open, then it is adding new transaction or editing existing transaction
       if (!isSubmitPaymentModalOpen) {

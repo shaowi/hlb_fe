@@ -8,13 +8,15 @@ import { useField, useFormikContext } from 'formik';
  * @returns The SelectWrapper component is returning a TextField component with the following props:
  */
 export default function SelectWrapper(props) {
-  const { name, options } = props;
+  const { name, options, onChange } = props;
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
 
   const handleChange = (evt) => {
     const { value } = evt.target;
+    const oldValue = field.value;
     setFieldValue(name, value);
+    onChange && onChange(oldValue, value);
   };
 
   const configSelect = {

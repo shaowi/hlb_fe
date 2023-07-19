@@ -382,6 +382,7 @@ interface FormAttribute {
     options?: Option[];
     required?: boolean;
     disabled?: boolean;
+    onChange?: (oldValue, newValue) => {}; // For 'select' type only
   };
   validateDateComparison?: {
     other: string;
@@ -397,6 +398,7 @@ interface Section {
   rows: {
     fields: FormAttribute[];
   }[];
+  hidden?: boolean;
 }
 
 interface Button {
