@@ -16,27 +16,30 @@ export default function UploadPaymentMain() {
   } = store;
   const [hasError, setHasError] = useState(false);
   const [showPaymentFile, setShowPaymentFile] = useState(false);
+  const [isSingleDebit, setIsSingleDebit] = useState(false);
 
   function onUpload(data, fileInfo) {
+    setShowPaymentFile(true);
     if (data.length <= 1) {
       setHasError(true);
       return;
     }
-    data = data.map(mapNullValuesToEmptyString);
-    const debitType = data[0].debitType;
-    if (debitType === 'S') {
-      const [
-        currMainFormData,
-        applicantDetails,
-        subFormDataList,
-        transactionSummaryData
-      ] = parseCsvFileData(data, fileInfo.name);
-      setApplicantDetails(applicantDetails);
-      setCurrMainFormData(currMainFormData);
-      setSubFormDataList(subFormDataList);
-      setTransactionSummaryData(transactionSummaryData);
-    }
-    setShowPaymentFile(true);
+    setIsSingleDebit(data[0].debitType === 'S');
+    const [
+      currMainFormData,
+      applicantDetails,
+      subFormDataList,
+      transactionSummaryData
+    ] = parseCsvFileData(
+      data.map(mapNullValuesToEmptyString),
+      fileInfo.name,
+      isSingleDebit
+    );
+
+    setCurrMainFormData(currMainFormData);
+    setSubFormDataList(subFormDataList);
+    setTransactionSummaryData(transactionSummaryData);
+    isSingleDebit && setApplicantDetails(applicantDetails[0]);
   }
 
   function closeAlert() {
@@ -64,7 +67,9 @@ export default function UploadPaymentMain() {
   const paymentFileProps = {
     storeProps: store,
     isCreate: true,
-    setShowPaymentFile
+    setShowPaymentFile,
+    isSingleDebit,
+    setIsSingleDebit
   };
 
   return (

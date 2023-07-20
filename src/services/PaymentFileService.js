@@ -36,10 +36,14 @@ export async function getFileDetails(filename) {
   return [mainFileData, applicantData, subFormDataList, transactionSummaryData];
 }
 
-export function parseCsvFileData(data, filename) {
+export function parseCsvFileData(data, filename, isSingleDebit) {
   const mainFileData = mapToMainFileDataFromCsv(data, filename);
-  const applicantData = mapToApplicantDataFromCsv(data);
-  const subFormDataList = mapToSubFormDataListFromCsv(applicantData, data);
+  const applicantData = data.map(mapToApplicantDataFromCsv);
+  const subFormDataList = mapToSubFormDataListFromCsv(
+    applicantData,
+    data,
+    isSingleDebit
+  );
 
   return [mainFileData, applicantData, subFormDataList, TRANSACTION_SUMMARY];
 }
@@ -292,8 +296,12 @@ function mapToSubFormDataList(applicantDetails, transactionList) {
   });
 }
 
-function mapToSubFormDataListFromCsv(applicantDetails, transactionList) {
-  return transactionList.map((transaction) => {
+function mapToSubFormDataListFromCsv(
+  applicantList,
+  transactionList,
+  isSingleDebit
+) {
+  return transactionList.map((transaction, index) => {
     const {
       processingMode,
       transactionType,
@@ -340,6 +348,9 @@ function mapToSubFormDataListFromCsv(applicantDetails, transactionList) {
       otherPaymentDetails,
       additionalRemarks
     };
+    const applicantDetails = isSingleDebit
+      ? applicantList[0]
+      : applicantList[index];
     return {
       ...subFileDetails,
       ...applicantDetails,
