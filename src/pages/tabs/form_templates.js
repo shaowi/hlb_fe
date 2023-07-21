@@ -1,10 +1,11 @@
 import { currentDate } from 'constants';
 
 // TODO: Clear data later (Mock data used for testing only)
+const debitType = 'multiple';
 export const APPLICANT_DETAILS = {
   applicantDbId: -1, // id used to identify the file to be updated in database
   applicantName: 'John Doe',
-  applicantAccountNo: '9000000001',
+  applicantAccountNumber: '9000000001',
   applicantAccountType: 'Current',
   applicantAccountCurrency: { label: 'SGD', value: 'SGD' },
   applicantIdType: 'New IC',
@@ -23,7 +24,7 @@ export const APPLICANT_DETAILS = {
 
 export const SUB_FILE_DETAILS = {
   id: -1, // id used to identify the file to be updated in database
-  debitType: 'single',
+  debitType,
   transactionType: 'ISS 1-M CBFT Credit Transfer (MT103)',
   processingMode: 'processingMode'
 };
@@ -31,7 +32,7 @@ export const SUB_FILE_DETAILS = {
 export const MAIN_FILE_DETAILS = {
   status: '',
   filename: `OPFR${currentDate.replace(/-/g, '')}0000001.csv`,
-  debitType: 'single',
+  debitType,
   channelTransactionReference: '2317333701OPZ00100',
   transactionType: 'ISS 1-M CBFT Credit Transfer (MT103)',
   requestChannel: 'PG BizOpsUI',
@@ -45,7 +46,7 @@ export const MAIN_FILE_DETAILS = {
 export const BENEFICIARY_DETAILS = {
   beneficiaryDbId: -1, // id used to identify the file to be updated in database
   beneficiaryName: 'Khanh Nguyen',
-  beneficiaryAccountNo: '1234567890',
+  beneficiaryAccountNumber: '1234567890',
   beneficiaryIdType: 'Passport',
   beneficiaryId: '72843',
   beneficiaryResidentCode: 'resident',

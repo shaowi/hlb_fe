@@ -21,7 +21,9 @@ export default function MainForm(props) {
     onSubmit,
     currMainFormData,
     applicantDetails,
-    formButtons,
+    isCreate,
+    isSingleDebit,
+    setIsSingleDebit,
     disabled = false,
     formikRef
   } = props;
@@ -60,12 +62,13 @@ export default function MainForm(props) {
             type: SELECT,
             defaultValue: debitType,
             componentProps: {
-              disabled,
+              disabled: disabled || !isCreate,
               required: true,
               name: 'debitType',
               label: 'Debit Type',
               'data-testid': 'debitType',
-              options: DEBIT_TYPE
+              options: DEBIT_TYPE,
+              onChange: (_, newVal) => setIsSingleDebit(newVal === 'single')
             }
           }
         ]
@@ -170,7 +173,7 @@ export default function MainForm(props) {
 
   const {
     applicantName,
-    applicantAccountNo,
+    applicantAccountNumber,
     applicantAccountType,
     applicantAccountCurrency,
     applicantIdType,
@@ -208,13 +211,13 @@ export default function MainForm(props) {
           },
           {
             type: TEXT,
-            defaultValue: applicantAccountNo,
+            defaultValue: applicantAccountNumber,
             componentProps: {
               disabled,
               required: true,
-              name: 'applicantAccountNo',
+              name: 'applicantAccountNumber',
               label: 'Account Number',
-              'data-testid': 'applicantAccountNo',
+              'data-testid': 'applicantAccountNumber',
               type: 'number'
             }
           },
@@ -396,12 +399,21 @@ export default function MainForm(props) {
           }
         ]
       }
-    ]
+    ],
+    hidden: !isSingleDebit
   };
 
+  const buttons = [
+    {
+      label: 'Add Transaction',
+      componentProps: {
+        color: 'success'
+      }
+    }
+  ];
   const formAttributes = {
     sections: [fileFormAttributes, applicantFormAttributes],
-    buttons: formButtons
+    buttons
   };
 
   const formBuilderProps = {

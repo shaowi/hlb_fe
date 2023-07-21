@@ -15,6 +15,7 @@ import { formatToCurrency } from 'services/helper';
 import PaymentFile from '../shared/PaymentFile';
 import SearchBox from './SearchBox';
 import { useAppStore } from 'app_store';
+import AlertDialog from 'components/AlertDialog';
 
 const { all } = STATUSES;
 
@@ -79,6 +80,7 @@ export default function RejectedPaymentMain() {
     setTransactionSummaryData
   } = store;
   const [loadingDatatable, setLoadingDatatable] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const [initFiles, setInitFiles] = useState({});
   const [files, setFiles] = useState({});
   const [rows, setRows] = useState([]);
@@ -90,6 +92,13 @@ export default function RejectedPaymentMain() {
      * updates the loading state of the datatable.
      */
     async function fetchFiles() {
+      /**
+       * The function sets initial files based on the account role, filtering out any files with a status of 'pending' if
+       * the account role is not 'maker'.
+       * @returns If the `isMaker` variable is true, then the function will return the result of calling the `setInitFiles`
+       * function with the `files` parameter. Otherwise, the function will return the result of calling the `setInitFiles`
+       * function with the `pendingFiles` object as the parameter.
+       */
       function setInitFilesBasedOnAccountRole(files) {
         if (isMaker) {
           setInitFiles(files);
@@ -106,9 +115,11 @@ export default function RejectedPaymentMain() {
       try {
         const files = await getPaymentFiles();
         setInitFilesBasedOnAccountRole(files);
-        setLoadingDatatable(false);
       } catch (error) {
         console.log(error);
+        setHasError(true);
+      } finally {
+        setLoadingDatatable(false);
       }
     }
     fetchFiles();
@@ -216,6 +227,10 @@ export default function RejectedPaymentMain() {
     setFiles(filteredFiles);
   }
 
+  function closeAlert() {
+    setHasError(false);
+  }
+
   const paymentFileProps = {
     storeProps: store,
     isCreate: false,
@@ -242,10 +257,28 @@ export default function RejectedPaymentMain() {
     rows
   };
 
+  const alertDialogProps = {
+    title: 'Error in fetching table records',
+    content: 'Please refresh and try again later.',
+    buttons: [
+      {
+        type: 'button',
+        label: 'Ok',
+        componentProps: {
+          color: 'error',
+          onClick: closeAlert
+        }
+      }
+    ],
+    open: hasError,
+    handleClose: closeAlert
+  };
+
   return showPaymentFile ? (
     <PaymentFile {...paymentFileProps} />
   ) : (
     <>
+      <AlertDialog {...alertDialogProps} />
       <SearchBox {...searchBoxProps} />
       {loadingDatatable ? <Loader /> : <DataTable {...dataTableProps} />}
     </>

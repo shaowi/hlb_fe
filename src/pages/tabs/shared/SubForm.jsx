@@ -22,11 +22,13 @@ const { TEXT, SELECT, SELECT_AUTOCOMPLETE, LABEL } = FORM_TYPES;
 export default function SubForm(props) {
   const {
     onSubmit,
+    resetCurrSubFormData,
     setSubFormVisible,
     isEdit,
     disabled = false,
     isFormEditable,
-    currSubFormData
+    currSubFormData,
+    isSingleDebit
   } = props;
   const debitFeeLabel = `Debit Fee in ${currSubFormData.paymentCurrency}`;
   const standardFeeLabel = 'Standard Fee in SGD';
@@ -41,7 +43,7 @@ export default function SubForm(props) {
             defaultValue: debitType,
             componentProps: {
               required: true,
-              disabled,
+              disabled: true,
               name: 'debitType',
               label: 'Debit Type',
               'data-testid': 'debitType',
@@ -76,7 +78,7 @@ export default function SubForm(props) {
 
   const {
     applicantName,
-    applicantAccountNo,
+    applicantAccountNumber,
     applicantAccountType,
     applicantAccountCurrency,
     applicantIdType,
@@ -115,13 +117,13 @@ export default function SubForm(props) {
             },
             {
               type: TEXT,
-              defaultValue: applicantAccountNo,
+              defaultValue: applicantAccountNumber,
               componentProps: {
                 disabled,
                 required: true,
-                name: 'applicantAccountNo',
+                name: 'applicantAccountNumber',
                 label: 'Account Number',
-                'data-testid': 'applicantAccountNo',
+                'data-testid': 'applicantAccountNumber',
                 type: 'number'
               }
             },
@@ -309,7 +311,7 @@ export default function SubForm(props) {
 
   const {
     beneficiaryName,
-    beneficiaryAccountNo,
+    beneficiaryAccountNumber,
     beneficiaryIdType,
     beneficiaryId,
     beneficiaryResidentCode,
@@ -347,17 +349,17 @@ export default function SubForm(props) {
             },
             {
               type: TEXT,
-              defaultValue: beneficiaryAccountNo,
+              defaultValue: beneficiaryAccountNumber,
               componentProps: {
                 disabled,
                 required: true,
-                name: 'beneficiaryAccountNo',
+                name: 'beneficiaryAccountNumber',
                 label: 'Account Number',
-                'data-testid': 'beneficiaryAccountNo',
+                'data-testid': 'beneficiaryAccountNumber',
                 type: 'number'
               },
               validateEquality: {
-                other: 'applicantAccountNo',
+                other: 'applicantAccountNumber',
                 shouldBeEqual: false,
                 errorMessage:
                   'Beneficiary Account Number cannot be the same as Applicant Account Number'
@@ -960,7 +962,10 @@ export default function SubForm(props) {
       type: 'button',
       componentProps: {
         color: 'neutral',
-        onClick: () => setSubFormVisible(false)
+        onClick: () => {
+          resetCurrSubFormData();
+          setSubFormVisible(false);
+        }
       }
     }
   ];
@@ -982,7 +987,7 @@ export default function SubForm(props) {
   const formAttributes = {
     sections: [
       fileFormAttributes,
-      applicantFormAttributes(true),
+      applicantFormAttributes(isSingleDebit),
       beneficiaryFormAttributes(disabled),
       paymentFormAttributes,
       chargesFormAttributes,

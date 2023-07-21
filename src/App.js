@@ -6,8 +6,8 @@ import {
   REJECTED_PAYMENT_FILE,
   UPLOAD_PAYMENT_FILE
 } from 'constants';
-import UploadPaymentMain from 'pages/tabs/UploadPaymentMain';
 import CreatePaymentMain from 'pages/tabs/create_payment_main';
+import UploadPaymentMain from 'pages/tabs/upload_payment_main';
 import { useEffect } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { getCurrentUser } from 'services/UserService';

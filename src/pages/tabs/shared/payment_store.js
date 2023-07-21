@@ -43,7 +43,7 @@ export const transactionColumns = [
     sortable: true
   },
   {
-    id: 'beneficiaryAccountNo',
+    id: 'beneficiaryAccountNumber',
     label: 'Beneficiary Account Number',
     minWidth: 120,
     sortable: true
