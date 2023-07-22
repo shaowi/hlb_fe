@@ -7,9 +7,9 @@ import {
   Typography
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { theme } from 'theme';
-import Footer from './Footer';
+import { useAppStore } from 'app_store';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -42,12 +42,15 @@ function a11yProps(index) {
 
 /** A React functional component called `PageTabs`. It takes a prop called `tabsContent`, which is an array of objects representing the content of each tab. */
 export default function PageTabs({ tabsContent }) {
-  const [value, setValue] = useState(1);
-  const [isFooterFixed, setIsFooterFixed] = useState(false); // Can be removed if content can cover the whole page
+  const { setFixedFooterIfPageHasScrollbar } = useAppStore();
+  const [value, setValue] = useState(0);
 
-  const handleChange = (event, newValue) => {
+  useEffect(() => {
+    setFixedFooterIfPageHasScrollbar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+  const handleChange = (_, newValue) => {
     setValue(newValue);
-    setIsFooterFixed(newValue === 1);
   };
 
   return (
@@ -83,7 +86,6 @@ export default function PageTabs({ tabsContent }) {
           </TabPanel>
         ))}
       </Paper>
-      <Footer isFixed={isFooterFixed} />
     </ThemeProvider>
   );
 }

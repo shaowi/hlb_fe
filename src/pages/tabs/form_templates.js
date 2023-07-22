@@ -1,7 +1,7 @@
 import { currentDate } from 'constants';
 
 // TODO: Clear data later (Mock data used for testing only)
-const debitType = 'multiple';
+const debitType = 'single';
 export const APPLICANT_DETAILS = {
   applicantDbId: -1, // id used to identify the file to be updated in database
   applicantName: 'John Doe',

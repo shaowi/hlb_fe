@@ -1,4 +1,4 @@
-import { currentDate, COUNTRY_CODE_TO_LABEL } from 'constants';
+import { currentDate, formatToDate, COUNTRY_CODE_TO_LABEL } from 'constants';
 import {
   CREATE_ONLINE_CBFT_URL,
   GET_ALL_ONLINE_CBFT_URL,
@@ -108,7 +108,7 @@ function mapToMainFileDataFromCsv(data, filename) {
     transactionType,
     requestChannel: '',
     transactionDate: currentDate,
-    valueDate,
+    valueDate: formatToDate(valueDate),
     businessDate: currentDate,
     recipientReference,
     otherPaymentDetails

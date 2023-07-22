@@ -1,11 +1,7 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box } from '@mui/material';
 import { useAppStore } from 'app_store';
 import AlertDialog from 'components/AlertDialog';
 import ModalBox from 'components/ModalBox';
-import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
 import DataTable from 'components/datatable/index';
 import { STATUSES, SUBMIT_TYPES } from 'constants';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -13,12 +9,17 @@ import {
   mapToApplicantDetails,
   mapToMainFileDetails
 } from 'services/PaymentFileService';
-import { transactionColumns } from '../shared/payment_store';
 import ConfirmationPage from './ConfirmationPage';
 import MainForm from './MainForm';
 import ReviewPage from './ReviewPage';
 import SubForm from './SubForm';
 import SummaryForm from './SummaryForm';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import CheckIcon from '@mui/icons-material/Check';
+import WarningIcon from '@mui/icons-material/Warning';
+import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
 
 /**
  * The `PaymentFile` function is a React component that renders a form for creating or editing payment files, including
@@ -29,10 +30,12 @@ export default function PaymentFile(props) {
   const { isMaker } = useAppStore();
   const {
     storeProps,
+    dataTableProps,
     isCreate,
     setShowPaymentFile,
     isSingleDebit,
-    setIsSingleDebit
+    setIsSingleDebit,
+    transactionsPassValidation
   } = props;
   const formikRef = useRef();
   const [selectedRowNum, setSelectedRowNum] = useState(-1);
@@ -51,6 +54,7 @@ export default function PaymentFile(props) {
     subFormDataList,
     transactionSummaryData,
     transactionRows,
+    transactionColumns,
     setTransactionRows,
     setSubFormDataList,
     setCurrSubFormData,
@@ -85,37 +89,64 @@ export default function PaymentFile(props) {
 
   // Keep the state and the table in sync
   useEffect(() => {
+    const rowMapperOtherProps = {
+      isSingleDebit,
+      isFormEditable,
+      editTransactionRow,
+      viewTransactionRow,
+      handleDeleteTransactionRow,
+      transactionsPassValidation
+    };
     // Update the edited row in the table
     if (selectedRowNum !== -1) {
       const newTransactionRows = [...transactionRows];
-      newTransactionRows[selectedRowNum] = mapToRow(
+      newTransactionRows[selectedRowNum] = mapToTransactionRow(
         selectedRowNum,
-        subFormDataList[selectedRowNum]
+        subFormDataList[selectedRowNum],
+        rowMapperOtherProps
       );
       setTransactionRows(newTransactionRows);
       setSelectedRowNum(-1);
       return;
     }
     setTransactionRows(
-      subFormDataList.map((item, index) => mapToRow(index, item))
+      subFormDataList.map((item, index) =>
+        mapToTransactionRow(index, item, rowMapperOtherProps)
+      )
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subFormDataList]);
 
-  function mapToRow(
-    id,
-    {
+  function handleDeleteTransactionRow(id) {
+    setSelectedRowNum(id);
+    setIsDeleteTransactionModalOpen(true);
+  }
+
+  function mapToTransactionRow(id, subFormData, otherProps) {
+    let {
       channelTransactionReference,
       processingMode,
+      applicantName,
+      applicantAccountNumber,
+      applicantAccountCurrency,
+      applicantAccountType,
       beneficiaryName,
       beneficiaryAccountNumber,
       beneficiaryBankName,
       beneficiaryAccountBic,
       remittanceAmount,
+      remittanceCurrency,
       paymentAmount,
       fxContractReferenceNo
-    }
-  ) {
+    } = subFormData;
+    const {
+      isSingleDebit,
+      isFormEditable,
+      editTransactionRow,
+      viewTransactionRow,
+      handleDeleteTransactionRow,
+      transactionsPassValidation
+    } = otherProps;
     const actionButtonProps = isFormEditable
       ? {
           buttons: [
@@ -130,10 +161,7 @@ export default function PaymentFile(props) {
               toolTipText: 'Delete Transaction',
               componentProps: {
                 color: 'error',
-                onClick: () => {
-                  setSelectedRowNum(id);
-                  setIsDeleteTransactionModalOpen(true);
-                }
+                onClick: () => handleDeleteTransactionRow(id)
               },
               icon: <DeleteIcon />
             }
@@ -151,8 +179,9 @@ export default function PaymentFile(props) {
           ]
         };
     const action = <ActionButtonGroup {...actionButtonProps} />;
+    beneficiaryAccountBic = beneficiaryAccountBic?.value;
 
-    return {
+    let rowData = {
       id,
       action,
       channelTransactionReference,
@@ -160,11 +189,50 @@ export default function PaymentFile(props) {
       beneficiaryName,
       beneficiaryAccountNumber,
       beneficiaryBankName,
-      beneficiaryAccountBic: beneficiaryAccountBic?.value,
+      beneficiaryAccountBic,
+      remittanceCurrency,
       remittanceAmount,
       paymentAmount,
       fxContractReferenceNo
     };
+    if (transactionsPassValidation) {
+      const validationResultProps = transactionsPassValidation[id]
+        ? {
+            buttons: [
+              {
+                toolTipText: 'Valid Data',
+                componentProps: {
+                  disabled: true
+                },
+                icon: <CheckIcon />
+              }
+            ]
+          }
+        : {
+            buttons: [
+              {
+                toolTipText: `Since the selected Remittance Currency (${remittanceCurrency?.value}) is ...`,
+                componentProps: {
+                  disabled: true
+                },
+                icon: <WarningIcon />
+              }
+            ]
+          };
+      rowData['validationResult'] = (
+        <ActionButtonGroup {...validationResultProps} />
+      );
+    }
+    if (!isSingleDebit) {
+      rowData = {
+        ...rowData,
+        applicantName,
+        applicantAccountNumber,
+        applicantAccountCurrency,
+        applicantAccountType
+      };
+    }
+    return rowData;
   }
 
   function addTransaction(values) {
@@ -312,11 +380,16 @@ export default function PaymentFile(props) {
     isSingleDebit
   };
 
+  // remove action & validationResult columns if is uploaded file else remove only action column;
+  const columns = transactionsPassValidation
+    ? transactionColumns.slice(2)
+    : transactionColumns.slice(1);
   const confirmationPageProps = {
     applicantDetails,
     currSubFormData,
     currMainFormData,
     subFormDataList,
+    columns,
     transactionSummaryData,
     setShowConfirmationPage,
     setShowReviewPage,
@@ -327,7 +400,8 @@ export default function PaymentFile(props) {
     paymentCurrency,
     isCreate,
     submitType,
-    isMaker
+    isMaker,
+    isSingleDebit
   };
 
   const reviewButtonProps = isCreate
@@ -389,6 +463,7 @@ export default function PaymentFile(props) {
     isCreate,
     isSingleDebit,
     setIsSingleDebit,
+    resetStore,
     onSubmit: (values) => {
       const updatedMainFormDetails = mapToMainFileDetails(
         currMainFormData,
@@ -414,13 +489,6 @@ export default function PaymentFile(props) {
         setSubFormVisible(true);
       }
     }
-  };
-
-  const dataTableProps = {
-    title: 'Transaction Details',
-    rows: transactionRows,
-    columns: transactionColumns,
-    emptyTableMessage: 'No transactions added'
   };
 
   const summaryFormProps = {

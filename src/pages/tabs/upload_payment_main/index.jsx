@@ -1,22 +1,34 @@
-import { useState } from 'react';
-import { mapNullValuesToEmptyString } from 'services/helper';
-import { parseCsvFileData } from 'services/PaymentFileService';
-import { useUploadPaymentStore } from './upload_payment_store';
-import UploadButton from './UploadButton';
+import { useAppStore } from 'app_store';
 import AlertDialog from 'components/AlertDialog';
+import { useEffect, useState } from 'react';
+import { parseCsvFileData } from 'services/PaymentFileService';
+import { mapNullValuesToEmptyString } from 'services/helper';
 import PaymentFile from '../shared/PaymentFile';
+import UploadButton from './UploadButton';
+import { useUploadPaymentStore } from './upload_payment_store';
 
 export default function UploadPaymentMain() {
+  const { setFixedFooterIfPageHasScrollbar } = useAppStore();
   const store = useUploadPaymentStore();
   const {
     setCurrMainFormData,
     setSubFormDataList,
     setApplicantDetails,
-    setTransactionSummaryData
+    setTransactionSummaryData,
+    transactionRows,
+    transactionColumns
   } = store;
   const [hasError, setHasError] = useState(false);
   const [showPaymentFile, setShowPaymentFile] = useState(false);
   const [isSingleDebit, setIsSingleDebit] = useState(false);
+  const [transactionsPassValidation, setTransactionsPassValidation] = useState(
+    []
+  );
+
+  useEffect(() => {
+    setFixedFooterIfPageHasScrollbar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showPaymentFile]);
 
   function onUpload(data, fileInfo) {
     setShowPaymentFile(true);
@@ -25,21 +37,25 @@ export default function UploadPaymentMain() {
       return;
     }
     setIsSingleDebit(data[0].debitType === 'S');
+    data = data.map(mapNullValuesToEmptyString);
     const [
       currMainFormData,
       applicantDetails,
       subFormDataList,
       transactionSummaryData
-    ] = parseCsvFileData(
-      data.map(mapNullValuesToEmptyString),
-      fileInfo.name,
-      isSingleDebit
-    );
+    ] = parseCsvFileData(data, fileInfo.name, isSingleDebit);
 
+    validateTransactions(data);
     setCurrMainFormData(currMainFormData);
     setSubFormDataList(subFormDataList);
     setTransactionSummaryData(transactionSummaryData);
     isSingleDebit && setApplicantDetails(applicantDetails[0]);
+  }
+
+  function validateTransactions(data) {
+    // TODO: validate rates based on remittance currency
+    // set to all passed for now
+    setTransactionsPassValidation(data.map((d) => true));
   }
 
   function closeAlert() {
@@ -64,12 +80,20 @@ export default function UploadPaymentMain() {
     handleClose: closeAlert
   };
 
+  const dataTableProps = {
+    title: 'Transaction Details',
+    rows: transactionRows,
+    columns: transactionColumns,
+    emptyTableMessage: 'No transactions added'
+  };
   const paymentFileProps = {
     storeProps: store,
+    dataTableProps,
     isCreate: true,
     setShowPaymentFile,
     isSingleDebit,
-    setIsSingleDebit
+    setIsSingleDebit,
+    transactionsPassValidation
   };
 
   return (

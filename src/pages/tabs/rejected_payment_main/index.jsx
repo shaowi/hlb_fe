@@ -1,4 +1,6 @@
 import FileOpenIcon from '@mui/icons-material/FileOpen';
+import { useAppStore } from 'app_store';
+import AlertDialog from 'components/AlertDialog';
 import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
 import DataTable from 'components/datatable/index';
 import {
@@ -13,9 +15,8 @@ import { useEffect, useState } from 'react';
 import { getFileDetails, getPaymentFiles } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
 import PaymentFile from '../shared/PaymentFile';
+import { getTransactionColumns } from '../shared/payment_store';
 import SearchBox from './SearchBox';
-import { useAppStore } from 'app_store';
-import AlertDialog from 'components/AlertDialog';
 
 const { all } = STATUSES;
 
@@ -74,10 +75,14 @@ export default function RejectedPaymentMain() {
   const { isMaker } = useAppStore();
   const store = useRejectedPaymentStore();
   const {
+    transactionRows,
+    transactionColumns,
+    currMainFormData,
     setCurrMainFormData,
     setSubFormDataList,
     setApplicantDetails,
-    setTransactionSummaryData
+    setTransactionSummaryData,
+    setTransactionColumns
   } = store;
   const [loadingDatatable, setLoadingDatatable] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -85,6 +90,9 @@ export default function RejectedPaymentMain() {
   const [files, setFiles] = useState({});
   const [rows, setRows] = useState([]);
   const [showPaymentFile, setShowPaymentFile] = useState(false);
+  const [isSingleDebit, setIsSingleDebit] = useState(
+    currMainFormData?.debitType === 'single'
+  );
 
   useEffect(() => {
     /**
@@ -148,6 +156,9 @@ export default function RejectedPaymentMain() {
         setCurrMainFormData(currMainFormData);
         setSubFormDataList(subFormDataList);
         setTransactionSummaryData(transactionSummaryData);
+        setTransactionColumns(
+          getTransactionColumns(currMainFormData.debitType)
+        );
         setShowPaymentFile(true);
       } catch (error) {
         console.log(error);
@@ -189,7 +200,8 @@ export default function RejectedPaymentMain() {
     setApplicantDetails,
     setCurrMainFormData,
     setTransactionSummaryData,
-    setSubFormDataList
+    setSubFormDataList,
+    setTransactionColumns
   ]);
 
   /**
@@ -231,10 +243,19 @@ export default function RejectedPaymentMain() {
     setHasError(false);
   }
 
+  const paymentFileDataTableProps = {
+    title: 'Transaction Details',
+    rows: transactionRows,
+    columns: transactionColumns,
+    emptyTableMessage: 'No transactions added'
+  };
   const paymentFileProps = {
     storeProps: store,
+    dataTableProps: paymentFileDataTableProps,
     isCreate: false,
-    setShowPaymentFile
+    setShowPaymentFile,
+    isSingleDebit,
+    setIsSingleDebit
   };
 
   const initialFormValues = {

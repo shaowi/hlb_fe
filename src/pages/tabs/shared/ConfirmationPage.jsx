@@ -2,7 +2,6 @@ import { Box } from '@mui/material';
 import DataTable from 'components/datatable';
 import ConfirmationSummaryForm from './ConfirmationSummaryForm';
 import MainForm from './MainForm';
-import { transactionColumns } from './payment_store';
 
 /**
  * The ConfirmationPage function is a React component that renders a confirmation page with transaction details and a
@@ -10,9 +9,8 @@ import { transactionColumns } from './payment_store';
  * @returns a JSX element.
  */
 export default function ConfirmationPage(props) {
-  const { subFormDataList } = props;
+  const { subFormDataList, columns } = props;
   const actionlessTransactionRows = subFormDataList.map(mapToRow);
-  const columns = transactionColumns.slice(1);
 
   function mapToRow({
     channelTransactionReference,

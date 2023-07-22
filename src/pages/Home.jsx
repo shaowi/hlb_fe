@@ -1,11 +1,25 @@
+import { useAppStore } from 'app_store';
+import Footer from 'components/Footer';
 import ModuleNavBar from 'components/navigation/ModuleNavBar';
 import UserNavBar from 'components/navigation/UserNavBar';
 import Loader from 'pages/Loader';
+import { useEffect } from 'react';
 import NotFound from './NotFound';
-import { useAppStore } from 'app_store';
 
 export default function Home({ children }) {
-  const { isMaker, username, isLoading } = useAppStore();
+  const {
+    isMaker,
+    username,
+    isLoading,
+    isFooterFixed,
+    setFixedFooterIfPageHasScrollbar
+  } = useAppStore();
+
+  useEffect(() => {
+    setFixedFooterIfPageHasScrollbar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const userNavBarProps = {
     imageSrc: '/images/logo.png',
     imageAlt: 'hlb',
@@ -196,6 +210,7 @@ export default function Home({ children }) {
       <UserNavBar {...userNavBarProps} />
       <ModuleNavBar menu={moduleNavBarMenu} />
       {children}
+      <Footer isFixed={isFooterFixed} />
     </>
   ) : (
     <NotFound {...restrictedProps} />

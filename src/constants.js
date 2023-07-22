@@ -5,6 +5,17 @@ export const previousMonthDate = new Date(
   .toJSON()
   .slice(0, 10);
 
+/**
+ * The function `formatToDate` takes a date string in the format "dd/mm/yyyy" and returns a formatted date string in the
+ * format "yyyy-mm-dd".
+ * @param dateStr - The `dateStr` parameter is a string representing a date in the format "dd/mm/yyyy".
+ * @returns a formatted date string in the format "YYYY-MM-DD".
+ */
+export function formatToDate(dateStr) {
+  const [day, month, year] = dateStr.split('/');
+  return new Date(year, month - 1, day).toJSON().slice(0, 10);
+}
+
 // Select dropdown options
 export const STATUSES = {
   all: 'ALL',

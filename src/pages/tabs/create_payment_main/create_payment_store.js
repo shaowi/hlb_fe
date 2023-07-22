@@ -9,7 +9,10 @@ import {
   TRANSACTION_DETAILS,
   TRANSACTION_SUMMARY
 } from '../form_templates';
-import { createPaymentStore } from '../shared/payment_store';
+import {
+  createPaymentStore,
+  getTransactionColumns
+} from '../shared/payment_store';
 
 export const INITIAL_PAYMENT_SUB_FORM_STATE = {
   ...SUB_FILE_DETAILS,
@@ -25,8 +28,9 @@ const initialStoreData = {
   applicantDetails: APPLICANT_DETAILS,
   currMainFormData: MAIN_FILE_DETAILS,
   currSubFormData: INITIAL_PAYMENT_SUB_FORM_STATE,
-  subFormDataList: [INITIAL_PAYMENT_SUB_FORM_STATE],
+  subFormDataList: [],
   transactionRows: [],
+  transactionColumns: getTransactionColumns(MAIN_FILE_DETAILS.debitType),
   transactionSummaryData: TRANSACTION_SUMMARY,
   showConfirmationPage: false,
   showReviewPage: false,

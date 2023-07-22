@@ -25,7 +25,8 @@ export default function MainForm(props) {
     isSingleDebit,
     setIsSingleDebit,
     disabled = false,
-    formikRef
+    formikRef,
+    resetStore
   } = props;
   const {
     filename,
@@ -68,7 +69,10 @@ export default function MainForm(props) {
               label: 'Debit Type',
               'data-testid': 'debitType',
               options: DEBIT_TYPE,
-              onChange: (_, newVal) => setIsSingleDebit(newVal === 'single')
+              onChange: (_, newVal) => {
+                setIsSingleDebit(newVal === 'single');
+                resetStore();
+              }
             }
           }
         ]
@@ -128,6 +132,17 @@ export default function MainForm(props) {
               name: 'valueDate',
               label: 'Value Date',
               'data-testid': 'valueDate'
+            },
+            validateDateComparison: {
+              other: 'businessDate',
+              func: ([businessDate], schema) => {
+                return businessDate
+                  ? schema.notOneOf(
+                      [businessDate],
+                      'Value date must be current date'
+                    )
+                  : schema;
+              }
             }
           },
           {
@@ -403,7 +418,7 @@ export default function MainForm(props) {
     hidden: !isSingleDebit
   };
 
-  const buttons = [
+  const buttons = !disabled && [
     {
       label: 'Add Transaction',
       componentProps: {

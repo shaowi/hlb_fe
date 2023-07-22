@@ -13,7 +13,6 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { getCurrentUser } from 'services/UserService';
 import { theme } from 'theme';
 import { useAppStore } from './app_store';
-import Footer from './components/Footer';
 import PageTabs from './components/PageTabs';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -85,14 +84,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Login {...loginProps} />} />
           <Route path="/login" element={<Login {...loginProps} />} />
-          <Route
-            path="/home"
-            element={
-              <Home>
-                <Footer isFixed={true} />
-              </Home>
-            }
-          />
+          <Route path="/home" element={<Home />} />
           <Route
             path="/outward-iss-cbft-credit-transfer"
             element={

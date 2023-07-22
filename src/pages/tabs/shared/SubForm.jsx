@@ -987,7 +987,7 @@ export default function SubForm(props) {
   const formAttributes = {
     sections: [
       fileFormAttributes,
-      applicantFormAttributes(isSingleDebit),
+      applicantFormAttributes(disabled || isSingleDebit),
       beneficiaryFormAttributes(disabled),
       paymentFormAttributes,
       chargesFormAttributes,
