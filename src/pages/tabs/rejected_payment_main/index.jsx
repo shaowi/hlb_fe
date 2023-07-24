@@ -1,15 +1,10 @@
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import { useAppStore } from 'app_store';
+import { useAppStore } from 'app/app_store';
 import AlertDialog from 'components/AlertDialog';
 import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
 import DataTable from 'components/datatable/index';
-import {
-  DEBIT_TYPE,
-  STATUSES,
-  currentDate,
-  previousMonthDate
-} from 'constants';
-import Loader from 'pages/Loader';
+import { DEBIT_TYPE, STATUSES, currentDate, previousMonthDate } from 'constant';
+import Loader from 'components/Loader';
 import { useRejectedPaymentStore } from 'pages/tabs/rejected_payment_main/rejected_payment_store';
 import { useEffect, useState } from 'react';
 import { getFileDetails, getPaymentFiles } from 'services/PaymentFileService';

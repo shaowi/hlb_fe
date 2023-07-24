@@ -74,14 +74,18 @@ const props = {
 [ModuleNavBar](../src/components/navigation/ModuleNavBar.jsx)
 
 ```ts
+interface ModuleNavBarMenuItem {
+  name: string;
+  link: string;
+}
+
 interface ModuleNavBarMenu {
   name: string;
   items: ModuleNavBarMenuItem[] | ModuleNavBarMenu[];
 }
 
-interface ModuleNavBarMenuItem {
-  name: string;
-  link: string;
+interface ModuleNavBarProps {
+  menu: ModuleNavBarMenu[];
 }
 ```
 
@@ -213,10 +217,14 @@ const props = {
 [PageTabs](../src/components/PageTabs.jsx)
 
 ```ts
-interface PaymentFileTabsProps {
+interface PageContent {
   title: string;
   label: string;
   content: React.ReactNode;
+}
+
+interface PageTabsProps {
+  tabContent: PageContent[];
 }
 ```
 
@@ -261,8 +269,8 @@ interface DatatableProps {
   title: string;
   columns: Column[];
   rows: Object[];
-  showPagination?: boolean;
-  emptyTableMessage?: string;
+  showPagination?: boolean; // Default is true
+  emptyTableMessage?: string; // Default is 'No records found'
 }
 ```
 
@@ -369,6 +377,19 @@ const rowsProp = [
 <DataTable title="Pending Action" columns={columnsProp} rows={rowsProp} />
 ```
 
+[FormButton](../src/components/forms_ui/buttons/FormButton.jsx)
+
+```ts
+interface FormButton {
+  label: string;
+  isLoading?: boolean;
+  type?: 'button' | 'reset' | 'submit' | 'loading'; // Default is 'submit'
+  componentProps: {
+    onClick: () => void;
+  } // Refer to https://mui.com/material-ui/api/button/ for more details
+}
+```
+
 [FormBuilder](../src/components/forms_ui/FormBuilder.jsx)
 
 ```ts
@@ -401,17 +422,7 @@ interface Section {
   hidden?: boolean;
 }
 
-interface Button {
-  label: string;
-  isReset?: boolean;
-  isLoading?: boolean;
-  type: 'button' | 'reset' | 'submit' | 'loading';
-  label: string;
-  componentProps: {
-    color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error';
-    onClick: () => void;
-  }
-}
+
 
 interface Option {
   value: string;
@@ -420,7 +431,7 @@ interface Option {
 
 interface FormAttributes {
   sections: Section[];
-  buttons: Button[];
+  buttons: FormButton[];
 }
 
 interface FormBuilderProps {
@@ -557,8 +568,8 @@ const formAttributesProp = {
         }
       },
       {
+        type: 'reset',
         label: 'Reset',
-        isReset: true
       }
     ],
   };
@@ -599,21 +610,12 @@ const props = {
 [ModalBox](../src/components/ModalBox.jsx)
 
 ```ts
-interface Button {
-  label: string;
-  type: 'button' | 'reset' | 'submit' | 'loading';
-  label: string;
-  componentProps: {
-    color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error';
-    onClick: () => void;
-  }
-}
 interface ModalBoxProps {
   isOpen: boolean;
   handleClose: () => void;
   title: string;
   description: string;
-  buttons: Button[];
+  buttons: FormButton[];
 }
 ```
 
@@ -654,21 +656,12 @@ const props = {
 [AlertDialog](../src/components/AlertDialog.jsx)
 
 ```ts
-interface Button {
-  label: string;
-  type: 'button' | 'reset' | 'submit' | 'loading';
-  label: string;
-  componentProps: {
-    color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error';
-    onClick: () => void;
-  }
-}
 interface AlertDialogProps {
   isOpen: boolean;
   handleClose: () => void;
   title: string;
   description: string;
-  buttons: Button[];
+  buttons: FormButton[];
 }
 ```
 

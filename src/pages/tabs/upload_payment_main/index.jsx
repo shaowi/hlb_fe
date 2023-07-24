@@ -1,4 +1,4 @@
-import { useAppStore } from 'app_store';
+import { useAppStore } from 'app/app_store';
 import AlertDialog from 'components/AlertDialog';
 import { useEffect, useState } from 'react';
 import { parseCsvFileData } from 'services/PaymentFileService';

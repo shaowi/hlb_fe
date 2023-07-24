@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import DataTable from 'components/datatable';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
-import { SUBMIT_TYPES } from 'constants';
+import { SUBMIT_TYPES } from 'constant';
 import { useState } from 'react';
 import {
   createPaymentTransaction,

@@ -1,4 +1,4 @@
-import { currentDate } from 'constants';
+import { currentDate } from 'constant';
 
 // TODO: Clear data later (Mock data used for testing only)
 const debitType = 'single';

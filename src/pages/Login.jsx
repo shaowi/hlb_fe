@@ -20,7 +20,7 @@ import {
   loginReducer
 } from 'services/reducers/loginReducer';
 import { theme } from 'theme';
-import { MAKER } from 'constants';
+import { MAKER } from 'constant';
 
 const themeCopy = cloneDeep(theme);
 themeCopy.typography.h4.color = '#BBB';

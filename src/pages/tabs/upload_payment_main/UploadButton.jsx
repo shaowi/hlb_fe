@@ -1,6 +1,6 @@
 import { Box, Button, Grid } from '@mui/material';
 import ToolTipWrapper from 'components/forms_ui/ToolTipWrapper';
-import { FILENAME_FORMAT } from 'constants';
+import { FILENAME_FORMAT } from 'constant';
 import CSVReader from 'react-csv-reader';
 import { toCamelCase } from 'services/helper';
 

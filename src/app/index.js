@@ -5,7 +5,7 @@ import {
   MAKER,
   REJECTED_PAYMENT_FILE,
   UPLOAD_PAYMENT_FILE
-} from 'constants';
+} from 'constant';
 import CreatePaymentMain from 'pages/tabs/create_payment_main';
 import UploadPaymentMain from 'pages/tabs/upload_payment_main';
 import { useEffect } from 'react';
@@ -13,11 +13,11 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { getCurrentUser } from 'services/UserService';
 import { theme } from 'theme';
 import { useAppStore } from './app_store';
-import PageTabs from './components/PageTabs';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import NotFound from './pages/NotFound';
-import RejectedPaymentMain from './pages/tabs/rejected_payment_main';
+import PageTabs from '../components/PageTabs';
+import Home from '../pages/Home';
+import Login from '../pages/Login';
+import NotFound from '../pages/NotFound';
+import RejectedPaymentMain from '../pages/tabs/rejected_payment_main';
 
 export default function App() {
   const { isMaker, setUsername, setIsLoading, setIsMaker } = useAppStore();

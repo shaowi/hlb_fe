@@ -1,4 +1,4 @@
-import { LOGIN_USER_URL, LOGOUT_USER_URL } from 'endpoints';
+import { LOGIN_USER_URL, LOGOUT_USER_URL } from 'constant/endpoints';
 import { postRequest } from './HttpRequests';
 
 /**

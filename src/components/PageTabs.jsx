@@ -9,7 +9,7 @@ import {
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { theme } from 'theme';
-import { useAppStore } from 'app_store';
+import { useAppStore } from 'app/app_store';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

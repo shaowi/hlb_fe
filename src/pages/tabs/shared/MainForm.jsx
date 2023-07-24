@@ -6,7 +6,7 @@ import {
   FILENAME_FORMAT,
   REMITTANCE_CURRENCY,
   RESIDENT_CODE
-} from 'constants';
+} from 'constant';
 import { theme } from 'theme';
 
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, DATE } = FORM_TYPES;

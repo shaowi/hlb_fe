@@ -1,10 +1,10 @@
-import { currentDate, formatToDate, COUNTRY_CODE_TO_LABEL } from 'constants';
+import { currentDate, formatToDate, COUNTRY_CODE_TO_LABEL } from 'constant';
 import {
   CREATE_ONLINE_CBFT_URL,
   GET_ALL_ONLINE_CBFT_URL,
   ONLINE_CBFT_URL,
   UPDATE_ONLINE_CBFT_URL
-} from 'endpoints';
+} from 'constant/endpoints';
 import { getRequest, postRequest } from './HttpRequests';
 import { convertToLocalCurrency } from './helper';
 import { TRANSACTION_SUMMARY } from 'pages/tabs/form_templates';

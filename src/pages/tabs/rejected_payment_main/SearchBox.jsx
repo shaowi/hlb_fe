@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
-import { STATUSES } from 'constants';
+import { STATUSES } from 'constant';
 
 const { TEXT, SELECT, DATE } = FORM_TYPES;
 
@@ -134,8 +134,8 @@ export default function SearchBox({ onSearch, initialFormValues }) {
         }
       },
       {
-        label: 'Reset',
-        isReset: true
+        type: 'reset',
+        label: 'Reset'
       }
     ]
   };

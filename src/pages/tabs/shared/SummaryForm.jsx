@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import FormBuilder, { FORM_TYPES } from 'components/forms_ui/FormBuilder';
-import { useAppStore } from 'app_store';
+import { useAppStore } from 'app/app_store';
 
 const { TEXT } = FORM_TYPES;
 

@@ -1,8 +1,8 @@
-import { useAppStore } from 'app_store';
+import { useAppStore } from 'app/app_store';
 import Footer from 'components/Footer';
 import ModuleNavBar from 'components/navigation/ModuleNavBar';
 import UserNavBar from 'components/navigation/UserNavBar';
-import Loader from 'pages/Loader';
+import Loader from 'components/Loader';
 import { useEffect } from 'react';
 import NotFound from './NotFound';
 
