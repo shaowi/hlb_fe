@@ -59,6 +59,7 @@ export default function PaymentFile(props) {
     setSubFormDataList,
     setCurrSubFormData,
     resetCurrSubFormData,
+    resetSubFormDataList,
     setApplicantDetails,
     setTransactionSummaryData,
     showConfirmationPage,
@@ -406,11 +407,18 @@ export default function PaymentFile(props) {
 
   const reviewButtonProps = isCreate
     ? {
-        label: 'Back to Create Outward Payment Request File',
+        label: `Back to ${
+          transactionsPassValidation ? 'Upload' : 'Create'
+        } Outward Payment Request File`,
         type: 'button',
         componentProps: {
           color: 'neutral',
-          onClick: resetStore
+          onClick: () => {
+            if (transactionsPassValidation) {
+              setShowPaymentFile(false);
+            }
+            resetStore();
+          }
         }
       }
     : {
@@ -463,7 +471,8 @@ export default function PaymentFile(props) {
     isCreate,
     isSingleDebit,
     setIsSingleDebit,
-    resetStore,
+    resetCurrSubFormData,
+    resetSubFormDataList,
     onSubmit: (values) => {
       const updatedMainFormDetails = mapToMainFileDetails(
         currMainFormData,

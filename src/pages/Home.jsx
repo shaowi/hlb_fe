@@ -17,8 +17,7 @@ export default function Home({ children }) {
 
   useEffect(() => {
     setFixedFooterIfPageHasScrollbar();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setFixedFooterIfPageHasScrollbar]);
 
   const userNavBarProps = {
     imageSrc: '/images/logo.png',

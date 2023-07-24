@@ -2,12 +2,14 @@ import { formatToCurrency } from 'services/helper';
 import { create } from 'zustand';
 import {
   APPLICANT_DETAILS,
+  MAIN_FILE_DETAILS,
   BENEFICIARY_DETAILS,
   CHARGES_DETAILS,
   CORRESPONDENT_BANK_DETAILS,
   PAYMENT_DETAILS,
   SUB_FILE_DETAILS,
-  TRANSACTION_DETAILS
+  TRANSACTION_DETAILS,
+  TRANSACTION_SUMMARY
 } from '../form_templates';
 
 export const INITIAL_PAYMENT_SUB_FORM_STATE = {
@@ -178,6 +180,7 @@ export const createPaymentStore = (initialStoreData) =>
       set({ currSubFormData: INITIAL_PAYMENT_SUB_FORM_STATE }),
     setSubFormDataList: (subFormDataList) =>
       set({ subFormDataList: subFormDataList }),
+    resetSubFormDataList: () => set({ subFormDataList: [] }),
     setTransactionRows: (transactionRows) => set({ transactionRows }),
     setTransactionColumns: (transactionColumns) => set({ transactionColumns }),
     setTransactionSummaryData: (transactionSummaryData) =>
@@ -189,19 +192,13 @@ export const createPaymentStore = (initialStoreData) =>
     setErrorOnConfirm: (errorOnConfirm) =>
       set({ errorOnConfirm: errorOnConfirm }),
     resetStore: () => {
-      const {
-        APPLICANT_DETAILS,
-        MAIN_FILE_DETAILS,
-        TRANSACTION_SUMMARY,
-        transactionColumns
-      } = initialStoreData;
       set({
         applicantDetails: APPLICANT_DETAILS,
         currMainFormData: MAIN_FILE_DETAILS,
         currSubFormData: INITIAL_PAYMENT_SUB_FORM_STATE,
         subFormDataList: [],
         transactionRows: [],
-        transactionColumns: transactionColumns,
+        transactionColumns: initialStoreData.transactionColumns,
         transactionSummaryData: TRANSACTION_SUMMARY,
         showConfirmationPage: false,
         showReviewPage: false,

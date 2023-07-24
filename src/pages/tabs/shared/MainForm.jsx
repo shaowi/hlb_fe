@@ -26,7 +26,8 @@ export default function MainForm(props) {
     setIsSingleDebit,
     disabled = false,
     formikRef,
-    resetStore
+    resetCurrSubFormData,
+    resetSubFormDataList
   } = props;
   const {
     filename,
@@ -71,7 +72,8 @@ export default function MainForm(props) {
               options: DEBIT_TYPE,
               onChange: (_, newVal) => {
                 setIsSingleDebit(newVal === 'single');
-                resetStore();
+                resetCurrSubFormData();
+                resetSubFormDataList();
               }
             }
           }

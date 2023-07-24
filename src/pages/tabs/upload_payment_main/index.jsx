@@ -11,6 +11,7 @@ export default function UploadPaymentMain() {
   const { setFixedFooterIfPageHasScrollbar } = useAppStore();
   const store = useUploadPaymentStore();
   const {
+    currMainFormData,
     setCurrMainFormData,
     setSubFormDataList,
     setApplicantDetails,
@@ -20,7 +21,9 @@ export default function UploadPaymentMain() {
   } = store;
   const [hasError, setHasError] = useState(false);
   const [showPaymentFile, setShowPaymentFile] = useState(false);
-  const [isSingleDebit, setIsSingleDebit] = useState(false);
+  const [isSingleDebit, setIsSingleDebit] = useState(
+    currMainFormData.debitType === 'single'
+  );
   const [transactionsPassValidation, setTransactionsPassValidation] = useState(
     []
   );
@@ -93,7 +96,7 @@ export default function UploadPaymentMain() {
     setShowPaymentFile,
     isSingleDebit,
     setIsSingleDebit,
-    transactionsPassValidation
+    transactionsPassValidation // Used to determine if the transactions pass sub form validations
   };
 
   return (
