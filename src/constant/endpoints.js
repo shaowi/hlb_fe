@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 export const LOGIN_USER_URL = `${BASE_URL}/user/login`;
 export const LOGOUT_USER_URL = `${BASE_URL}/user/logout`;
 export const GET_USER_URL = `${BASE_URL}/user/current`;
