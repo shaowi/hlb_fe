@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Fade from '@mui/material/Fade';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
-import FormButton from 'components/forms_ui/buttons/FormButton';
+import FormButton from 'components/forms_ui/FormButton';
 
 const style = {
   position: 'absolute',

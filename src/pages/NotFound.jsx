@@ -1,5 +1,5 @@
 import { Container, Grid, Paper, Typography } from '@mui/material';
-import FormButton from 'components/forms_ui/buttons/FormButton';
+import FormButton from 'components/forms_ui/FormButton';
 import { Link } from 'react-router-dom';
 
 /** A React functional component called `NotFound`. It is exported as the default export, which means

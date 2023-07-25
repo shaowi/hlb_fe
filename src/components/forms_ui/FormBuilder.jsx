@@ -6,7 +6,7 @@ import {
   InputAdornment,
   Typography
 } from '@mui/material';
-import FormButton from 'components/forms_ui/buttons/FormButton';
+import FormButton from 'components/forms_ui/FormButton';
 import { ConnectedFocusError } from 'focus-formik-error';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';

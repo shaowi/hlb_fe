@@ -3,7 +3,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import FormButton from './forms_ui/buttons/FormButton';
+import FormButton from './forms_ui/FormButton';
 
 /** A React functional component called `AlertDialog`. This component takes in several props: `open`, `handleClose`, `title`, `content`, and `buttons`. */
 export default function AlertDialog(props) {

@@ -1,6 +1,6 @@
 import { Alert, Box, Grid, Typography } from '@mui/material';
 import DataTable from 'components/datatable/index';
-import FormButton from 'components/forms_ui/buttons/FormButton';
+import FormButton from 'components/forms_ui/FormButton';
 import { formatToCurrency } from 'services/helper';
 
 /** A React functional component called `ReviewPage`. It takes in a single object parameter `props`

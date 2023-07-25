@@ -390,7 +390,7 @@ const rowsProp = [
 <DataTable title="Pending Action" columns={columnsProp} rows={rowsProp} />
 ```
 
-[FormButton](../src/components/forms_ui/buttons/FormButton.jsx)
+[FormButton](../src/components/forms_ui/FormButton.jsx)
 
 ```ts
 interface FormButton {
@@ -434,8 +434,6 @@ interface Section {
   }[];
   hidden?: boolean;
 }
-
-
 
 interface Option {
   value: string;
