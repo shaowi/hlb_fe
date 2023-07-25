@@ -153,7 +153,8 @@ export default function PaymentFile(props) {
               onClick: () => editTransactionRow(id)
             },
             {
-              onClick: () => handleDeleteTransactionRow(id)
+              onClick: () => handleDeleteTransactionRow(id),
+              color: 'error'
             }
           ]
         }

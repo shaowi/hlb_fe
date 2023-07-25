@@ -10,7 +10,10 @@ export function formatToCurrency(amount) {
 
 // TODO: Update this function later with rate taken from API
 export function convertToLocalCurrency(amount) {
-  return parseFloat(amount) + 0.5;
+  const localAmount = parseFloat(amount) + 0.5;
+  if (isNaN(localAmount)) {
+    return '';
+  }
 }
 
 /**

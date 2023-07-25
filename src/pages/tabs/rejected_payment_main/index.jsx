@@ -7,8 +7,8 @@ import { useRejectedPaymentStore } from 'pages/tabs/rejected_payment_main/reject
 import { useEffect, useState } from 'react';
 import { getFileDetails, getPaymentFiles } from 'services/PaymentFileService';
 import { formatToCurrency } from 'services/helper';
+import { getTransactionColumns } from '../create_payment_main/create_payment_store';
 import PaymentFile from '../shared/PaymentFile';
-import { getTransactionColumns } from '../shared/payment_store';
 import SearchBox from './SearchBox';
 
 const { all } = STATUSES;

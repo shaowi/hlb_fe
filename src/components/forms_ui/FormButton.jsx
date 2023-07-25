@@ -11,14 +11,15 @@ import { useFormikContext } from 'formik';
  */
 export default function FormButton(props) {
   let { label, type = 'submit', isLoading, componentProps } = props;
-  // access formik context to check if the form is dirty.
-  const { dirty, resetForm } = useFormikContext();
+  const formikContext = useFormikContext();
   let buttonProps = {
     type,
     variant: 'contained',
     ...componentProps
   };
-  if (type === 'reset') {
+  // access formik context to check if the form is dirty.
+  if (formikContext && type === 'reset') {
+    const { dirty, resetForm } = formikContext;
     buttonProps = {
       ...buttonProps,
       color: 'error',

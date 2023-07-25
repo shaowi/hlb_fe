@@ -612,7 +612,7 @@ const props = {
   centerText: 'Oops! Page not found.',
   subText: 'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.',
   buttonText: 'Go to Home',
-  buttonLink: '/'
+  buttonLink: '/home'
 }
 
 <NotFound {...props} />
@@ -637,7 +637,7 @@ E.g:
 ```js
 const [isModalOpen, setIsModalOpen] = React.useState(false);
 const props = {
-  isOpen: false,
+  isOpen: isModalOpen,
   handleClose: () => setIsModalOpen(false)
   title: 'Logout',
   description: 'Are you sure you want to logout?',
