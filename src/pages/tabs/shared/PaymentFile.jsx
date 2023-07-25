@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import { useAppStore } from 'app/app_store';
 import AlertDialog from 'components/AlertDialog';
 import ModalBox from 'components/ModalBox';
+import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
 import DataTable from 'components/datatable/index';
 import { STATUSES, SUBMIT_TYPES } from 'constant';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -14,12 +15,6 @@ import MainForm from './MainForm';
 import ReviewPage from './ReviewPage';
 import SubForm from './SubForm';
 import SummaryForm from './SummaryForm';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import CheckIcon from '@mui/icons-material/Check';
-import WarningIcon from '@mui/icons-material/Warning';
-import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
 
 /**
  * The `PaymentFile` function is a React component that renders a form for creating or editing payment files, including
@@ -148,38 +143,30 @@ export default function PaymentFile(props) {
       handleDeleteTransactionRow,
       transactionsPassValidation
     } = otherProps;
-    const actionButtonProps = isFormEditable
+    const action = isFormEditable
       ? {
-          buttons: [
+          type: 'icon',
+          icons: ['edit', 'delete'],
+          toolTipTexts: ['Edit Transaction', 'Delete Transaction'],
+          componentPropsList: [
             {
-              toolTipText: 'Edit Transaction',
-              componentProps: {
-                onClick: () => editTransactionRow(id)
-              },
-              icon: <EditIcon />
+              onClick: () => editTransactionRow(id)
             },
             {
-              toolTipText: 'Delete Transaction',
-              componentProps: {
-                color: 'error',
-                onClick: () => handleDeleteTransactionRow(id)
-              },
-              icon: <DeleteIcon />
+              onClick: () => handleDeleteTransactionRow(id)
             }
           ]
         }
       : {
-          buttons: [
+          type: 'icon',
+          icons: ['visibility'],
+          toolTipTexts: ['View Transaction'],
+          componentPropsList: [
             {
-              toolTipText: 'View Transaction',
-              componentProps: {
-                onClick: () => viewTransactionRow(id)
-              },
-              icon: <VisibilityIcon />
+              onClick: () => viewTransactionRow(id)
             }
           ]
         };
-    const action = <ActionButtonGroup {...actionButtonProps} />;
     beneficiaryAccountBic = beneficiaryAccountBic?.value;
 
     let rowData = {
@@ -199,24 +186,24 @@ export default function PaymentFile(props) {
     if (transactionsPassValidation) {
       const validationResultProps = transactionsPassValidation[id]
         ? {
-            buttons: [
+            type: 'icon',
+            icons: ['check'],
+            toolTipTexts: ['Valid Data'],
+            componentPropsList: [
               {
-                toolTipText: 'Valid Data',
-                componentProps: {
-                  disabled: true
-                },
-                icon: <CheckIcon />
+                disabled: true
               }
             ]
           }
         : {
-            buttons: [
+            type: 'icon',
+            icons: ['warning'],
+            toolTipTexts: [
+              `Since the selected Remittance Currency (${remittanceCurrency?.value}) is ...`
+            ],
+            componentPropsList: [
               {
-                toolTipText: `Since the selected Remittance Currency (${remittanceCurrency?.value}) is ...`,
-                componentProps: {
-                  disabled: true
-                },
-                icon: <WarningIcon />
+                disabled: true
               }
             ]
           };

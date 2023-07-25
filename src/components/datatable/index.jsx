@@ -11,6 +11,13 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Typography from '@mui/material/Typography';
 import { visuallyHidden } from '@mui/utils';
 import { useState, useMemo } from 'react';
+import FileOpenIcon from '@mui/icons-material/FileOpen';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import CheckIcon from '@mui/icons-material/Check';
+import WarningIcon from '@mui/icons-material/Warning';
+import ActionButtonGroup from './ActionButtonGroup';
 
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -84,6 +91,25 @@ export default function DataTable(props) {
     setOrderBy(property);
   };
 
+  const getIconFromStr = (iconStr) => {
+    switch (iconStr) {
+      case 'fileOpen':
+        return <FileOpenIcon />;
+      case 'edit':
+        return <EditIcon />;
+      case 'delete':
+        return <DeleteIcon />;
+      case 'visibility':
+        return <VisibilityIcon />;
+      case 'check':
+        return <CheckIcon />;
+      case 'warning':
+        return <WarningIcon />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden', p: 3 }}>
       <Typography variant="h4">{title}</Typography>
@@ -128,12 +154,34 @@ export default function DataTable(props) {
               .map((row, indexA) => (
                 <TableRow hover role="checkbox" tabIndex={-1} key={indexA}>
                   {columns.map((column, indexB) => {
-                    const value = row[column.id];
+                    const rowObj = row[column.id];
+                    const {
+                      type,
+                      value,
+                      componentPropsList,
+                      icons,
+                      toolTipTexts
+                    } = rowObj ? rowObj : {};
+                    let rowValue = rowObj;
+                    if (type === 'icon') {
+                      const buttonProps = {
+                        buttons: componentPropsList.map(
+                          (componentProps, index) => {
+                            return {
+                              toolTipText: toolTipTexts[index],
+                              icon: getIconFromStr(icons[index]),
+                              componentProps
+                            };
+                          }
+                        )
+                      };
+                      rowValue = <ActionButtonGroup {...buttonProps} />;
+                    } else if (column.format && typeof value === 'number') {
+                      rowValue = column.format(value);
+                    }
                     return (
                       <TableCell key={column.id + indexB} align={column.align}>
-                        {column.format && typeof value === 'number'
-                          ? column.format(value)
-                          : value}
+                        {rowValue}
                       </TableCell>
                     );
                   })}

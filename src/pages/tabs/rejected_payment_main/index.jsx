@@ -1,10 +1,8 @@
-import FileOpenIcon from '@mui/icons-material/FileOpen';
 import { useAppStore } from 'app/app_store';
 import AlertDialog from 'components/AlertDialog';
-import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
+import Loader from 'components/Loader';
 import DataTable from 'components/datatable/index';
 import { DEBIT_TYPE, STATUSES, currentDate, previousMonthDate } from 'constant';
-import Loader from 'components/Loader';
 import { useRejectedPaymentStore } from 'pages/tabs/rejected_payment_main/rejected_payment_store';
 import { useEffect, useState } from 'react';
 import { getFileDetails, getPaymentFiles } from 'services/PaymentFileService';
@@ -14,8 +12,6 @@ import { getTransactionColumns } from '../shared/payment_store';
 import SearchBox from './SearchBox';
 
 const { all } = STATUSES;
-
-const viewFileToolTipText = 'View File';
 
 /**
  * The RejectedPaymentMain component is a React component that displays a datatable of rejected payment files and allows
@@ -163,19 +159,17 @@ export default function RejectedPaymentMain() {
     const rows = [];
     Object.entries(files).forEach(([key, value], index) => {
       const { debitType, transactionDate, businessDate, status } = value[0];
-      const actionButtonProps = {
-        buttons: [
-          {
-            toolTipText: viewFileToolTipText,
-            componentProps: {
-              onClick: () => setStoreData(index)
-            },
-            icon: <FileOpenIcon />
-          }
-        ]
-      };
-      const action = <ActionButtonGroup {...actionButtonProps} />;
       rows.push({
+        action: {
+          type: 'icon',
+          icons: ['fileOpen'],
+          toolTipTexts: ['View file'],
+          componentPropsList: [
+            {
+              onClick: () => setStoreData(index)
+            }
+          ]
+        },
         debitType: DEBIT_TYPE[debitType],
         transactionCount: value.length,
         totalPaymentAmount: value.reduce(
@@ -185,8 +179,7 @@ export default function RejectedPaymentMain() {
         transactionDate,
         businessDate,
         status: STATUSES[status],
-        filename: key,
-        action
+        filename: key
       });
     });
     setRows(rows);

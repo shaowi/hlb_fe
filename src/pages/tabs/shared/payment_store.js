@@ -25,7 +25,15 @@ export const INITIAL_PAYMENT_SUB_FORM_STATE = {
 export const getTransactionColumns = (debitType) =>
   debitType === 'single'
     ? [
-        { id: 'action', label: 'Action', minWidth: 160, sortable: false },
+        {
+          id: 'action',
+          label: 'Action',
+          minWidth: 160,
+          sortable: false,
+          type: 'icon',
+          icon: 'fileOpen',
+          toolTipText: 'View file'
+        },
         {
           id: 'channelTransactionReference',
           label: 'Channel Transaction Reference',
@@ -84,7 +92,15 @@ export const getTransactionColumns = (debitType) =>
         }
       ]
     : [
-        { id: 'action', label: 'Action', minWidth: 160, sortable: false },
+        {
+          id: 'action',
+          label: 'Action',
+          minWidth: 160,
+          sortable: false,
+          type: 'icon',
+          icon: 'fileOpen',
+          toolTipText: 'View file'
+        },
         {
           id: 'channelTransactionReference',
           label: 'Channel Transaction Reference',

@@ -257,18 +257,22 @@ const props = [
 [Datatable](../src/components/datatable/index.jsx)
 
 ```ts
+type IconType = 'fileOpen' | 'edit' | 'delete' | 'visibility' | 'check' | 'warning';
+
 interface Column {
   id: string;
   label: string;
   minWidth: number;
   sortable: boolean;
   format?: (value: number) => string;
+  type?: string; // Default is 'text'
+  icons?: IconType[];
 }
 
 interface DatatableProps {
   title: string;
   columns: Column[];
-  rows: Object[];
+  rows: Object[]; // Depends on columns defined
   showPagination?: boolean; // Default is true
   emptyTableMessage?: string; // Default is 'No records found'
 }
@@ -298,7 +302,7 @@ const columnsProp = [
     id: 'totalPaymentAmount',
     label: 'Total Payment Amount',
     minWidth: 170,
-    sortable: true,
+    sortable: true
     format: (value) => formatToCurrency(value)
   },
   {
@@ -325,13 +329,16 @@ const columnsProp = [
 
 const rowsProp = [
   {
-    action: (
-      <ToolTipWrapper title={viewFileToolTipText}>
-        <ActionButton onClick={() => console.log('row 0 clicked')}>
-          <FileOpenIcon />
-        </ActionButton>
-      </ToolTipWrapper>
-    ),
+    action: {
+      type: 'icon',
+      icons: ['fileOpen'], // Type: IconType[]
+      toolTipTexts: ['View file'],
+      componentPropsList: [
+        {
+          onClick: () => {}
+        }
+      ]
+    },
     filename: 'OPFR202305150000021.csv',
     debitType: 'Single Debit',
     transactionCount: 2,
@@ -341,13 +348,16 @@ const rowsProp = [
     status: 'REJECTED'
   },
   {
-    action: (
-      <ToolTipWrapper title={viewFileToolTipText}>
-        <ActionButton onClick={() => console.log('row 1 clicked')}>
-          <FileOpenIcon />
-        </ActionButton>
-      </ToolTipWrapper>
-    ),
+    action: {
+      type: 'icon',
+      icons: ['fileOpen'], // Type: IconType[]
+      toolTipTexts: ['View file'],
+      componentPropsList: [
+        {
+          onClick: () => {}
+        }
+      ]
+    },
     filename: 'OPFR202305150000022.csv',
     debitType: 'Multiple Debit',
     transactionCount: 2,
@@ -357,13 +367,16 @@ const rowsProp = [
     status: 'FAILED'
   },
   {
-    action: (
-      <ToolTipWrapper title={viewFileToolTipText}>
-        <ActionButton onClick={() => console.log('row 2 clicked')}>
-          <FileOpenIcon />
-        </ActionButton>
-      </ToolTipWrapper>
-    ),
+    action: {
+      type: 'icon',
+      icons: ['fileOpen'], // Type: IconType[]
+      toolTipTexts: ['View file'],
+      componentPropsList: [
+        {
+          onClick: () => {}
+        }
+      ]
+    },
     filename: 'OPFR202305150000023.csv',
     debitType: 'Single Debit',
     transactionCount: 2,
