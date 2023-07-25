@@ -6,6 +6,10 @@ import Loader from 'components/Loader';
 import { useEffect } from 'react';
 import NotFound from './NotFound';
 
+/**
+ * The Home component is a React component that renders different content based on the user's permissions and login status.
+ * @returns a JSX element.
+ */
 export default function Home({ children }) {
   const {
     isMaker,
