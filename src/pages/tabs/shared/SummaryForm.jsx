@@ -22,6 +22,7 @@ export default function SummaryForm(props) {
     resetStore,
     isRejectedFile,
     isCreate,
+    isUpload,
     isFormEditable,
     setSubmitType
   } = props;
@@ -87,7 +88,14 @@ export default function SummaryForm(props) {
       ]);
     }
 
-    if (isCreate) {
+    if (isUpload) {
+      buttons.push({
+        label: 'Submit',
+        componentProps: {
+          color: 'success'
+        }
+      });
+    } else if (isCreate) {
       // Replace back button with submit
       buttons.splice(0, 1, {
         label: 'Submit',

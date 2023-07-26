@@ -2,7 +2,6 @@ import { Box } from '@mui/material';
 import { useAppStore } from 'app/app_store';
 import AlertDialog from 'components/AlertDialog';
 import ModalBox from 'components/ModalBox';
-import ActionButtonGroup from 'components/datatable/ActionButtonGroup';
 import DataTable from 'components/datatable/index';
 import { STATUSES, SUBMIT_TYPES } from 'constant';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -208,9 +207,7 @@ export default function PaymentFile(props) {
               }
             ]
           };
-      rowData['validationResult'] = (
-        <ActionButtonGroup {...validationResultProps} />
-      );
+      rowData['validationResult'] = validationResultProps;
     }
     if (!isSingleDebit) {
       rowData = {
@@ -497,6 +494,7 @@ export default function PaymentFile(props) {
     resetStore,
     isRejectedFile,
     isCreate,
+    isUpload: isCreate && transactionsPassValidation,
     isFormEditable,
     setSubmitType
   };
