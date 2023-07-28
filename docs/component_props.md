@@ -416,7 +416,8 @@ interface FormAttribute {
     options?: Option[];
     required?: boolean;
     disabled?: boolean;
-    onChange?: (oldValue, newValue) => {}; // For 'select' type only
+    onChange?: (oldValue, newValue) => {}; // For 'select', 'select-autocomplete' types
+    afterChange?: (oldValue, newValue) => {}; // For 'text' type
   };
   validateDateComparison?: {
     other: string;

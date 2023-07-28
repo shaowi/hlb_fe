@@ -1,10 +1,10 @@
 import { currentDate } from 'constant';
 
-// TODO: Clear data later (Mock data used for testing only)
+// FIXME: Mock data used for testing only
 const debitType = 'single';
 export const APPLICANT_DETAILS = {
   applicantDbId: -1, // id used to identify the file to be updated in database
-  applicantName: 'John Doe',
+  applicantName: 'John',
   applicantAccountNumber: '9000000001',
   applicantAccountType: 'Current',
   applicantAccountCurrency: { label: 'SGD', value: 'SGD' },
@@ -19,7 +19,7 @@ export const APPLICANT_DETAILS = {
   applicantAddress1: 'applicantAddress1',
   applicantAddress2: 'applicantAddress2',
   applicantAddress3: 'applicantAddress3',
-  applicantCountryCode: { label: 'AU - Australia', value: 'AU' }
+  applicantCountryCode: { label: '', value: '' }
 };
 
 export const SUB_FILE_DETAILS = {
@@ -45,7 +45,7 @@ export const MAIN_FILE_DETAILS = {
 
 export const BENEFICIARY_DETAILS = {
   beneficiaryDbId: -1, // id used to identify the file to be updated in database
-  beneficiaryName: 'Khanh Nguyen',
+  beneficiaryName: 'Tim',
   beneficiaryAccountNumber: '1234567890',
   beneficiaryIdType: 'Passport',
   beneficiaryId: '72843',

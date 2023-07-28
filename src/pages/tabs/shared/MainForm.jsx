@@ -26,6 +26,7 @@ export default function MainForm(props) {
     setIsSingleDebit,
     disabled = false,
     formikRef,
+    setSelectedRowNum,
     resetCurrSubFormData,
     resetSubFormDataList
   } = props;
@@ -72,6 +73,7 @@ export default function MainForm(props) {
               options: DEBIT_TYPE,
               onChange: (_, newVal) => {
                 setIsSingleDebit(newVal === 'single');
+                setSelectedRowNum(-1);
                 resetCurrSubFormData();
                 resetSubFormDataList();
               }

@@ -21,7 +21,7 @@ export default function TextfieldWrapper(props) {
    */
   const { value } = field;
   const [fieldValue, setFieldValue] = useState(value);
-  const { disablePerformance, loading, ...otherProps } = props;
+  const { disablePerformance, loading, afterChange, ...otherProps } = props;
   usePropagateRef({
     setFieldValue,
     name,
@@ -48,6 +48,9 @@ export default function TextfieldWrapper(props) {
   };
   const onBlur = (evt) => {
     const val = evt.target.value || '';
+    if (val !== field.value && afterChange) {
+      afterChange(field.value, val);
+    }
     setTimeout(() => {
       field.onChange({
         target: {

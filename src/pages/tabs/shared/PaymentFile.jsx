@@ -456,6 +456,7 @@ export default function PaymentFile(props) {
     isCreate,
     isSingleDebit,
     setIsSingleDebit,
+    setSelectedRowNum,
     resetCurrSubFormData,
     resetSubFormDataList,
     onSubmit: (values) => {
@@ -464,13 +465,14 @@ export default function PaymentFile(props) {
         values
       );
       setCurrMainFormData(updatedMainFormDetails);
+
       let updatedApplicantDetails = {};
       if (isSingleDebit) {
         updatedApplicantDetails = mapToApplicantDetails(
           applicantDetails,
           values
         );
-        setApplicantDetails(mapToApplicantDetails(applicantDetails, values));
+        setApplicantDetails(updatedApplicantDetails);
       }
 
       // if modal is not open, then it is adding new transaction or editing existing transaction

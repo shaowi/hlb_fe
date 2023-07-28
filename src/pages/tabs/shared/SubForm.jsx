@@ -9,8 +9,12 @@ import {
   RESIDENT_CODE,
   TRANSACTION_PURPOSE_CODE
 } from 'constant';
-import { convertToLocalCurrency } from 'services/helper';
+import {
+  convertToLocalCurrency,
+  convertToPaymentAmount
+} from 'services/helper';
 import { theme } from 'theme';
+import { useRef } from 'react';
 
 const { TEXT, SELECT, SELECT_AUTOCOMPLETE, LABEL } = FORM_TYPES;
 
@@ -20,6 +24,7 @@ const { TEXT, SELECT, SELECT_AUTOCOMPLETE, LABEL } = FORM_TYPES;
  * @returns a JSX element.
  */
 export default function SubForm(props) {
+  const formikRef = useRef();
   const {
     onSubmit,
     resetCurrSubFormData,
@@ -571,7 +576,14 @@ export default function SubForm(props) {
               name: 'remittanceCurrency',
               label: 'Remittance Currency',
               'data-testid': 'remittanceCurrency',
-              options: REMITTANCE_CURRENCY
+              options: REMITTANCE_CURRENCY,
+              onChange: (prevVal, curVal) =>
+                console.log(
+                  'changed remitCurrency from: ',
+                  prevVal,
+                  ' to: ',
+                  curVal
+                ) // TODO: Add logic to update fx rates
             }
           },
           {
@@ -582,7 +594,19 @@ export default function SubForm(props) {
               name: 'remittanceAmount',
               label: 'Remittance Amount',
               'data-testid': 'remittanceAmount',
-              type: 'number'
+              type: 'number',
+              afterChange: (prevVal, curVal) => {
+                console.log('changed remitAmt from: ', prevVal, ' to ', curVal);
+                // TODO: Add logic to update payment amount
+                formikRef.current.setFieldValue(
+                  'paymentAmount',
+                  convertToPaymentAmount(curVal)
+                );
+                formikRef.current.setFieldValue(
+                  'localEquivalentAmount',
+                  convertToLocalCurrency(curVal)
+                );
+              }
             }
           }
         ]
@@ -720,7 +744,14 @@ export default function SubForm(props) {
               name: 'chargeBearer',
               label: 'Charge Bearer',
               'data-testid': 'chargeBearer',
-              options: CHARGE_BEARER
+              options: CHARGE_BEARER,
+              onChange: (prevVal, curVal) =>
+                console.log(
+                  'changed chargedBearer from: ',
+                  prevVal,
+                  ' to: ',
+                  curVal
+                ) // TODO: Add logic to update debit fees and standard fees
             }
           }
         ]
@@ -741,7 +772,14 @@ export default function SubForm(props) {
               disabled,
               name: 'commissionInLieuOfExchange',
               label: debitFeeLabel,
-              'data-testid': 'debitMidRate'
+              'data-testid': 'debitMidRate',
+              afterChange: (prevVal, curVal) =>
+                console.log(
+                  'changed commissionInLieuOfExchange from: ',
+                  prevVal,
+                  ' to ',
+                  curVal
+                ) // TODO: Add logic to update standard fee for commissionInLieuOfExchange
             }
           },
           {
@@ -772,7 +810,14 @@ export default function SubForm(props) {
               disabled,
               name: 'commissionHandle',
               label: debitFeeLabel,
-              'data-testid': 'commissionHandle'
+              'data-testid': 'commissionHandle',
+              afterChange: (prevVal, curVal) =>
+                console.log(
+                  'changed commissionHandle from: ',
+                  prevVal,
+                  ' to ',
+                  curVal
+                ) // TODO: Add logic to update standard fee for commissionHandle
             }
           },
           {
@@ -814,7 +859,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: receiversCorrespondent,
             componentProps: {
-              disabled: true,
+              disabled,
               name: 'receiversCorrespondent',
               label: "Receiver's Correspondent",
               'data-testid': 'receiversCorrespondent'
@@ -848,7 +893,7 @@ export default function SubForm(props) {
             type: TEXT,
             defaultValue: channelTransactionReference,
             componentProps: {
-              disabled,
+              disabled: true,
               name: 'channelTransactionReference',
               label: 'Channel Transaction Reference',
               'data-testid': 'channelTransactionReference'
@@ -1000,7 +1045,8 @@ export default function SubForm(props) {
   const formBuilderProps = {
     onSubmit,
     formAttributes,
-    id: currSubFormData.id
+    id: currSubFormData.id,
+    formikRef
   };
 
   return (

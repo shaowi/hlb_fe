@@ -69,6 +69,8 @@ export const COUNTRY_CODE_TO_LABEL = {
   SG: 'SG - Singapore'
 };
 
+export const getCountryCodeFromLabel = (label) => label.split('-')[0].trim();
+
 export const REMITTANCE_CURRENCY = [
   { label: 'AUD', value: 'AUD' },
   { label: 'USD', value: 'USD' },

@@ -9,7 +9,7 @@ import {
   SUB_FILE_DETAILS,
   TRANSACTION_DETAILS,
   TRANSACTION_SUMMARY
-} from '../mock_form_templates';
+} from '../form_templates';
 import { createPaymentStore } from '../shared/payment_store';
 
 export const getTransactionColumns = (debitType) =>

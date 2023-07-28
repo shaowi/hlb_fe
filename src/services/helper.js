@@ -9,11 +9,21 @@ export function formatToCurrency(amount) {
 }
 
 // TODO: Update this function later with rate taken from API
+export function convertToPaymentAmount(amount) {
+  const paymentAmt = parseFloat(amount) + 20;
+  if (isNaN(paymentAmt)) {
+    return '';
+  }
+  return paymentAmt;
+}
+
+// TODO: Update this function later with rate taken from API
 export function convertToLocalCurrency(amount) {
   const localAmount = parseFloat(amount) + 0.5;
   if (isNaN(localAmount)) {
     return '';
   }
+  return localAmount;
 }
 
 /**

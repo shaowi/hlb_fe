@@ -171,6 +171,11 @@ export default function FormBuilder(props) {
                                   }
                                   getOptionLabel={(option) => option.label}
                                   onChange={(e, value) => {
+                                    field.componentProps.onChange &&
+                                      field.componentProps.onChange(
+                                        field.defaultValue,
+                                        value
+                                      );
                                     setFieldValue(
                                       field.componentProps.name,
                                       value !== null

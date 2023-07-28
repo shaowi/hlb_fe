@@ -63,7 +63,7 @@ export default function RejectedPaymentMain() {
       sortable: true
     }
   ];
-  const { isMaker } = useAppStore();
+  const { setFixedFooterIfPageHasScrollbar, isMaker } = useAppStore();
   const store = useRejectedPaymentStore();
   const {
     transactionRows,
@@ -119,6 +119,7 @@ export default function RejectedPaymentMain() {
         setHasError(true);
       } finally {
         setLoadingDatatable(false);
+        setFixedFooterIfPageHasScrollbar();
       }
     }
     fetchFiles();

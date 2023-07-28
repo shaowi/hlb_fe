@@ -3,7 +3,7 @@ import {
   APPLICANT_DETAILS,
   MAIN_FILE_DETAILS,
   TRANSACTION_SUMMARY
-} from '../mock_form_templates';
+} from '../form_templates';
 import { createPaymentStore } from '../shared/payment_store';
 import { INITIAL_PAYMENT_SUB_FORM_STATE } from '../create_payment_main/create_payment_store';
 

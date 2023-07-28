@@ -1,7 +1,8 @@
-import { Paper, Box, Typography } from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 
 export default function ContentWrapper(props) {
   const { children, title } = props;
+
   return (
     <Paper
       elevation={12}

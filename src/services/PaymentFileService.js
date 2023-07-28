@@ -1,4 +1,9 @@
-import { currentDate, formatToDate, COUNTRY_CODE_TO_LABEL } from 'constant';
+import {
+  currentDate,
+  formatToDate,
+  getCountryCodeFromLabel,
+  COUNTRY_CODE_TO_LABEL
+} from 'constant';
 import {
   CREATE_ONLINE_CBFT_URL,
   GET_ALL_ONLINE_CBFT_URL,
@@ -256,7 +261,9 @@ function mapToSubFormDataList(applicantDetails, transactionList) {
     } = transaction;
     const subFileDetails = {
       id,
-      debitType: debitType.toLowerCase() === 's' ? 'single' : 'multiple',
+      debitType: debitType.toLowerCase().startsWith('s')
+        ? 'single'
+        : 'multiple',
       transactionType,
       processingMode
     };
@@ -627,7 +634,7 @@ export function mapToBeneficiaryPayload(subFormData, id = null) {
     beneficiaryAddress1,
     beneficiaryAddress2,
     beneficiaryAddress3,
-    beneficiaryCountryCode
+    beneficiaryCountryCode: beneficiaryCountryLabel
   } = subFormData;
   const addresses = `${beneficiaryAddress1},${beneficiaryAddress2},${beneficiaryAddress3}`;
   const bankAddresses = `${beneficiaryBankAddress1},${beneficiaryBankAddress2},${beneficiaryBankAddress3}`;
@@ -638,12 +645,12 @@ export function mapToBeneficiaryPayload(subFormData, id = null) {
       name: beneficiaryName,
       accountNumber: beneficiaryAccountNumber,
       isResident: beneficiaryResidentCode === 'resident',
-      bankBic: beneficiaryAccountBic.value,
+      bankBic: beneficiaryAccountBic,
       addresses,
       bankAddresses,
       bankName: beneficiaryBankName,
       bankCountryCode: beneficiaryBankCountryCode,
-      countryCode: beneficiaryCountryCode.value
+      countryCode: getCountryCodeFromLabel(beneficiaryCountryLabel)
     }
   };
 }
@@ -672,7 +679,7 @@ export function mapToForeignPaymentPayload(subFormData, id = null) {
   return {
     foreignPaymentForm: {
       id,
-      remittanceCurrency: remittanceCurrency.value,
+      remittanceCurrency: remittanceCurrency,
       remittanceAmount,
       paymentCurrency,
       paymentAmount,
@@ -766,7 +773,7 @@ export async function getPaymentFiles() {
  * @returns an object with the following properties:
  */
 export function mapToApplicantDetails(curApplicantDetails, obj) {
-  const {
+  let {
     applicantName,
     applicantAccountNumber,
     applicantAccountType,
@@ -784,6 +791,20 @@ export function mapToApplicantDetails(curApplicantDetails, obj) {
     applicantAddress3,
     applicantCountryCode
   } = obj;
+  applicantAccountCurrency =
+    typeof applicantAccountCurrency === 'object'
+      ? applicantAccountCurrency
+      : {
+          label: applicantAccountCurrency,
+          value: applicantAccountCurrency
+        };
+  applicantCountryCode =
+    typeof applicantCountryCode === 'object'
+      ? applicantCountryCode
+      : {
+          label: applicantCountryCode,
+          value: getCountryCodeFromLabel(applicantCountryCode)
+        };
   return {
     applicantDbId: curApplicantDetails.applicantDbId,
     applicantName,
